@@ -1,17 +1,26 @@
-# Kuis Interaktif BENAR / SALAH – V18
+# SPENDA Game Center V4
 
-Perbaikan tampilan hasil:
-- Kamera tidak lagi ditutup overlay gelap/buram.
-- Hasil jawaban menjadi banner kecil di atas tengah.
-- Banner tidak memakai blur dan tidak menutup layar.
-- Pertanyaan tetap kecil.
-- Warna sisi BENAR/SALAH untuk hasil tetap baru aktif setelah timer habis.
-- Garis tengah dan label bawah tetap.
-- Tidak ada deteksi tubuh/posisi.
-- Tidak ada poin.
+Sekarang berisi 4 game dalam satu repository, seluruh file berada sejajar di root:
+- index.html
+- benar-salah.html
+- spenda-family-100.html
+- spenda-gesture-battle.html
+- clash-of-champions.html
+- logo-sekolah.png
+- icon-192.png
+- icon-512.png
+- manifest.webmanifest
+- sw.js
 
-Perbaikan deployment:
-- Service worker V18 dibuat network-first untuk index.html agar deploy GitHub Pages tidak tertahan oleh cache lama.
-- Pada pembukaan pertama V18, service worker lama yang terdaftar untuk game ini akan dilepas dan cache game lama dibersihkan sekali.
+Game baru:
+**Clash of Champions: Cipher Vault Arena**
+diambil dari file yang Anda kirim. Game ini memiliki pengaturan jumlah tim, durasi pertandingan, arena Vault, timer, dashboard guru, dan sistem rebutan bendera.
 
-Database/editor/import/jenjang/kelas/mapel tetap dipertahankan.
+Tombol kembali ke SPENDA Game Center pada game Clash ditempatkan hanya di halaman setup agar tidak menutupi kontrol/game menu.
+
+## Deploy GitHub Pages
+Upload semua file langsung ke root repository. Tidak ada folder `games`.
+
+Settings → Pages → Deploy from branch → main → root.
+
+Karena aplikasi menggunakan beberapa library CDN, koneksi internet tetap diperlukan saat pertama kali memuat resource eksternal.

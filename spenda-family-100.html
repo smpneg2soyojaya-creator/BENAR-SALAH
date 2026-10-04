@@ -1,0 +1,1708 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<!-- SPENDA FAMILY 100 | SMP Negeri 2 Soyo Jaya | Personal School Edition v1.0 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPENDA FAMILY 100 • SPENDA Game Center</title>
+<style>
+  :root{
+    --stage-1:#170b36;
+    --stage-2:#4a1c8f;
+    --stage-3:#7b2ff7;
+    --gold:#ffd93d;
+    --red:#ff4d5e;
+    --orange:#ff9f43;
+    --yellow:#ffd93d;
+    --green:#2ecc71;
+    --teal:#17c3b2;
+    --blue:#3a86ff;
+    --violet:#a366ff;
+    --pink:#ff5da2;
+    --ink:#170b36;
+    --panel:#2a1458;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    height:100%;
+    margin:0;
+    overflow:hidden;
+    font-family:'Segoe UI', 'Trebuchet MS', Verdana, sans-serif;
+    color:#fff;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* =========================================================================
+     LATAR PANGGUNG KUIS TV (dibuat murni CSS -- bukan foto berhak cipta)
+     ========================================================================= */
+  body{
+    background:
+      radial-gradient(ellipse 60% 40% at 15% 0%, rgba(255,217,61,.25), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 85% 0%, rgba(255,93,162,.22), transparent 60%),
+      radial-gradient(circle at 50% 110%, rgba(122,60,255,.35), transparent 55%),
+      linear-gradient(160deg, var(--stage-1) 0%, var(--stage-2) 55%, var(--stage-3) 100%);
+  }
+  /* Sorot lampu panggung berayun */
+  .stage-lights{ position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+  .beam{
+    position:absolute; top:-10%; width:180px; height:140%;
+    background:linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,0) 70%);
+    transform-origin:top center;
+    filter:blur(2px);
+    animation:sway 6s ease-in-out infinite;
+  }
+  .beam.b1{ left:2%;  background:linear-gradient(180deg, rgba(255,217,61,.22), transparent 70%); animation-delay:0s; }
+  .beam.b2{ left:18%; background:linear-gradient(180deg, rgba(255,93,162,.18), transparent 70%); animation-delay:.8s; }
+  .beam.b3{ right:18%;background:linear-gradient(180deg, rgba(58,134,255,.18), transparent 70%); animation-delay:1.6s; }
+  .beam.b4{ right:2%; background:linear-gradient(180deg, rgba(163,102,255,.22), transparent 70%); animation-delay:2.4s; }
+  @keyframes sway{ 0%,100%{ transform:rotate(-8deg);} 50%{ transform:rotate(8deg);} }
+  /* Tirai panggung di tepi atas & bawah */
+  .curtain-top, .curtain-bottom{
+    position:fixed; left:0; right:0; height:26px; z-index:1; pointer-events:none;
+    background:
+      radial-gradient(circle at 10px 0, transparent 12px, #7a1230 13px) 0 0/40px 26px repeat-x,
+      linear-gradient(#8a1638,#5c0e26);
+  }
+  .curtain-top{ top:0; }
+  .curtain-bottom{ bottom:0; transform:scaleY(-1); }
+  /* Lampu marquee berkedip di bingkai panel utama */
+  .marquee-frame{
+    position:relative;
+    border-radius:22px;
+    padding:3px;
+    background:linear-gradient(135deg,#ffe28a,#c99a2c 30%,#ffe28a 55%,#8a6112 80%,#ffe28a);
+    box-shadow:0 10px 34px rgba(0,0,0,.5);
+  }
+  .marquee-frame::before{
+    content:"";
+    position:absolute; inset:6px;
+    border-radius:18px;
+    background-image: radial-gradient(circle, #fff6c8 2.4px, transparent 3px);
+    background-size: 26px 26px;
+    background-position: 0 0;
+    opacity:.55;
+    animation:blinkBulbs 1s steps(2) infinite;
+    pointer-events:none;
+    z-index:0;
+  }
+  @keyframes blinkBulbs{ 0%{opacity:.25;} 50%{opacity:.7;} 100%{opacity:.25;} }
+  .marquee-frame > .inner{
+    position:relative; z-index:1;
+    border-radius:16px;
+    background:linear-gradient(160deg, var(--stage-1), var(--stage-2));
+    height:100%;
+  }
+
+  #app{ position:relative; width:100vw; height:100vh; z-index:2; }
+  .screen{
+    position:absolute; inset:0;
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    text-align:center;
+  }
+  .screen.active{ display:flex; }
+
+  /* ---------- Sparkle background dots ---------- */
+  .sparkle{
+    position:absolute; border-radius:50%;
+    background:var(--gold);
+    opacity:.55;
+    animation:twinkle 2.4s ease-in-out infinite;
+  }
+  @keyframes twinkle{ 0%,100%{opacity:.15; transform:scale(.7);} 50%{opacity:.8; transform:scale(1.2);} }
+
+  /* ---------- Opening screen ---------- */
+  #screen-opening h1{
+    font-size:clamp(42px,7vw,92px);
+    margin:0;
+    letter-spacing:2px;
+    color:var(--gold);
+    text-shadow: 0 0 18px rgba(255,217,61,.7), 4px 4px 0 rgba(0,0,0,.35);
+    animation:pulseTitle 1.8s ease-in-out infinite;
+  }
+  @keyframes pulseTitle{ 0%,100%{transform:scale(1);} 50%{transform:scale(1.04);} }
+  #screen-opening h2{
+    font-size:clamp(20px,3.4vw,36px);
+    margin:6px 0 34px;
+    color:#fff;
+    background:linear-gradient(90deg,var(--red),var(--violet),var(--blue));
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+    font-weight:800;
+  }
+  .big-btn{
+    font-size:clamp(18px,2.4vw,28px);
+    font-weight:800;
+    padding:16px 40px;
+    border:none;
+    border-radius:60px;
+    cursor:pointer;
+    color:var(--ink);
+    background:linear-gradient(90deg,var(--gold),var(--orange));
+    box-shadow:0 8px 0 #b5790a, 0 14px 24px rgba(0,0,0,.4);
+    transition:transform .12s ease;
+  }
+  .big-btn:active{ transform:translateY(6px); box-shadow:0 2px 0 #b5790a, 0 6px 14px rgba(0,0,0,.4); }
+  .ghost-btn{
+    font-size:15px; font-weight:700; padding:10px 20px; border-radius:40px; cursor:pointer;
+    color:#fff; background:rgba(255,255,255,.10); border:2px solid rgba(255,255,255,.35);
+  }
+  .footer-credit{
+    position:absolute; bottom:22px; font-size:14px; color:#d9caff; letter-spacing:.5px;
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+  }
+  .footer-credit b{ color:var(--gold); }
+  .fc-icons{ display:flex; gap:12px; }
+  .fc-icon{
+    width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    background:rgba(255,255,255,.08); border:2px solid rgba(255,255,255,.3); color:var(--gold);
+    transition:all .15s;
+  }
+  .fc-icon:hover{ border-color:var(--gold); background:rgba(255,255,255,.16); transform:translateY(-2px); }
+  .fc-icon.wa:hover{ color:#2ecc71; border-color:#2ecc71; }
+  .fc-icon.ig:hover{ color:#ff5da2; border-color:#ff5da2; }
+  .fc-icon.tt:hover{ color:#3a86ff; border-color:#3a86ff; }
+  .fc-warn{
+    font-size:11.5px; color:var(--red); max-width:340px; line-height:1.5;
+  }
+
+  /* ---------- Setup: Tim + Babak/Survei ---------- */
+  #screen-setup{ justify-content:flex-start; padding-top:16px; overflow-y:auto; }
+  .setup-wrap{ width:100%; max-width:760px; display:flex; flex-direction:column; gap:12px; padding-bottom:20px; }
+  .panel-card{
+    background:var(--panel);
+    border-radius:20px;
+    padding:18px 26px;
+    box-shadow:0 12px 30px rgba(0,0,0,.35);
+    border:3px solid rgba(255,255,255,.08);
+    text-align:left;
+  }
+  .panel-card h2{ margin:0 0 12px; color:var(--gold); font-size:clamp(18px,2.4vw,24px); text-align:center; }
+  .setup-actions.start-action{ margin:2px 0; }
+  .setup-actions.start-action .big-btn{ width:100%; max-width:420px; font-size:clamp(20px,2.6vw,30px); }
+  .setup-divider{
+    text-align:center; font-size:12.5px; font-weight:700; color:#c9b8ff; opacity:.75;
+    margin:2px 0; letter-spacing:.3px;
+  }
+  .team-row{
+    display:flex; align-items:center; gap:14px; margin:12px 0;
+    background:rgba(255,255,255,.06); border-radius:14px; padding:12px 16px;
+  }
+  .team-row label{ width:80px; font-weight:800; text-align:left; flex-shrink:0; }
+  .team-row.a label{ color:var(--red); }
+  .team-row.b label{ color:var(--blue); }
+  .team-row input{
+    flex:1; font-size:17px; padding:10px 14px; border-radius:10px; border:none;
+    outline:2px solid transparent; min-width:0;
+  }
+  .team-row input:focus{ outline:2px solid var(--gold); }
+
+  .team-count-row{ display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:14px; font-weight:800; }
+  .team-count-row select{
+    padding:9px 16px; border-radius:10px; border:none; font-weight:800; font-size:15px; cursor:pointer;
+  }
+  .team-inputs-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px 14px; }
+  .team-inputs-grid .team-row{ margin:0; }
+  @media (max-width:560px){ .team-inputs-grid{ grid-template-columns:1fr; } }
+
+  .survey-toolbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; align-items:center; }
+  .survey-toolbar input[type=number]{ width:64px; padding:8px; border-radius:8px; border:none; font-weight:700; text-align:center; }
+  .survey-list{
+    max-height:230px; overflow-y:auto; display:flex; flex-direction:column; gap:6px;
+    background:rgba(0,0,0,.22); border-radius:12px; padding:10px;
+  }
+  .survey-item{
+    display:flex; align-items:center; gap:10px; background:rgba(255,255,255,.05);
+    border-radius:10px; padding:8px 10px; cursor:pointer; font-size:13.5px;
+  }
+  .survey-item:hover{ background:rgba(255,255,255,.10); }
+  .survey-item input{ transform:scale(1.3); flex-shrink:0; accent-color:var(--gold); }
+  .survey-item .num{ background:var(--violet); border-radius:6px; padding:2px 7px; font-weight:800; font-size:11px; flex-shrink:0; }
+  .survey-item .cat{ font-weight:800; color:var(--gold); flex-shrink:0; }
+  .survey-item .qtxt{ flex:1; color:#e9e2ff; text-align:left; }
+  .survey-item .cnt{ font-size:11px; opacity:.75; flex-shrink:0; }
+  .survey-count-info{ margin-top:10px; font-weight:800; color:var(--gold); text-align:center; font-size:14px; }
+  .setup-actions{ display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:6px; }
+
+  /* ---------- Edit Soal screen ---------- */
+  #screen-editsoal{ justify-content:flex-start; padding-top:18px; }
+  .editsoal-wrap{ width:100%; max-width:840px; height:100%; display:flex; flex-direction:column; gap:10px; }
+  .editsoal-toolbar{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+  .editsoal-list{ flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:14px; padding:6px 4px 20px; }
+  .edit-q-card{
+    background:var(--panel); border-radius:16px; padding:16px 18px; text-align:left;
+    border:2px solid rgba(255,255,255,.10);
+  }
+  .eq-head{ display:flex; gap:8px; align-items:center; margin-bottom:8px; }
+  .eq-head .eq-idx{ background:var(--violet); border-radius:8px; padding:4px 10px; font-weight:800; font-size:12px; flex-shrink:0; }
+  .eq-kategori{ flex:1; padding:8px 10px; border-radius:8px; border:none; font-weight:800; min-width:0; }
+  .eq-pertanyaan{ width:100%; margin-top:6px; padding:8px 10px; border-radius:8px; border:none; font-size:14px; resize:vertical; min-height:44px; font-family:inherit; }
+  .eq-answers{ display:flex; flex-direction:column; gap:6px; margin-top:10px; }
+  .eq-ans-row{ display:flex; gap:6px; align-items:center; }
+  .eq-ans-teks{ flex:2; min-width:0; padding:7px 9px; border-radius:7px; border:none; }
+  .eq-ans-skor{ width:64px; padding:7px 4px; border-radius:7px; border:none; text-align:center; font-weight:800; }
+  .eq-ans-kunci{ flex:2; min-width:0; padding:7px 9px; border-radius:7px; border:none; font-size:12.5px; }
+  .eq-ans-kunci::placeholder{ color:#888; }
+  .btn-del-ans{ background:var(--red); border:none; color:#fff; border-radius:7px; width:28px; height:28px; cursor:pointer; font-weight:800; flex-shrink:0; }
+  .btn-del-soal{ background:var(--red); border:none; color:#fff; border-radius:8px; padding:7px 12px; cursor:pointer; font-weight:800; font-size:12px; flex-shrink:0; }
+  .btn-add-ans{ margin-top:8px; background:var(--teal); border:none; color:#fff; border-radius:8px; padding:7px 12px; cursor:pointer; font-weight:800; font-size:12.5px; }
+  .eq-foot{ display:flex; justify-content:space-between; align-items:center; margin-top:8px; }
+  .eq-total{ font-size:12.5px; font-weight:800; }
+  .eq-total.ok{ color:var(--green); }
+  .eq-total.warn{ color:var(--red); }
+  .field-hint{ font-size:10.5px; opacity:.6; margin-top:2px; }
+
+  /* ---------- Game screen ---------- */
+  #screen-game{ padding:10px 14px; }
+  .game-wrap{
+    width:100%; height:100%; max-width:1600px;
+    display:grid; grid-template-rows:auto 1fr auto; gap:10px;
+    min-height:0;
+  }
+
+  /* top strip: kategori + counter + kontrol guru */
+  .top-strip{
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;
+    background:rgba(0,0,0,.30); border-radius:14px; padding:8px 16px;
+    border:2px solid rgba(255,217,61,.25);
+  }
+  .top-strip .info{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .top-strip .qcount{ font-weight:800; color:var(--gold); font-size:14px; }
+  .top-strip .category-tag{
+    font-size:13px; font-weight:800; padding:5px 14px; border-radius:20px;
+    background:var(--violet); color:#fff;
+  }
+  .top-ctrls{ display:flex; gap:6px; flex-wrap:wrap; }
+  .icon-btn{
+    border:none; border-radius:9px; padding:7px 11px; font-weight:800; cursor:pointer; font-size:12px; color:#fff;
+  }
+  .icon-btn.next{ background:var(--green); }
+  .icon-btn.reveal{ background:var(--orange); }
+  .icon-btn.resetq{ background:var(--teal); }
+  .icon-btn.resetgame{ background:var(--pink); }
+  .icon-btn.home{ background:#5b4a8a; }
+
+  /* area tengah: tim kiri - konten tengah - tim kanan */
+  .mid-area{
+    display:grid; grid-template-columns:200px 1fr 200px; gap:12px; min-height:0;
+  }
+  .team-panel{
+    border-radius:18px; padding:14px 10px; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:10px;
+    border:3px solid transparent; transition:border-color .2s ease, transform .2s ease;
+    min-height:0;
+  }
+  .team-panel.team-a{ background:linear-gradient(160deg,#ff4d5e,#8f0f22); }
+  .team-panel.team-b{ background:linear-gradient(160deg,#3a86ff,#0d3a8f); }
+  .team-panel.team-c{ background:linear-gradient(160deg,#2ecc71,#146c3a); }
+  .team-panel.team-d{ background:linear-gradient(160deg,#a366ff,#4b1fa0); }
+  .team-panel.team-e{ background:linear-gradient(160deg,#ff9f43,#a85e05); }
+  .team-panel.team-f{ background:linear-gradient(160deg,#17c3b2,#0b6b60); }
+  .team-panel.active-team{ border-color:var(--gold); transform:scale(1.035); box-shadow:0 0 20px rgba(255,217,61,.7); }
+  .team-panel .tname{ font-size:15px; font-weight:800; opacity:.95; text-align:center; word-break:break-word; }
+  .team-panel .tscore{ font-size:clamp(30px,4vw,48px); font-weight:900; line-height:1; }
+  .team-panel .rank{ font-size:12px; font-weight:800; color:var(--gold); min-height:16px; }
+  .team-panel .lives{ font-size:18px; letter-spacing:3px; min-height:22px; }
+  .team-panel .lives .heart-lost{ opacity:.25; filter:grayscale(1); }
+  .team-panel.no-lives{ opacity:.55; filter:grayscale(.5); }
+
+  /* ---------- Susunan sisi tim (mendukung hingga 3 tim bersusun per sisi) ---------- */
+  .team-side{ display:flex; flex-direction:column; gap:8px; min-height:0; }
+  .team-side .team-panel{ flex:1; min-height:0; }
+  .team-side.count-2 .team-panel .tname{ font-size:14px; }
+  .team-side.count-2 .team-panel .tscore{ font-size:clamp(24px,3.2vw,40px); }
+  .team-side.count-3 .team-panel{ padding:8px 6px; gap:4px; }
+  .team-side.count-3 .team-panel .tname{ font-size:11.5px; }
+  .team-side.count-3 .team-panel .tscore{ font-size:clamp(18px,2.4vw,28px); }
+  .team-side.count-3 .team-panel .lives{ font-size:13px; letter-spacing:1px; min-height:16px; }
+  .team-side.count-3 .team-panel .rank{ font-size:10px; min-height:13px; }
+  .team-side.count-3 .team-panel .pick-btn{ padding:6px 4px; font-size:10.5px; }
+  .pick-btn{
+    border:none; border-radius:12px; padding:10px 8px; font-weight:900; cursor:pointer; font-size:13px; color:#fff;
+    background:rgba(0,0,0,.28); width:100%;
+  }
+  .pick-btn:hover{ background:rgba(0,0,0,.42); }
+  .pick-btn:disabled{ opacity:.4; cursor:not-allowed; }
+
+  .center-col{ display:flex; flex-direction:column; gap:8px; min-height:0; }
+  .question-box{
+    background:linear-gradient(135deg,#22114a,#341769);
+    border-radius:16px;
+    padding:12px 22px;
+    display:flex; align-items:center; justify-content:center;
+    min-height:56px;
+    border:2px solid rgba(255,217,61,.35);
+  }
+  .question-box p{
+    font-size:clamp(15px,1.9vw,23px);
+    font-weight:800;
+    margin:0;
+    line-height:1.25;
+  }
+  .turn-status-bar{
+    display:flex; justify-content:center; gap:14px; flex-wrap:wrap;
+    font-size:12.5px; font-weight:700;
+  }
+  .turn-indicator{ color:var(--gold); background:rgba(255,217,61,.14); border:1px dashed var(--gold); border-radius:10px; padding:4px 12px; }
+  .status-msgs{ color:#ffb3b3; }
+
+  .board{
+    flex:1;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    grid-auto-rows:1fr;
+    gap:8px;
+    min-height:0;
+    overflow:hidden;
+  }
+  .answer-box{
+    position:relative;
+    border-radius:12px;
+    display:flex; align-items:center;
+    padding:0 14px;
+    font-weight:800;
+    font-size:clamp(12px,1.4vw,17px);
+    color:#fff;
+    background:rgba(255,255,255,.08);
+    border:2px solid rgba(255,255,255,.12);
+    overflow:hidden;
+  }
+  .answer-box .num{
+    width:24px; height:24px; border-radius:50%;
+    background:rgba(255,255,255,.18);
+    display:flex; align-items:center; justify-content:center;
+    font-size:12px; margin-right:9px; flex-shrink:0;
+  }
+  .answer-box .txt{ flex:1; text-align:left; letter-spacing:2px; }
+  .answer-box .score{
+    background:rgba(0,0,0,.28); padding:3px 9px; border-radius:8px; font-size:13px; flex-shrink:0;
+  }
+  .answer-box.hidden-answer .txt{ letter-spacing:6px; opacity:.85; }
+  .answer-box.revealed{ animation:flipIn .5s ease; }
+  @keyframes flipIn{
+    0%{ transform:rotateX(90deg); opacity:0; }
+    100%{ transform:rotateX(0deg); opacity:1; }
+  }
+
+  /* bottom bar: kotak jawaban -- SELALU PALING BAWAH */
+  .bottom-bar{
+    display:flex; align-items:center; gap:10px;
+    background:rgba(0,0,0,.34);
+    border-radius:16px; padding:10px 14px;
+    border:2px solid rgba(255,217,61,.30);
+  }
+  .bottom-bar input{
+    flex:1; font-size:19px; padding:12px 16px; border-radius:12px; border:none; outline:none;
+    font-weight:700;
+  }
+  .check-btn{
+    background:linear-gradient(90deg,var(--green),#1ea672);
+    color:#fff; border:none; border-radius:12px; padding:12px 26px; font-size:17px; font-weight:800; cursor:pointer;
+    flex-shrink:0;
+  }
+  .feedback-banner{
+    position:absolute;
+    left:50%; top:44%;
+    transform:translate(-50%,-50%) scale(0.4);
+    font-size:clamp(40px,7vw,90px);
+    font-weight:900;
+    padding:10px 40px;
+    border-radius:20px;
+    opacity:0;
+    pointer-events:none;
+    z-index:50;
+  }
+  .feedback-banner.show-correct{
+    animation:popBanner .9s ease forwards;
+    color:#fff;
+    background:rgba(46,204,113,.92);
+    text-shadow:0 4px 0 rgba(0,0,0,.25);
+  }
+  .feedback-banner.show-wrong{
+    animation:popBanner .8s ease forwards;
+    color:#fff;
+    background:rgba(255,77,94,.92);
+    text-shadow:0 4px 0 rgba(0,0,0,.25);
+  }
+  @keyframes popBanner{
+    0%{ opacity:0; transform:translate(-50%,-50%) scale(.3); }
+    25%{ opacity:1; transform:translate(-50%,-50%) scale(1.15); }
+    40%{ transform:translate(-50%,-50%) scale(1); }
+    80%{ opacity:1; }
+    100%{ opacity:0; transform:translate(-50%,-50%) scale(1); }
+  }
+
+  /* ---------- End screen ---------- */
+  #screen-end .end-card{
+    background:var(--panel); border-radius:24px; padding:34px 46px;
+    max-width:620px; width:100%;
+    border:3px solid var(--gold);
+    box-shadow:0 0 40px rgba(255,217,61,.4);
+  }
+  #screen-end h2{ font-size:clamp(28px,4vw,44px); color:var(--gold); margin:0 0 6px; }
+  .final-scores{ display:flex; flex-wrap:wrap; justify-content:center; gap:16px; margin:22px 0; }
+  .final-score-box{ flex:1 1 140px; min-width:120px; border-radius:16px; padding:16px; font-weight:800; }
+  .final-score-box.a{ background:linear-gradient(135deg,#ff4d5e,#c0132a); }
+  .final-score-box.b{ background:linear-gradient(135deg,#3a86ff,#1554b3); }
+  .final-score-box.c{ background:linear-gradient(135deg,#2ecc71,#146c3a); }
+  .final-score-box.d{ background:linear-gradient(135deg,#a366ff,#4b1fa0); }
+  .final-score-box.e{ background:linear-gradient(135deg,#ff9f43,#a85e05); }
+  .final-score-box.f{ background:linear-gradient(135deg,#17c3b2,#0b6b60); }
+  .final-score-box .val{ font-size:32px; }
+  .winner-line{ font-size:clamp(20px,2.6vw,28px); font-weight:900; color:var(--gold); margin:10px 0; }
+  .motivation{ font-size:15px; color:#e6dcff; margin-bottom:20px; }
+
+  /* Confetti */
+  #confetti-container{ position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:200; }
+  .confetti-piece{
+    position:absolute; top:-20px; width:10px; height:16px; opacity:.95;
+    animation-name:confettiFall; animation-timing-function:ease-in;
+    animation-fill-mode:forwards;
+  }
+  @keyframes confettiFall{
+    0%{ transform:translateY(0) rotate(0deg); }
+    100%{ transform:translateY(105vh) rotate(600deg); }
+  }
+
+  ::selection{ background:var(--gold); color:#000; }
+
+  /* ---------- Tombol Perbesar Layar (Fullscreen) ---------- */
+  #btnFullscreen{
+    position:fixed; top:14px; right:14px; z-index:300;
+    width:44px; height:44px; border-radius:50%; border:2px solid rgba(255,255,255,.35);
+    background:rgba(0,0,0,.38); color:#fff; font-size:19px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:transform .15s ease, background .15s ease;
+  }
+  #btnFullscreen:hover{ background:rgba(0,0,0,.6); transform:scale(1.08); }
+  #btnFullscreen:active{ transform:scale(.94); }
+
+  /* Scrollbar tipis untuk area yang bisa discroll */
+  .survey-list::-webkit-scrollbar, .editsoal-list::-webkit-scrollbar, #screen-setup::-webkit-scrollbar{ width:8px; }
+  .survey-list::-webkit-scrollbar-thumb, .editsoal-list::-webkit-scrollbar-thumb, #screen-setup::-webkit-scrollbar-thumb{ background:rgba(255,217,61,.5); border-radius:8px; }
+
+
+  /* ---------- SPENDA PERSONAL BRANDING ---------- */
+  .school-badge{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:82px; height:82px; border-radius:50%;
+    background:linear-gradient(145deg,#ffd93d,#ff9f43);
+    color:#170b36; font-weight:1000; font-size:18px;
+    border:5px solid rgba(255,255,255,.85);
+    box-shadow:0 8px 25px rgba(0,0,0,.35),0 0 30px rgba(255,217,61,.35);
+    margin-bottom:12px;
+  }
+  .school-subtitle{
+    margin-top:-22px; margin-bottom:24px;
+    font-size:13px; font-weight:800; letter-spacing:.8px; color:#e9e2ff;
+  }
+  .school-config-card{ border-color:rgba(255,217,61,.28); }
+  .config-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .config-grid label{ display:flex; flex-direction:column; gap:5px; font-size:12px; font-weight:800; color:#d9caff; }
+  .config-grid input{
+    width:100%; padding:10px 12px; border:0; border-radius:9px;
+    font:inherit; color:#170b36; outline:2px solid transparent;
+  }
+  .config-grid input:focus{ outline:2px solid var(--gold); }
+  .config-note{ margin-top:10px; font-size:11px; opacity:.7; text-align:center; }
+  @media(max-width:560px){ .config-grid{grid-template-columns:1fr;} }
+  .spenda-watermark{
+    position:absolute; top:7px; left:12px; z-index:5;
+    font-size:10px; font-weight:900; letter-spacing:1px;
+    color:rgba(255,255,255,.45); pointer-events:none;
+  }
+
+</style>
+</head>
+<body><a href="index.html" style="position:fixed;z-index:10000;left:14px;top:14px;height:38px;padding:0 13px;display:flex;align-items:center;border-radius:20px;background:rgba(15,7,43,.82);border:1px solid rgba(255,217,61,.35);color:#fff;text-decoration:none;font:800 11px Inter,system-ui,sans-serif;box-shadow:0 8px 25px rgba(0,0,0,.25)">← Game Center</a>
+
+<div class="stage-lights">
+  <div class="beam b1"></div><div class="beam b2"></div><div class="beam b3"></div><div class="beam b4"></div>
+</div>
+<div class="curtain-top"></div>
+<div class="curtain-bottom"></div>
+<div id="confetti-container"></div>
+<button id="btnFullscreen" title="Perbesar Layar (Fullscreen)">⛶</button>
+
+<div id="app"><div class="spenda-watermark">SPENDA FAMILY 100 • SMPN 2 SOYO JAYA</div>
+
+  <!-- ============ 1. HALAMAN PEMBUKA ============ -->
+  <section id="screen-opening" class="screen active">
+    <div class="school-badge">SPENDA</div><h1>🎉 SPENDA FAMILY 100 🎉</h1>
+    <h2>BELAJAR SAMBIL BERMAIN &mdash; JADILAH JUARA</h2><div class="school-subtitle">SMP NEGERI 2 SOYO JAYA • BERILMU • BERKARAKTER • BERPRESTASI</div>
+    <button class="big-btn" id="btnMulai">▶ MULAI PERMAINAN</button>
+    <div class="footer-credit">
+      <div>Dibuat untuk <b>SMP NEGERI 2 SOYO JAYA</b></div>
+      <div class="fc-icons" aria-hidden="true" style="display:none;"></div>
+
+    </div>
+  </section>
+
+  <!-- ============ 2. PENGATURAN: NAMA TIM + BABAK/SURVEI ============ -->
+  <section id="screen-setup" class="screen">
+    <div class="setup-wrap">
+
+      <div class="panel-card school-config-card">
+        <h2>🏫 Identitas Permainan</h2>
+        <div class="config-grid">
+          <label>Nama Sekolah<input id="cfgSchool" type="text" value="SMP Negeri 2 Soyo Jaya"></label>
+          <label>Mata Pelajaran<input id="cfgSubject" type="text" value="Informatika"></label>
+          <label>Kelas<input id="cfgClass" type="text" value="VII / VIII / IX"></label>
+          <label>Tahun Pelajaran<input id="cfgYear" type="text" value="2026/2027"></label>
+        </div>
+        <div class="config-note">Identitas ini tersimpan di browser perangkat ini dan akan tampil pada permainan.</div>
+      </div>
+
+      <div class="panel-card">
+        <h2>✏️ Edit Kelompok / Nama Tim</h2>
+        <div class="team-count-row">
+          <label for="teamCountSelect">Jumlah Tim:</label>
+          <select id="teamCountSelect">
+            <option value="2">2 Tim</option>
+            <option value="3">3 Tim</option>
+            <option value="4">4 Tim</option>
+            <option value="5">5 Tim</option>
+            <option value="6">6 Tim</option>
+          </select>
+        </div>
+        <div class="team-inputs-grid" id="teamInputsGrid"></div>
+      </div>
+
+      <div class="setup-actions start-action">
+        <button class="big-btn" id="btnStartGame">🚀 MULAI GAME</button>
+      </div>
+
+      <div class="setup-divider">🔒 Pengaturan soal di bawah ini khusus untuk guru</div>
+
+      <div class="panel-card">
+        <h2>🎯 Atur Babak &amp; Pilih Survei</h2>
+        <div class="survey-toolbar">
+          <button class="ghost-btn" id="btnSelectAll">☑ Pilih Semua</button>
+          <button class="ghost-btn" id="btnSelectNone">☐ Hapus Semua</button>
+          <span style="display:flex;align-items:center;gap:6px;">
+            🎲 Acak <input type="number" id="randomCount" min="1" value="10"> survei
+            <button class="ghost-btn" id="btnRandomPick">Terapkan</button>
+          </span>
+        </div>
+        <div class="survey-list" id="surveyList"></div>
+        <div class="survey-count-info" id="surveyCountInfo"></div>
+        <div class="setup-actions">
+          <button class="ghost-btn" id="btnEditSoal">🛠️ Kelola / Edit Bank Soal</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3. KELOLA / EDIT BANK SOAL ============ -->
+  <section id="screen-editsoal" class="screen">
+    <div class="editsoal-wrap">
+      <h2 style="color:var(--gold); margin:4px 0;">🛠️ Kelola Bank Soal (Survei)</h2>
+      <div style="font-size:12px; opacity:.75; text-align:center; margin-bottom:2px;">
+        💾 Perubahan tersimpan otomatis di browser ini setelah menekan "Simpan &amp; Kembali". Gunakan Export/Import untuk memindahkan soal ke perangkat lain.
+      </div>
+      <div class="editsoal-toolbar">
+        <button class="ghost-btn" id="btnAddSoal">➕ Tambah Soal Baru</button>
+        <button class="ghost-btn" id="btnResetSoalBawaan">↺ Kembalikan ke Soal Bawaan</button>
+        <button class="ghost-btn" id="btnExportSoal">📤 Export Soal (.json)</button>
+        <button class="ghost-btn" id="btnImportSoal">📥 Import Soal (.json)</button>
+        <input type="file" id="fileImportSoal" accept=".json,application/json" style="display:none;">
+        <button class="big-btn" id="btnSaveEditSoalTop" style="padding:10px 22px;font-size:15px;">💾 Simpan &amp; Kembali</button>
+        <button class="ghost-btn" id="btnCancelEditSoal">✖ Batal</button>
+      </div>
+      <div class="editsoal-list" id="editSoalList"></div>
+    </div>
+  </section>
+
+  <!-- ============ 4. HALAMAN PERMAINAN UTAMA ============ -->
+  <section id="screen-game" class="screen">
+    <div class="game-wrap">
+
+      <!-- Baris atas: kategori + counter + kontrol guru -->
+      <div class="top-strip">
+        <div class="info">
+          <div class="category-tag" id="categoryTag">Kategori</div>
+          <div class="qcount" id="qCounter">Soal 1 / 20</div><div class="qcount" id="schoolInfoTag" style="opacity:.75;font-size:11px;"></div>
+        </div>
+        <div class="top-ctrls">
+          <button class="icon-btn home" id="btnBackHome">🏠 Halaman Depan</button>
+          <button class="icon-btn reveal" id="btnRevealAll">🔓 Buka Semua</button>
+          <button class="icon-btn resetq" id="btnResetQ">↺ Reset Soal</button>
+          <button class="icon-btn next" id="btnNextQ">Soal Berikutnya ▶</button>
+          <button class="icon-btn resetgame" id="btnResetGame">⟲ Reset Permainan</button>
+        </div>
+      </div>
+
+      <!-- Baris tengah: Tim (kiri, bisa bersusun hingga 3) - Papan Soal (tengah) - Tim (kanan, bisa bersusun hingga 3) -->
+      <div class="mid-area">
+
+        <div class="team-side left" id="teamSideLeft"></div>
+
+        <div class="center-col">
+          <div class="question-box"><p id="questionText">Pertanyaan...</p></div>
+          <div class="turn-status-bar">
+            <span class="turn-indicator" id="turnIndicator">Tim yang Menjawab: -</span>
+            <span class="status-msgs" id="statusMsg"></span>
+          </div>
+          <div class="marquee-frame" style="flex:1; min-height:0;">
+            <div class="inner" style="padding:8px; display:flex;">
+              <div class="board" id="answerBoard" style="flex:1;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="team-side right" id="teamSideRight"></div>
+
+      </div>
+
+      <!-- Baris paling bawah: kotak input jawaban -->
+      <div class="bottom-bar">
+        <input type="text" id="answerInput" placeholder="Ketik jawaban di sini..." autocomplete="off">
+        <button class="check-btn" id="btnCheck">✅ CEK JAWABAN</button>
+      </div>
+
+    </div>
+    <div class="feedback-banner" id="feedbackBanner"></div>
+  </section>
+
+  <!-- ============ 5. HALAMAN AKHIR ============ -->
+  <section id="screen-end" class="screen">
+    <div class="end-card">
+      <h2>🏆 PERMAINAN SELESAI!</h2><div id="endSchoolInfo" style="font-weight:800;color:#e9e2ff;margin-bottom:8px;"></div>
+      <div class="final-scores" id="finalScoresWrap"></div>
+      <div class="winner-line" id="winnerLine">Selamat!</div>
+      <div class="motivation">Kerja bagus, tetap semangat belajar Informatika! Gunakan pengetahuan teknologi secara kreatif, aman, dan bertanggung jawab. 💪✨</div>
+      <button class="big-btn" id="btnPlayAgain">🔁 MAIN LAGI</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* =========================================================================
+   BANK SOAL (BAWAAN)
+   -------------------------------------------------------------------------
+   Guru dapat mengedit / menambah soal langsung lewat menu
+   "🛠️ Kelola / Edit Bank Soal" di dalam game, ATAU mengedit array di
+   bawah ini secara manual.
+   Setiap soal berisi:
+     kategori   : nama materi
+     pertanyaan : teks pertanyaan
+     jawaban    : array objek { teks, skor, kunci[] }
+                  - teks  : jawaban yang tampil di papan
+                  - skor  : poin jawaban (total per soal idealnya = 100)
+                  - kunci : daftar kata kunci alternatif untuk pengecekan
+   ========================================================================= */
+let questionBank = [
+  { kategori:"Perangkat Keras Komputer",
+    pertanyaan:"Sebutkan contoh perangkat keras (hardware) komputer!",
+    jawaban:[
+      {teks:"Monitor", skor:25, kunci:["monitor","layar"]},
+      {teks:"Keyboard", skor:20, kunci:["keyboard","papan ketik"]},
+      {teks:"Mouse", skor:15, kunci:["mouse","tetikus"]},
+      {teks:"CPU / Processor", skor:15, kunci:["cpu","processor","prosesor"]},
+      {teks:"Printer", skor:10, kunci:["printer","pencetak"]},
+      {teks:"Speaker", skor:10, kunci:["speaker","pengeras suara"]},
+      {teks:"Harddisk", skor:5, kunci:["harddisk","hard disk","hdd"]},
+    ]},
+  { kategori:"Perangkat Input",
+    pertanyaan:"Sebutkan perangkat input (masukan) pada komputer!",
+    jawaban:[
+      {teks:"Keyboard", skor:30, kunci:["keyboard","papan ketik"]},
+      {teks:"Mouse", skor:25, kunci:["mouse","tetikus"]},
+      {teks:"Scanner", skor:15, kunci:["scanner","pemindai"]},
+      {teks:"Microphone", skor:10, kunci:["microphone","mikrofon","mic"]},
+      {teks:"Webcam", skor:10, kunci:["webcam","kamera"]},
+      {teks:"Joystick", skor:5, kunci:["joystick","stik game"]},
+      {teks:"Touchpad", skor:5, kunci:["touchpad","panel sentuh"]},
+    ]},
+  { kategori:"Perangkat Output",
+    pertanyaan:"Sebutkan perangkat output (keluaran) pada komputer!",
+    jawaban:[
+      {teks:"Monitor", skor:35, kunci:["monitor","layar"]},
+      {teks:"Printer", skor:25, kunci:["printer","pencetak"]},
+      {teks:"Speaker", skor:20, kunci:["speaker","pengeras suara"]},
+      {teks:"Proyektor", skor:10, kunci:["proyektor","projector"]},
+      {teks:"Headphone", skor:5, kunci:["headphone","earphone"]},
+      {teks:"Plotter", skor:5, kunci:["plotter"]},
+    ]},
+  { kategori:"Perangkat Storage",
+    pertanyaan:"Sebutkan perangkat penyimpanan (storage) pada komputer!",
+    jawaban:[
+      {teks:"Harddisk", skor:30, kunci:["harddisk","hard disk","hdd"]},
+      {teks:"Flashdisk", skor:25, kunci:["flashdisk","flash disk","usb"]},
+      {teks:"SSD", skor:15, kunci:["ssd","solid state drive"]},
+      {teks:"CD / DVD", skor:10, kunci:["cd","dvd","compact disc"]},
+      {teks:"Memory Card", skor:10, kunci:["memory card","kartu memori","microsd","sd card"]},
+      {teks:"Cloud Storage", skor:10, kunci:["cloud storage","cloud","penyimpanan awan","google drive"]},
+    ]},
+  { kategori:"Perangkat Processing",
+    pertanyaan:"Sebutkan komponen perangkat pemroses (processing) pada komputer!",
+    jawaban:[
+      {teks:"Processor / CPU", skor:35, kunci:["processor","cpu","prosesor"]},
+      {teks:"RAM", skor:30, kunci:["ram","memori"]},
+      {teks:"Motherboard", skor:15, kunci:["motherboard","mainboard","papan induk"]},
+      {teks:"VGA Card", skor:10, kunci:["vga","kartu grafis","graphics card","gpu"]},
+      {teks:"Power Supply", skor:10, kunci:["power supply","psu","catu daya"]},
+    ]},
+  { kategori:"Perangkat Lunak",
+    pertanyaan:"Sebutkan contoh perangkat lunak (software) komputer!",
+    jawaban:[
+      {teks:"Sistem Operasi", skor:30, kunci:["sistem operasi","os","operating system"]},
+      {teks:"Aplikasi Office (Word/Excel)", skor:20, kunci:["office","word","excel","ms office"]},
+      {teks:"Browser", skor:20, kunci:["browser","peramban"]},
+      {teks:"Antivirus", skor:15, kunci:["antivirus","anti virus"]},
+      {teks:"Aplikasi Games", skor:10, kunci:["games","game","permainan"]},
+      {teks:"Media Player", skor:5, kunci:["media player","pemutar media"]},
+    ]},
+  { kategori:"Aplikasi Media Sosial",
+    pertanyaan:"Sebutkan contoh aplikasi media sosial yang kamu ketahui!",
+    jawaban:[
+      {teks:"WhatsApp", skor:25, kunci:["whatsapp","wa"]},
+      {teks:"Instagram", skor:20, kunci:["instagram","ig"]},
+      {teks:"TikTok", skor:20, kunci:["tiktok","tik tok"]},
+      {teks:"Facebook", skor:15, kunci:["facebook","fb"]},
+      {teks:"YouTube", skor:10, kunci:["youtube","yt"]},
+      {teks:"Twitter / X", skor:5, kunci:["twitter","x"]},
+      {teks:"Telegram", skor:5, kunci:["telegram"]},
+    ]},
+  { kategori:"Sistem Operasi Komputer",
+    pertanyaan:"Sebutkan contoh sistem operasi komputer!",
+    jawaban:[
+      {teks:"Windows", skor:35, kunci:["windows"]},
+      {teks:"Linux", skor:25, kunci:["linux"]},
+      {teks:"MacOS", skor:20, kunci:["macos","mac os","apple mac"]},
+      {teks:"Chrome OS", skor:10, kunci:["chrome os","chromeos"]},
+      {teks:"Ubuntu", skor:10, kunci:["ubuntu"]},
+    ]},
+  { kategori:"Sistem Operasi HP",
+    pertanyaan:"Sebutkan contoh sistem operasi pada HP (smartphone)!",
+    jawaban:[
+      {teks:"Android", skor:45, kunci:["android"]},
+      {teks:"iOS", skor:35, kunci:["ios","iphone os"]},
+      {teks:"HarmonyOS", skor:10, kunci:["harmonyos","harmony os"]},
+      {teks:"Symbian", skor:5, kunci:["symbian"]},
+      {teks:"KaiOS", skor:5, kunci:["kaios","kai os"]},
+    ]},
+  { kategori:"Perangkat Keras - Keyboard",
+    pertanyaan:"Sebutkan bagian-bagian dari keyboard yang kamu ketahui!",
+    jawaban:[
+      {teks:"Tombol Huruf", skor:25, kunci:["tombol huruf","huruf"]},
+      {teks:"Tombol Angka", skor:20, kunci:["tombol angka","angka"]},
+      {teks:"Tombol Enter", skor:15, kunci:["enter"]},
+      {teks:"Tombol Spasi", skor:15, kunci:["spasi","space"]},
+      {teks:"Tombol Shift", skor:10, kunci:["shift"]},
+      {teks:"Tombol Ctrl", skor:10, kunci:["ctrl","control"]},
+      {teks:"Tombol Fungsi (F1-F12)", skor:5, kunci:["fungsi","f1","f12","function"]},
+    ]},
+  { kategori:"Perangkat Keras - Mouse",
+    pertanyaan:"Sebutkan jenis-jenis mouse komputer!",
+    jawaban:[
+      {teks:"Mouse Optik", skor:30, kunci:["optik","optic"]},
+      {teks:"Mouse Wireless", skor:25, kunci:["wireless","nirkabel"]},
+      {teks:"Mouse Mekanik / Bola", skor:20, kunci:["mekanik","bola","ball"]},
+      {teks:"Mouse Gaming", skor:15, kunci:["gaming"]},
+      {teks:"Trackball", skor:10, kunci:["trackball"]},
+    ]},
+  { kategori:"Perangkat Keras",
+    pertanyaan:"Sebutkan merk laptop / komputer yang kamu ketahui!",
+    jawaban:[
+      {teks:"Asus", skor:25, kunci:["asus"]},
+      {teks:"Lenovo", skor:20, kunci:["lenovo"]},
+      {teks:"HP", skor:20, kunci:["hp","hewlett packard"]},
+      {teks:"Acer", skor:15, kunci:["acer"]},
+      {teks:"Dell", skor:10, kunci:["dell"]},
+      {teks:"Apple / MacBook", skor:10, kunci:["apple","macbook"]},
+    ]},
+  { kategori:"Perangkat Processing",
+    pertanyaan:"Sebutkan bagian dalam unit sistem (CPU/casing) komputer!",
+    jawaban:[
+      {teks:"Processor", skor:30, kunci:["processor","prosesor","cpu"]},
+      {teks:"RAM", skor:25, kunci:["ram","memori"]},
+      {teks:"Motherboard", skor:20, kunci:["motherboard","mainboard"]},
+      {teks:"Harddisk", skor:15, kunci:["harddisk","hard disk"]},
+      {teks:"Power Supply", skor:10, kunci:["power supply","psu"]},
+    ]},
+  { kategori:"Perangkat Output - Printer",
+    pertanyaan:"Sebutkan jenis-jenis printer yang kamu ketahui!",
+    jawaban:[
+      {teks:"Printer Inkjet", skor:35, kunci:["inkjet"]},
+      {teks:"Printer Laser", skor:30, kunci:["laser"]},
+      {teks:"Printer Dot Matrix", skor:20, kunci:["dot matrix"]},
+      {teks:"Printer 3D", skor:15, kunci:["3d","tiga dimensi"]},
+    ]},
+  { kategori:"Perangkat Storage",
+    pertanyaan:"Sebutkan satuan kapasitas penyimpanan data yang kamu ketahui!",
+    jawaban:[
+      {teks:"Byte", skor:10, kunci:["byte"]},
+      {teks:"Kilobyte (KB)", skor:20, kunci:["kilobyte","kb"]},
+      {teks:"Megabyte (MB)", skor:25, kunci:["megabyte","mb"]},
+      {teks:"Gigabyte (GB)", skor:30, kunci:["gigabyte","gb"]},
+      {teks:"Terabyte (TB)", skor:15, kunci:["terabyte","tb"]},
+    ]},
+  { kategori:"Perangkat Lunak - Office",
+    pertanyaan:"Sebutkan aplikasi office / perkantoran yang sering digunakan!",
+    jawaban:[
+      {teks:"Microsoft Word", skor:30, kunci:["word","microsoft word"]},
+      {teks:"Microsoft Excel", skor:25, kunci:["excel","microsoft excel"]},
+      {teks:"Microsoft PowerPoint", skor:20, kunci:["powerpoint","ppt"]},
+      {teks:"Google Docs", skor:15, kunci:["google docs","gdocs"]},
+      {teks:"Google Sheets", skor:10, kunci:["google sheets","gsheet"]},
+    ]},
+  { kategori:"Perangkat Lunak - Browser",
+    pertanyaan:"Sebutkan aplikasi browser (peramban internet) yang kamu ketahui!",
+    jawaban:[
+      {teks:"Google Chrome", skor:40, kunci:["chrome","google chrome"]},
+      {teks:"Mozilla Firefox", skor:20, kunci:["firefox","mozilla"]},
+      {teks:"Microsoft Edge", skor:20, kunci:["edge","microsoft edge"]},
+      {teks:"Safari", skor:10, kunci:["safari"]},
+      {teks:"Opera", skor:10, kunci:["opera"]},
+    ]},
+  { kategori:"Aplikasi Streaming",
+    pertanyaan:"Sebutkan aplikasi untuk menonton video / streaming!",
+    jawaban:[
+      {teks:"YouTube", skor:35, kunci:["youtube","yt"]},
+      {teks:"Netflix", skor:25, kunci:["netflix"]},
+      {teks:"TikTok", skor:20, kunci:["tiktok","tik tok"]},
+      {teks:"Disney+ / Viu", skor:10, kunci:["disney","viu"]},
+      {teks:"Vidio", skor:10, kunci:["vidio"]},
+    ]},
+  { kategori:"Perangkat Output - Monitor",
+    pertanyaan:"Sebutkan jenis-jenis layar (monitor) yang kamu ketahui!",
+    jawaban:[
+      {teks:"LCD", skor:35, kunci:["lcd"]},
+      {teks:"LED", skor:30, kunci:["led"]},
+      {teks:"OLED", skor:20, kunci:["oled"]},
+      {teks:"Plasma", skor:10, kunci:["plasma"]},
+      {teks:"CRT (Tabung)", skor:5, kunci:["crt","tabung"]},
+    ]},
+  { kategori:"Aplikasi Komunikasi",
+    pertanyaan:"Sebutkan contoh aplikasi chatting / komunikasi yang kamu ketahui!",
+    jawaban:[
+      {teks:"WhatsApp", skor:30, kunci:["whatsapp","wa"]},
+      {teks:"Telegram", skor:20, kunci:["telegram"]},
+      {teks:"Line", skor:15, kunci:["line"]},
+      {teks:"Messenger", skor:15, kunci:["messenger","fb messenger"]},
+      {teks:"Zoom", skor:10, kunci:["zoom"]},
+      {teks:"Google Meet", skor:10, kunci:["google meet","gmeet"]},
+    ]},
+];
+/* Salinan asli disimpan untuk tombol "Kembalikan ke Soal Bawaan" */
+const ORIGINAL_QUESTION_BANK = JSON.parse(JSON.stringify(questionBank));
+
+/* =========================================================================
+   PENYIMPANAN BANK SOAL DI BROWSER (localStorage)
+   -------------------------------------------------------------------------
+   Setiap kali guru menekan "Simpan & Kembali" atau "Kembalikan ke Soal
+   Bawaan", bank soal disimpan ke localStorage milik browser ini. Saat
+   aplikasi (file HTML) dibuka lagi -- bahkan setelah ditutup total -- bank
+   soal yang tersimpan akan otomatis dimuat kembali, SELAMA dibuka di
+   browser & perangkat yang sama. Untuk memindahkan soal ke komputer/IFP
+   lain, gunakan tombol Export/Import (.json) di halaman Kelola Bank Soal.
+   ========================================================================= */
+const QBANK_STORAGE_KEY = "kuisFamily100_questionBank_v1";
+
+function saveQuestionBankToStorage(){
+  try{
+    localStorage.setItem(QBANK_STORAGE_KEY, JSON.stringify(questionBank));
+  }catch(e){
+    console.warn("Gagal menyimpan bank soal ke penyimpanan lokal browser:", e);
+  }
+}
+function loadQuestionBankFromStorage(){
+  try{
+    const raw = localStorage.getItem(QBANK_STORAGE_KEY);
+    if(raw){
+      const parsed = JSON.parse(raw);
+      if(Array.isArray(parsed) && parsed.length){
+        questionBank = parsed;
+      }
+    }
+  }catch(e){
+    console.warn("Gagal memuat bank soal tersimpan, memakai bank soal bawaan:", e);
+  }
+}
+loadQuestionBankFromStorage(); // muat bank soal tersimpan (jika ada) saat aplikasi dibuka
+
+/* Warna kotak jawaban berselang-seling (pelangi) */
+const answerColors = ["#ff4d5e","#ff9f43","#ffd93d","#2ecc71","#17c3b2","#3a86ff","#a366ff","#ff5da2"];
+
+/* =========================================================================
+   STATE PERMAINAN
+   ========================================================================= */
+const TEAM_LETTERS_ALL = ["A","B","C","D","E","F"]; // urutan huruf tim yang didukung (maks 6 tim)
+let activeTeams = ["A","B"]; // daftar huruf tim yang benar-benar sedang bermain (2-6 tim)
+let teamNames = { A:"Tim A", B:"Tim B" };
+let scores = { A:0, B:0 };
+let activeTeam = null;
+let playOrder = [];         // daftar INDEX questionBank yang dipilih & akan dimainkan (babak)
+let currentIndex = 0;       // posisi saat ini di dalam playOrder
+let revealed = [];          // boolean[] untuk soal aktif
+let wrongCount = 0;
+let earnedThisQuestion = { A:0, B:0 };
+let lives = { A:3, B:3 };   // nyawa tiap tim, direset setiap babak/soal baru
+let audioCtx = null;
+
+const SPENDA_CONFIG_KEY = "spendaFamily100_config_v1";
+const SPENDA_DEFAULT_CONFIG = {
+  school:"SMP Negeri 2 Soyo Jaya",
+  subject:"Informatika",
+  className:"VII / VIII / IX",
+  year:"2026/2027"
+};
+let spendaConfig = {...SPENDA_DEFAULT_CONFIG};
+
+function loadSpendaConfig(){
+  try{
+    const raw = localStorage.getItem(SPENDA_CONFIG_KEY);
+    if(raw) spendaConfig = {...SPENDA_DEFAULT_CONFIG, ...JSON.parse(raw)};
+  }catch(e){}
+}
+function saveSpendaConfig(){
+  try{ localStorage.setItem(SPENDA_CONFIG_KEY, JSON.stringify(spendaConfig)); }catch(e){}
+}
+function applySpendaConfig(){
+  const ids = {school:"cfgSchool",subject:"cfgSubject",className:"cfgClass",year:"cfgYear"};
+  Object.entries(ids).forEach(([key,id])=>{
+    const el=document.getElementById(id); if(el) el.value=spendaConfig[key]||"";
+  });
+}
+function syncSpendaConfig(){
+  const map = {school:"cfgSchool",subject:"cfgSubject",className:"cfgClass",year:"cfgYear"};
+  Object.entries(map).forEach(([key,id])=>{
+    const el=document.getElementById(id); if(el) spendaConfig[key]=el.value.trim()||SPENDA_DEFAULT_CONFIG[key];
+  });
+  saveSpendaConfig();
+}
+loadSpendaConfig();
+
+
+/* =========================================================================
+   AUDIO (Web Audio API - tanpa file eksternal)
+   ========================================================================= */
+function ensureAudio(){
+  if(!audioCtx){
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if(audioCtx.state === "suspended") audioCtx.resume();
+}
+function tone(freq, start, dur, type="sine", vol=0.18){
+  if(!audioCtx) return;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = type;
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime(vol, audioCtx.currentTime+start);
+  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime+start+dur);
+  osc.connect(gain); gain.connect(audioCtx.destination);
+  osc.start(audioCtx.currentTime+start);
+  osc.stop(audioCtx.currentTime+start+dur);
+}
+function sndCorrect(){ tone(523,0,.12,"triangle"); tone(659,.1,.12,"triangle"); tone(784,.2,.22,"triangle"); }
+function sndScore(){ tone(880,0,.08,"square",.12); tone(1046,.06,.12,"square",.12); }
+function sndWrong(){ tone(200,0,.18,"sawtooth",.15); tone(140,.15,.25,"sawtooth",.15); }
+function sndApplause(){
+  if(!audioCtx) return;
+  for(let i=0;i<26;i++){
+    const t = Math.random()*1.1;
+    tone(300+Math.random()*1400, t, 0.05+Math.random()*0.05, "square", 0.04);
+  }
+}
+function sndGameEnd(){
+  tone(523,0,.18,"triangle"); tone(659,.18,.18,"triangle");
+  tone(784,.36,.18,"triangle"); tone(1046,.54,.5,"triangle");
+}
+
+/* =========================================================================
+   TOMBOL PERBESAR LAYAR (FULLSCREEN)
+   ========================================================================= */
+function isFullscreenActive(){
+  return !!(document.fullscreenElement || document.webkitFullscreenElement ||
+            document.msFullscreenElement);
+}
+function enterFullscreen(){
+  const el = document.documentElement;
+  if(el.requestFullscreen) el.requestFullscreen();
+  else if(el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+  else if(el.msRequestFullscreen) el.msRequestFullscreen();
+}
+function exitFullscreen(){
+  if(document.exitFullscreen) document.exitFullscreen();
+  else if(document.webkitExitFullscreen) document.webkitExitFullscreen();
+  else if(document.msExitFullscreen) document.msExitFullscreen();
+}
+function updateFullscreenBtn(){
+  const btn = document.getElementById("btnFullscreen");
+  if(isFullscreenActive()){
+    btn.textContent = "🗗";
+    btn.title = "Keluar dari Layar Penuh";
+  } else {
+    btn.textContent = "⛶";
+    btn.title = "Perbesar Layar (Fullscreen)";
+  }
+}
+applySpendaConfig();
+document.getElementById("btnFullscreen").addEventListener("click", ()=>{
+  if(isFullscreenActive()) exitFullscreen();
+  else enterFullscreen();
+});
+["fullscreenchange","webkitfullscreenchange","msfullscreenchange"].forEach(evt=>{
+  document.addEventListener(evt, updateFullscreenBtn);
+});
+
+/* =========================================================================
+   NAVIGASI ANTAR HALAMAN
+   ========================================================================= */
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+document.getElementById("btnMulai").addEventListener("click", ()=>{
+  ensureAudio();
+  renderSurveyList();
+  renderTeamInputs();
+  showScreen("screen-setup");
+});
+
+/* =========================================================================
+   INPUT NAMA TIM DINAMIS (2 - 6 TIM) DI HALAMAN PENGATURAN
+   ========================================================================= */
+const TEAM_LABEL_COLORS = { A:"#ff4d5e", B:"#3a86ff", C:"#2ecc71", D:"#a366ff", E:"#ff9f43", F:"#17c3b2" };
+
+function renderTeamInputs(){
+  const grid = document.getElementById("teamInputsGrid");
+  const select = document.getElementById("teamCountSelect");
+  const count = parseInt(select.value,10) || 2;
+  // simpan nilai yang sudah diketik guru agar tidak hilang saat jumlah tim diubah
+  const existing = {};
+  TEAM_LETTERS_ALL.forEach(letter=>{
+    const inp = document.getElementById("inputTeam"+letter);
+    if(inp) existing[letter] = inp.value;
+  });
+  grid.innerHTML = "";
+  for(let i=0;i<count;i++){
+    const letter = TEAM_LETTERS_ALL[i];
+    const row = document.createElement("div");
+    row.className = "team-row team-row-"+letter.toLowerCase();
+    const savedVal = existing[letter] ? escapeAttr(existing[letter]) : "";
+    row.innerHTML = `
+      <label style="color:${TEAM_LABEL_COLORS[letter]}">TIM ${letter}</label>
+      <input type="text" id="inputTeam${letter}" placeholder="Tim ${letter}" maxlength="18" value="${savedVal}">`;
+    grid.appendChild(row);
+  }
+}
+document.getElementById("teamCountSelect").addEventListener("change", renderTeamInputs);
+renderTeamInputs();
+
+/* =========================================================================
+   PANEL TIM DI ARENA GAME (dibangun dinamis, maks 3 tim bersusun per sisi)
+   ========================================================================= */
+function buildTeamPanels(){
+  const leftWrap = document.getElementById("teamSideLeft");
+  const rightWrap = document.getElementById("teamSideRight");
+  leftWrap.innerHTML = "";
+  rightWrap.innerHTML = "";
+  const leftCount = Math.ceil(activeTeams.length/2);
+  const rightCount = activeTeams.length - leftCount;
+  activeTeams.forEach((letter, idx)=>{
+    const panel = document.createElement("div");
+    panel.className = `team-panel team-${letter.toLowerCase()}`;
+    panel.id = `scoreCard${letter}`;
+    panel.innerHTML = `
+      <span class="tname" id="scoreName${letter}">${escapeHtml(teamNames[letter])}</span>
+      <span class="tscore" id="scoreVal${letter}">0</span>
+      <span class="lives" id="lives${letter}">❤❤❤</span>
+      <span class="rank" id="rank${letter}"></span>
+      <button class="pick-btn" id="btnPick${letter}">Jawaban untuk ${escapeHtml(teamNames[letter])}</button>`;
+    (idx < leftCount ? leftWrap : rightWrap).appendChild(panel);
+    panel.querySelector(".pick-btn").addEventListener("click", ()=>pickTeam(letter));
+  });
+  leftWrap.className = "team-side left count-"+leftCount;
+  rightWrap.className = "team-side right count-"+rightCount;
+}
+
+/* =========================================================================
+   DAFTAR SURVEI (PILIH BABAK) DI HALAMAN PENGATURAN
+   ========================================================================= */
+function renderSurveyList(){
+  const wrap = document.getElementById("surveyList");
+  wrap.innerHTML = "";
+  questionBank.forEach((q, i)=>{
+    const label = document.createElement("label");
+    label.className = "survey-item";
+    label.innerHTML = `
+      <input type="checkbox" class="survey-chk" data-idx="${i}" checked>
+      <span class="num">${i+1}</span>
+      <span class="cat">${escapeHtml(q.kategori)}</span>
+      <span class="qtxt">${escapeHtml(q.pertanyaan)}</span>
+      <span class="cnt">${q.jawaban.length} jwb</span>`;
+    wrap.appendChild(label);
+  });
+  wrap.querySelectorAll(".survey-chk").forEach(chk=>{
+    chk.addEventListener("change", updateSurveyCountInfo);
+  });
+  const randomCountInput = document.getElementById("randomCount");
+  randomCountInput.max = questionBank.length;
+  if(parseInt(randomCountInput.value,10) > questionBank.length) randomCountInput.value = questionBank.length;
+  updateSurveyCountInfo();
+}
+function updateSurveyCountInfo(){
+  const total = questionBank.length;
+  const checked = document.querySelectorAll(".survey-chk:checked").length;
+  document.getElementById("surveyCountInfo").textContent =
+    `${checked} dari ${total} survei dipilih — akan dimainkan sebagai ${checked} babak.`;
+}
+function escapeHtml(str){
+  const d = document.createElement("div");
+  d.textContent = str;
+  return d.innerHTML;
+}
+document.getElementById("btnSelectAll").addEventListener("click", ()=>{
+  document.querySelectorAll(".survey-chk").forEach(c=>c.checked = true);
+  updateSurveyCountInfo();
+});
+document.getElementById("btnSelectNone").addEventListener("click", ()=>{
+  document.querySelectorAll(".survey-chk").forEach(c=>c.checked = false);
+  updateSurveyCountInfo();
+});
+document.getElementById("btnRandomPick").addEventListener("click", ()=>{
+  const n = Math.max(1, Math.min(questionBank.length, parseInt(document.getElementById("randomCount").value,10) || 1));
+  const all = Array.from({length:questionBank.length}, (_,i)=>i);
+  for(let i=all.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [all[i],all[j]]=[all[j],all[i]]; }
+  const chosen = new Set(all.slice(0,n));
+  document.querySelectorAll(".survey-chk").forEach(c=>{
+    c.checked = chosen.has(parseInt(c.dataset.idx,10));
+  });
+  updateSurveyCountInfo();
+});
+
+document.getElementById("btnStartGame").addEventListener("click", ()=>{
+  syncSpendaConfig();
+  const count = parseInt(document.getElementById("teamCountSelect").value,10) || 2;
+  activeTeams = TEAM_LETTERS_ALL.slice(0, count);
+
+  teamNames = {};
+  scores = {};
+  lives = {};
+  earnedThisQuestion = {};
+  activeTeams.forEach(letter=>{
+    const val = document.getElementById("inputTeam"+letter).value.trim();
+    teamNames[letter] = val || `Tim ${letter}`;
+    scores[letter] = 0;
+    lives[letter] = 3;
+    earnedThisQuestion[letter] = 0;
+  });
+
+  buildTeamPanels();
+
+  playOrder = Array.from(document.querySelectorAll(".survey-chk:checked")).map(c=>parseInt(c.dataset.idx,10));
+  if(playOrder.length === 0){
+    alert("Pilih minimal satu survei/babak terlebih dahulu.");
+    return;
+  }
+
+  currentIndex = 0;
+  activeTeam = null;
+  document.getElementById("turnIndicator").textContent = "Tim yang Menjawab: -";
+  document.getElementById("schoolInfoTag").textContent = `${spendaConfig.school} • ${spendaConfig.subject} • ${spendaConfig.className}`;
+  activeTeams.forEach(t=> document.getElementById(`scoreCard${t}`).classList.remove("active-team"));
+  loadQuestion(currentIndex);
+  updateScoreboard();
+  showScreen("screen-game");
+  document.getElementById("answerInput").focus();
+});
+
+document.getElementById("btnPlayAgain").addEventListener("click", ()=>{
+  renderSurveyList();
+  showScreen("screen-setup");
+});
+
+/* =========================================================================
+   RENDER SOAL & PAPAN JAWABAN
+   ========================================================================= */
+function loadQuestion(index){
+  const q = questionBank[playOrder[index]];
+  revealed = q.jawaban.map(()=>false);
+  wrongCount = 0;
+  earnedThisQuestion = {};
+  lives = {};
+  activeTeams.forEach(t=>{ earnedThisQuestion[t] = 0; lives[t] = 3; }); // setiap babak/soal baru, nyawa semua tim direset ke 3
+  document.getElementById("categoryTag").textContent = q.kategori;
+  document.getElementById("qCounter").textContent = `Soal ${index+1} / ${playOrder.length}`;
+  document.getElementById("questionText").textContent = q.pertanyaan;
+  document.getElementById("statusMsg").textContent = "";
+  updateLivesDisplay();
+  renderBoard();
+}
+
+/* =========================================================================
+   SISTEM NYAWA (3 NYAWA PER TIM PER BABAK)
+   -------------------------------------------------------------------------
+   Setiap tim mulai babak dengan 3 nyawa. Setiap jawaban salah dari tim yang
+   sedang menjawab akan mengurangi nyawa tim tersebut. Jika nyawa kedua tim
+   sudah habis, tidak ada tim yang bisa menjawab lagi di babak (soal) ini --
+   guru tinggal menekan "Soal Berikutnya" untuk lanjut ke babak berikutnya,
+   di mana nyawa kedua tim otomatis terisi penuh (3) lagi.
+   ========================================================================= */
+function updateLivesDisplay(){
+  activeTeams.forEach(team=>{
+    const el = document.getElementById(`lives${team}`);
+    let html = "";
+    for(let i=0;i<3;i++){
+      html += i < lives[team] ? "❤" : `<span class="heart-lost">❤</span>`;
+    }
+    el.innerHTML = html;
+    document.getElementById(`scoreCard${team}`).classList.toggle("no-lives", lives[team] <= 0);
+    document.getElementById(`btnPick${team}`).disabled = lives[team] <= 0;
+  });
+  const allOut = activeTeams.every(t=> lives[t] <= 0);
+  const answerInput = document.getElementById("answerInput");
+  const checkBtn = document.getElementById("btnCheck");
+  answerInput.disabled = allOut;
+  checkBtn.disabled = allOut;
+  if(allOut){
+    answerInput.placeholder = "Nyawa semua tim habis -- lanjut ke soal berikutnya";
+    document.getElementById("statusMsg").textContent = "💔 Nyawa semua tim sudah habis di babak ini! Tekan \"Soal Berikutnya\" untuk lanjut.";
+  } else {
+    answerInput.placeholder = "Ketik jawaban di sini...";
+  }
+}
+
+function renderBoard(){
+  const q = questionBank[playOrder[currentIndex]];
+  const board = document.getElementById("answerBoard");
+  board.innerHTML = "";
+  q.jawaban.forEach((jwb, i)=>{
+    const box = document.createElement("div");
+    box.className = "answer-box " + (revealed[i] ? "revealed" : "hidden-answer");
+    if(revealed[i]){
+      box.style.background = answerColors[i % answerColors.length];
+      box.innerHTML = `<span class="num">${i+1}</span><span class="txt">${escapeHtml(jwb.teks)}</span><span class="score">${jwb.skor}</span>`;
+    } else {
+      box.innerHTML = `<span class="num">${i+1}</span><span class="txt">?????</span><span class="score">${jwb.skor}</span>`;
+      box.querySelector(".score").style.visibility = "hidden";
+    }
+    board.appendChild(box);
+  });
+  const foundCount = revealed.filter(Boolean).length;
+  const hiddenCount = revealed.length - foundCount;
+  if(foundCount === revealed.length){
+    document.getElementById("statusMsg").textContent = `🎉 Semua jawaban (${revealed.length}) pada soal ini sudah ditemukan!`;
+  } else {
+    document.getElementById("statusMsg").textContent = `Ditemukan: ${foundCount} | Tersisa: ${hiddenCount}`;
+  }
+}
+
+/* =========================================================================
+   SISTEM TIM & SKOR
+   ========================================================================= */
+function pickTeam(team){
+  if(lives[team] <= 0){
+    alert(`${teamNames[team]} sudah kehabisan nyawa di babak ini. Pilih tim lain atau lanjut ke soal berikutnya.`);
+    return;
+  }
+  activeTeam = team;
+  document.getElementById("turnIndicator").textContent = `Tim yang Menjawab: ${teamNames[team]}`;
+  activeTeams.forEach(t=>{
+    document.getElementById(`scoreCard${t}`).classList.toggle("active-team", t===team);
+  });
+}
+/* Tombol "Jawaban untuk Tim X" dipasang langsung saat panel dibuat di buildTeamPanels() */
+
+function updateScoreboard(){
+  activeTeams.forEach(t=>{
+    document.getElementById(`scoreVal${t}`).textContent = scores[t];
+  });
+  const maxScore = Math.max(...activeTeams.map(t=>scores[t]));
+  const allTied = activeTeams.every(t=>scores[t] === maxScore);
+  activeTeams.forEach(t=>{
+    const rankEl = document.getElementById(`rank${t}`);
+    if(allTied){
+      rankEl.textContent = "⭐ Seri";
+    } else if(scores[t] === maxScore){
+      rankEl.textContent = "👑 Memimpin";
+    } else {
+      rankEl.textContent = "";
+    }
+  });
+}
+
+/* =========================================================================
+   PENGECEKAN JAWABAN
+   ========================================================================= */
+function normalize(str){
+  return str.toLowerCase().trim().replace(/[^\w\s]/g,"").replace(/\s+/g," ");
+}
+function checkAnswer(){
+  ensureAudio();
+  const input = document.getElementById("answerInput");
+  const val = normalize(input.value);
+  input.value = "";
+  input.focus();
+  if(!val) return;
+
+  const q = questionBank[playOrder[currentIndex]];
+  let matchIndex = -1;
+  for(let i=0;i<q.jawaban.length;i++){
+    if(revealed[i]) continue;
+    const kunciList = [normalize(q.jawaban[i].teks), ...q.jawaban[i].kunci.map(normalize)];
+    if(kunciList.some(k => k === val || (val.length>=3 && (k.includes(val) || val.includes(k))))){
+      matchIndex = i; break;
+    }
+  }
+
+  if(matchIndex > -1){
+    revealed[matchIndex] = true;
+    if(activeTeam){
+      scores[activeTeam] += q.jawaban[matchIndex].skor;
+      earnedThisQuestion[activeTeam] += q.jawaban[matchIndex].skor;
+      updateScoreboard();
+      sndScore();
+    }
+    renderBoard();
+    showFeedback(true);
+    sndCorrect();
+    if(revealed.every(Boolean)){
+      setTimeout(sndApplause, 250);
+      launchConfetti(30);
+    }
+  } else {
+    wrongCount++;
+    showFeedback(false);
+    sndWrong();
+    renderBoard();
+    if(activeTeam && lives[activeTeam] > 0){
+      lives[activeTeam]--;
+      if(lives[activeTeam] <= 0){
+        if(activeTeams.every(t=> lives[t] <= 0)){
+          activeTeam = null;
+          document.getElementById("turnIndicator").textContent = "Tim yang Menjawab: -";
+          activeTeams.forEach(t=> document.getElementById(`scoreCard${t}`).classList.remove("active-team"));
+        } else {
+          document.getElementById("statusMsg").textContent = `💔 Nyawa ${teamNames[activeTeam]} habis untuk babak ini!`;
+        }
+      }
+    }
+    updateLivesDisplay();
+  }
+}
+document.getElementById("btnCheck").addEventListener("click", checkAnswer);
+document.getElementById("answerInput").addEventListener("keydown", (e)=>{
+  if(e.key === "Enter") checkAnswer();
+});
+
+function showFeedback(correct){
+  const banner = document.getElementById("feedbackBanner");
+  banner.className = "feedback-banner";
+  void banner.offsetWidth; // restart animation
+  if(correct){
+    banner.textContent = "✅ BENAR!";
+    banner.classList.add("show-correct");
+    launchConfetti(16);
+  } else {
+    banner.textContent = "❌ SALAH ✕";
+    banner.classList.add("show-wrong");
+  }
+}
+
+/* =========================================================================
+   KONTROL GURU
+   ========================================================================= */
+document.getElementById("btnRevealAll").addEventListener("click", ()=>{
+  revealed = revealed.map(()=>true);
+  renderBoard();
+  sndApplause();
+  launchConfetti(24);
+});
+document.getElementById("btnResetQ").addEventListener("click", ()=>{
+  activeTeams.forEach(t=> scores[t] -= earnedThisQuestion[t]);
+  updateScoreboard();
+  loadQuestion(currentIndex);
+});
+document.getElementById("btnNextQ").addEventListener("click", ()=>{
+  if(currentIndex < playOrder.length - 1){
+    currentIndex++;
+    loadQuestion(currentIndex);
+  } else {
+    endGame();
+  }
+});
+document.getElementById("btnResetGame").addEventListener("click", ()=>{
+  if(confirm("Reset seluruh permainan dari awal (babak/survei yang dipilih tetap sama)?")){
+    activeTeams.forEach(t=> scores[t] = 0);
+    activeTeam = null;
+    currentIndex = 0;
+    document.getElementById("turnIndicator").textContent = "Tim yang Menjawab: -";
+    activeTeams.forEach(t=> document.getElementById(`scoreCard${t}`).classList.remove("active-team"));
+    updateScoreboard();
+    loadQuestion(currentIndex);   // loadQuestion juga mereset nyawa ke 3/3
+  }
+});
+document.getElementById("btnBackHome").addEventListener("click", ()=>{
+  if(confirm("Kembali ke halaman depan? Permainan yang sedang berjalan akan berhenti dan skor tidak disimpan.")){
+    showScreen("screen-opening");
+  }
+});
+
+/* =========================================================================
+   HALAMAN AKHIR
+   ========================================================================= */
+function endGame(){
+  const endInfo=document.getElementById("endSchoolInfo");
+  if(endInfo) endInfo.textContent = `${spendaConfig.school} • ${spendaConfig.subject} • Kelas ${spendaConfig.className} • TP ${spendaConfig.year}`;
+  const wrap = document.getElementById("finalScoresWrap");
+  wrap.innerHTML = "";
+  activeTeams.forEach(t=>{
+    const box = document.createElement("div");
+    box.className = `final-score-box ${t.toLowerCase()}`;
+    box.innerHTML = `<div>${escapeHtml(teamNames[t])}</div><div class="val">${scores[t]}</div>`;
+    wrap.appendChild(box);
+  });
+
+  const maxScore = Math.max(...activeTeams.map(t=>scores[t]));
+  const winners = activeTeams.filter(t=> scores[t] === maxScore);
+  const winnerEl = document.getElementById("winnerLine");
+  if(winners.length === activeTeams.length){
+    winnerEl.textContent = `🤝 SERI! Semua tim sama-sama hebat!`;
+  } else if(winners.length > 1){
+    winnerEl.textContent = `🏆 SELAMAT ${winners.map(t=>teamNames[t].toUpperCase()).join(" & ")}, KALIAN JUARA!`;
+  } else {
+    winnerEl.textContent = `🏆 SELAMAT ${teamNames[winners[0]].toUpperCase()}, KALIAN JUARA!`;
+  }
+  sndGameEnd();
+  launchConfetti(60);
+  showScreen("screen-end");
+}
+
+/* =========================================================================
+   EFEK CONFETTI SEDERHANA
+   ========================================================================= */
+function launchConfetti(count){
+  const container = document.getElementById("confetti-container");
+  for(let i=0;i<count;i++){
+    const piece = document.createElement("div");
+    piece.className = "confetti-piece";
+    piece.style.left = Math.random()*100 + "vw";
+    piece.style.background = answerColors[Math.floor(Math.random()*answerColors.length)];
+    piece.style.animationDuration = (1.6 + Math.random()*1.4) + "s";
+    piece.style.borderRadius = Math.random()>0.5 ? "50%" : "3px";
+    container.appendChild(piece);
+    setTimeout(()=>piece.remove(), 3200);
+  }
+}
+
+/* Dekorasi kilau bintang latar belakang */
+(function addSparkles(){
+  const opening = document.getElementById("screen-opening");
+  for(let i=0;i<18;i++){
+    const s = document.createElement("div");
+    s.className = "sparkle";
+    const size = 3 + Math.random()*5;
+    s.style.width = size+"px";
+    s.style.height = size+"px";
+    s.style.left = Math.random()*100+"%";
+    s.style.top = Math.random()*100+"%";
+    s.style.animationDelay = (Math.random()*2)+"s";
+    opening.appendChild(s);
+  }
+})();
+
+/* =========================================================================
+   KELOLA / EDIT BANK SOAL LANGSUNG DI DALAM GAME
+   -------------------------------------------------------------------------
+   Guru bisa menambah/menghapus soal, menambah/menghapus jawaban, mengubah
+   kategori, pertanyaan, teks jawaban, skor, dan kata kunci -- semua lewat
+   form, tanpa perlu menyunting kode.
+   ========================================================================= */
+document.getElementById("btnEditSoal").addEventListener("click", ()=>{
+  const kode = prompt("🔐 Masukkan Kode Guru untuk membuka Bank Soal:");
+  if(kode !== "SPENDA2026"){
+    if(kode !== null) alert("Kode Guru salah.");
+    return;
+  }
+  renderEditSoal();
+  showScreen("screen-editsoal");
+});
+document.getElementById("btnCancelEditSoal").addEventListener("click", ()=>{
+  if(confirm("Batalkan perubahan yang belum disimpan?")){
+    renderSurveyList();
+    showScreen("screen-setup");
+  }
+});
+document.getElementById("btnSaveEditSoalTop").addEventListener("click", saveEditSoalAndReturn);
+document.getElementById("btnAddSoal").addEventListener("click", ()=>{
+  commitDomToArray();
+  questionBank.push(emptyQuestion());
+  renderEditSoal();
+});
+document.getElementById("btnResetSoalBawaan").addEventListener("click", ()=>{
+  if(confirm("Kembalikan seluruh bank soal ke versi bawaan? Semua perubahan akan hilang.")){
+    questionBank = JSON.parse(JSON.stringify(ORIGINAL_QUESTION_BANK));
+    saveQuestionBankToStorage();
+    renderEditSoal();
+  }
+});
+
+/* =========================================================================
+   EXPORT / IMPORT BANK SOAL (FILE .JSON)
+   -------------------------------------------------------------------------
+   Export: mengunduh bank soal yang sedang diedit sebagai file .json, bisa
+   dipakai sebagai cadangan atau dipindahkan ke komputer/IFP lain.
+   Import: membaca file .json hasil Export dan menggantikan bank soal yang
+   sedang diedit (belum permanen sampai guru menekan "Simpan & Kembali").
+   ========================================================================= */
+document.getElementById("btnExportSoal").addEventListener("click", ()=>{
+  commitDomToArray();
+  const dataStr = JSON.stringify(questionBank, null, 2);
+  const blob = new Blob([dataStr], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  const stamp = new Date().toISOString().slice(0,10);
+  a.download = `bank-soal-kuis-${stamp}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+});
+document.getElementById("btnImportSoal").addEventListener("click", ()=>{
+  document.getElementById("fileImportSoal").click();
+});
+document.getElementById("fileImportSoal").addEventListener("change", (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (evt)=>{
+    try{
+      const parsed = JSON.parse(evt.target.result);
+      const valid = Array.isArray(parsed) && parsed.length > 0 &&
+        parsed.every(q => q && typeof q.kategori === "string" && typeof q.pertanyaan === "string" && Array.isArray(q.jawaban));
+      if(!valid){
+        throw new Error("Struktur file tidak sesuai format bank soal.");
+      }
+      if(confirm(`Import ${parsed.length} soal dari file ini? Bank soal yang sedang diedit akan diganti (tekan "Simpan & Kembali" agar permanen).`)){
+        questionBank = parsed;
+        renderEditSoal();
+      }
+    }catch(err){
+      alert("Gagal membaca file. Pastikan file yang dipilih adalah file .json hasil Export dari aplikasi ini.");
+    }
+    e.target.value = "";
+  };
+  reader.readAsText(file);
+});
+
+function emptyQuestion(){
+  return { kategori:"Kategori Baru", pertanyaan:"Tuliskan pertanyaan survei di sini...", jawaban:[{teks:"Jawaban 1", skor:100, kunci:[]}] };
+}
+
+function renderEditSoal(){
+  const list = document.getElementById("editSoalList");
+  list.innerHTML = "";
+  questionBank.forEach((q, qi)=>{
+    const card = document.createElement("div");
+    card.className = "edit-q-card";
+    const total = q.jawaban.reduce((s,j)=>s+(parseInt(j.skor,10)||0), 0);
+    card.innerHTML = `
+      <div class="eq-head">
+        <span class="eq-idx">Soal ${qi+1}</span>
+        <input class="eq-kategori" value="${escapeAttr(q.kategori)}" placeholder="Kategori">
+        <button class="btn-del-soal" type="button">🗑 Hapus Soal</button>
+      </div>
+      <textarea class="eq-pertanyaan" placeholder="Tuliskan pertanyaan survei...">${escapeHtml(q.pertanyaan)}</textarea>
+      <div class="field-hint">Jawaban (teks — skor — kata kunci alternatif dipisah koma):</div>
+      <div class="eq-answers">
+        ${q.jawaban.map((j,ai)=>`
+          <div class="eq-ans-row">
+            <input class="eq-ans-teks" value="${escapeAttr(j.teks)}" placeholder="Teks jawaban">
+            <input class="eq-ans-skor" type="number" value="${j.skor}" min="0" max="100">
+            <input class="eq-ans-kunci" value="${escapeAttr((j.kunci||[]).join(', '))}" placeholder="kata kunci, alternatif">
+            <button class="btn-del-ans" type="button">✕</button>
+          </div>`).join('')}
+      </div>
+      <div class="eq-foot">
+        <button class="btn-add-ans" type="button">+ Tambah Jawaban</button>
+        <span class="eq-total ${total===100?'ok':'warn'}">Total skor: ${total}/100</span>
+      </div>`;
+    list.appendChild(card);
+  });
+
+  // Event delegation: hapus soal, tambah/hapus jawaban, update total skor live
+  list.querySelectorAll(".btn-del-soal").forEach((btn, qi)=>{
+    btn.addEventListener("click", ()=>{
+      if(questionBank.length <= 1){ alert("Minimal harus ada 1 soal."); return; }
+      commitDomToArray();
+      questionBank.splice(qi,1);
+      renderEditSoal();
+    });
+  });
+  list.querySelectorAll(".btn-add-ans").forEach((btn, qi)=>{
+    btn.addEventListener("click", ()=>{
+      commitDomToArray();
+      questionBank[qi].jawaban.push({teks:"Jawaban Baru", skor:0, kunci:[]});
+      renderEditSoal();
+    });
+  });
+  list.querySelectorAll(".edit-q-card").forEach((card, qi)=>{
+    card.querySelectorAll(".btn-del-ans").forEach((btn, ai)=>{
+      btn.addEventListener("click", ()=>{
+        if(questionBank[qi].jawaban.length <= 1){ alert("Minimal harus ada 1 jawaban per soal."); return; }
+        commitDomToArray();
+        questionBank[qi].jawaban.splice(ai,1);
+        renderEditSoal();
+      });
+    });
+    // Update total skor secara langsung saat mengetik
+    card.querySelectorAll(".eq-ans-skor").forEach(inp=>{
+      inp.addEventListener("input", ()=>{
+        const rows = card.querySelectorAll(".eq-ans-row");
+        let total = 0;
+        rows.forEach(r=> total += parseInt(r.querySelector(".eq-ans-skor").value,10) || 0);
+        const totalEl = card.querySelector(".eq-total");
+        totalEl.textContent = `Total skor: ${total}/100`;
+        totalEl.className = "eq-total " + (total===100 ? "ok" : "warn");
+      });
+    });
+  });
+}
+
+/* Membaca seluruh isi form Kelola Soal kembali ke array questionBank,
+   TANPA mengubah tampilan (dipakai sebelum menambah/menghapus baris agar
+   perubahan yang sedang diketik guru tidak hilang). */
+function commitDomToArray(){
+  const cards = document.querySelectorAll("#editSoalList .edit-q-card");
+  const updated = [];
+  cards.forEach(card=>{
+    const kategori = card.querySelector(".eq-kategori").value.trim() || "Tanpa Kategori";
+    const pertanyaan = card.querySelector(".eq-pertanyaan").value.trim() || "Pertanyaan belum diisi";
+    const jawaban = [];
+    card.querySelectorAll(".eq-ans-row").forEach(row=>{
+      const teks = row.querySelector(".eq-ans-teks").value.trim();
+      const skor = parseInt(row.querySelector(".eq-ans-skor").value,10) || 0;
+      const kunciRaw = row.querySelector(".eq-ans-kunci").value.trim();
+      const kunci = kunciRaw ? kunciRaw.split(",").map(s=>s.trim().toLowerCase()).filter(Boolean) : [];
+      if(teks) jawaban.push({ teks, skor, kunci });
+    });
+    updated.push({ kategori, pertanyaan, jawaban: jawaban.length ? jawaban : [{teks:"Jawaban 1", skor:100, kunci:[]}] });
+  });
+  questionBank = updated;
+}
+function escapeAttr(str){ return String(str).replace(/"/g,"&quot;"); }
+
+function saveEditSoalAndReturn(){
+  commitDomToArray();
+  const emptyQ = questionBank.findIndex(q=>!q.pertanyaan || q.pertanyaan==="Pertanyaan belum diisi");
+  if(emptyQ > -1 && !confirm(`Soal ${emptyQ+1} belum diisi pertanyaannya. Simpan juga?`)){
+    return;
+  }
+  saveQuestionBankToStorage();
+  renderSurveyList();
+  showScreen("screen-setup");
+}
+</script>
+</body>
+</html>

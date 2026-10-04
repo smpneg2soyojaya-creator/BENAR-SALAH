@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SPENDA GESTURE BATTLE EDU • SPENDA Game Center</title>
+<style>
+:root{--blue:#0b5ed7;--blue2:#063b91;--cyan:#00b8ff;--gold:#ffd54a;--green:#16a34a;--red:#ef4444;--bg:#071426;--panel:#0d2038;--panel2:#102a49;--text:#eef6ff;--muted:#a9bdd6;--line:#234466}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;background:radial-gradient(circle at 50% 0,#123a69 0,#071426 45%,#030914 100%);color:var(--text);min-height:100vh}button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.hidden{display:none!important}.app{max-width:1250px;margin:auto;padding:16px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}.brand{display:flex;align-items:center;gap:12px}.logo{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#fff,#5dc9ff);display:grid;place-items:center;color:#063b91;font-weight:900;font-size:22px;box-shadow:0 8px 24px #0006}.brand h1{margin:0;font-size:clamp(20px,3vw,30px)}.brand small{color:var(--muted)}.pill{padding:9px 12px;border:1px solid var(--line);border-radius:999px;background:#091b30;color:#cfe4ff}.screen{background:#0a1a2eaa;border:1px solid var(--line);border-radius:24px;padding:22px;box-shadow:0 18px 60px #0005;backdrop-filter:blur(10px)}.hero{text-align:center;padding:34px 16px}.hero h2{font-size:clamp(32px,7vw,68px);margin:8px 0;background:linear-gradient(90deg,#fff,#58d4ff,#ffd54a);-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{color:var(--muted);max-width:720px;margin:0 auto 24px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{background:linear-gradient(180deg,#102a49,#0b1d34);border:1px solid var(--line);border-radius:18px;padding:16px}.card h3{margin:0 0 12px}.field{display:flex;flex-direction:column;gap:7px;margin:10px 0}.field label{font-size:13px;color:var(--muted)}input,select,textarea{width:100%;padding:11px 12px;border-radius:12px;border:1px solid #31577e;background:#061527;color:#fff;outline:none}input:focus,select:focus,textarea:focus{border-color:#45c9ff;box-shadow:0 0 0 3px #00b8ff22}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}.btn{padding:11px 15px;border-radius:12px;color:#fff;background:#173b61;border:1px solid #31577e}.btn.primary{background:linear-gradient(135deg,#087df7,#0751c5);border-color:#2ea9ff}.btn.gold{background:linear-gradient(135deg,#ffc928,#e89a00);color:#182033}.btn.danger{background:#7d1e2a}.btn.green{background:#116b39}.game-head{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;margin-bottom:14px}.player{padding:13px;border-radius:18px;border:1px solid var(--line);background:#0c2038}.player.right{text-align:right}.pname{font-weight:800}.score{font-size:28px;font-weight:900;color:var(--gold)}.round{text-align:center}.round .num{font-size:13px;color:var(--muted)}.round .subject{font-weight:900}.question{padding:24px;text-align:center;border-radius:20px;background:linear-gradient(135deg,#123c69,#0b2440);border:1px solid #2d5e88;min-height:160px;display:flex;flex-direction:column;justify-content:center}.question .qtext{font-size:clamp(20px,3vw,34px);font-weight:850;line-height:1.25}.question .hint{margin-top:9px;color:#b8d6f2;font-size:14px}.battle{display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:12px;margin-top:14px}.cam{position:relative;background:#020711;border:1px solid var(--line);border-radius:18px;overflow:hidden;min-height:260px}.cam video{width:100%;height:100%;min-height:260px;object-fit:cover;transform:scaleX(-1);display:block}.cam canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;transform:scaleX(-1)}.cam .tag{position:absolute;top:10px;left:10px;background:#0009;padding:7px 10px;border-radius:10px;font-weight:800}.arena{background:#07172a;border:1px solid var(--line);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:12px;justify-content:center}.status{padding:12px;border-radius:14px;background:#0c2340;text-align:center;min-height:52px}.gesture-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.gesture{padding:13px;border-radius:14px;background:#0b1f36;border:1px solid var(--line);text-align:center}.gesture b{display:block;font-size:22px}.answer-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.answer{padding:14px;text-align:left;border-radius:14px;background:#0c2340;border:1px solid #31577e;color:#fff}.answer span{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:9px;background:#163f67;margin-right:8px;font-weight:900}.answer:hover{border-color:#54d3ff}.answer.correct{background:#0f5d35;border-color:#38e88b}.answer.wrong{background:#64202b;border-color:#ff6377}.controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.controls .btn{min-width:130px}.progress{height:8px;border-radius:99px;background:#07111f;overflow:hidden;margin-top:14px}.progress i{display:block;height:100%;background:linear-gradient(90deg,#00b8ff,#ffd54a);width:0}.result{text-align:center;padding:25px}.winner{font-size:38px;font-weight:950;color:var(--gold);margin:12px}.table{width:100%;border-collapse:collapse;margin-top:15px}.table th,.table td{padding:10px;border-bottom:1px solid var(--line);text-align:left}.modal{position:fixed;inset:0;background:#000b;display:grid;place-items:center;padding:18px;z-index:50}.modalbox{width:min(1000px,100%);max-height:90vh;overflow:auto;background:#0a1a2e;border:1px solid var(--line);border-radius:20px;padding:18px}.qrow{display:grid;grid-template-columns:1fr 130px 130px auto;gap:8px;align-items:center;margin-bottom:8px}.qrow input{min-width:0}.notice{padding:10px 12px;border-radius:12px;background:#0b2948;color:#bfe4ff;margin:10px 0}.footer{text-align:center;color:#6f8da9;font-size:12px;margin:16px}.kbd{font-family:monospace;border:1px solid #456;padding:2px 6px;border-radius:5px;background:#07111f}
+@media(max-width:850px){.grid,.battle{grid-template-columns:1fr}.game-head{grid-template-columns:1fr 1fr}.round{grid-column:1/-1;grid-row:1}.player.right{order:3}.qrow{grid-template-columns:1fr 100px auto}.qrow input:nth-child(3){display:none}.cam{min-height:220px}.cam video{min-height:220px}}
+
+/* Gesture position battle v3 */
+.gesture-battle{grid-template-columns:minmax(0,1.65fr) minmax(280px,.8fr)}
+.camera-stage{position:relative;min-height:560px;border-radius:22px;overflow:hidden;background:#020711;border:1px solid #31577e;box-shadow:inset 0 0 80px #0008}
+.camera-stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1);filter:saturate(.9) brightness(.78)}
+.camera-stage canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;transform:scaleX(-1)}
+.camera-tag{position:absolute;top:12px;left:12px;z-index:8;background:#071426dd;border:1px solid #4b7297;padding:8px 11px;border-radius:12px;font-weight:800;font-size:12px}
+.player-zone{position:absolute;top:0;bottom:0;width:50%;z-index:2;pointer-events:none;border-left:1px dashed #ffffff18;border-right:1px dashed #ffffff18}.left-zone{left:0}.right-zone{right:0}.player-zone span{position:absolute;bottom:12px;padding:7px 10px;border-radius:10px;background:#071426cc;font-size:12px;color:#d9ecff}.left-zone span{left:12px}.right-zone span{right:12px}
+.falling-answers{position:absolute;inset:0;z-index:6;pointer-events:none}
+.balloon{position:absolute;width:min(21%,150px);min-width:105px;aspect-ratio:1/1.08;border-radius:50% 50% 46% 46%;display:flex;align-items:center;justify-content:center;text-align:center;padding:12px;color:#fff;font-weight:900;font-size:clamp(14px,2vw,22px);line-height:1.1;border:3px solid #ffffffaa;box-shadow:0 10px 28px #0008, inset 0 0 25px #ffffff2b;filter:drop-shadow(0 8px 7px #0007);animation:balloonFloat 2.6s ease-in-out infinite alternate}
+.balloon:after{content:"";position:absolute;bottom:-22px;width:2px;height:24px;background:#ffffff88}.balloon .letter{position:absolute;top:8px;left:10px;font-size:12px;background:#071426aa;border-radius:99px;padding:3px 6px}.balloon.hit{animation:none;transform:scale(1.18);opacity:0}.balloon.correct{background:linear-gradient(145deg,#19b96b,#08763e)!important;border-color:#8fffc4}.balloon.wrong{background:linear-gradient(145deg,#e8475d,#8f1729)!important;border-color:#ff9aaa}
+@keyframes balloonFloat{0%{transform:translateY(0) scale(1)}100%{transform:translateY(-8px) scale(1.015)}}
+.hand-cursor{position:absolute;width:54px;height:54px;border-radius:50%;border:4px solid #fff;background:#00b8ff55;box-shadow:0 0 0 8px #00b8ff22,0 0 28px #00b8ff99;z-index:10;display:none;pointer-events:none;transform:translate(-50%,-50%)}.hand-cursor:after{content:'☝';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:27px;filter:drop-shadow(0 2px 2px #000)}.right-cursor{border-color:#ffd54a;background:#ffd54a55;box-shadow:0 0 0 8px #ffd54a22,0 0 28px #ffd54a99}.right-cursor:after{content:'☝'}
+.instruction-card{text-align:center;padding:18px;border-radius:18px;background:linear-gradient(145deg,#0e2d4e,#08192c);border:1px solid #31577e}.big-hand{font-size:58px;line-height:1;margin-bottom:8px}.instruction-card small{display:block;color:#a9bdd6;margin-top:7px;line-height:1.4}.answer-preview{display:grid;grid-template-columns:1fr 1fr;gap:8px}.answer-preview .preview{padding:10px;border-radius:12px;border:1px solid #31577e;background:#0b1f36;font-size:13px}.answer-preview .preview b{color:#7ddcff;margin-right:5px}.gesture-battle .controls{margin-top:auto}.status.success{background:#0d5b36;border-color:#36d986}.status.error{background:#64202b;border-color:#ff6377}.btn:disabled{cursor:not-allowed;opacity:.45}
+
+.gesture-help{padding:13px 14px;border:1px solid #31577e;border-radius:14px;background:#0a1e35;text-align:center}.gesture-help b{display:block;color:#dff5ff;font-size:15px}.gesture-help small{display:block;color:#9eb9d3;margin-top:5px;line-height:1.4}.camera-error{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;background:#020711e8;color:#fff;font-weight:700}.camera-error.hidden{display:none!important}.camera-ready{color:#8fffc4!important;border-color:#1fae6a!important}.camera-wait{color:#ffe28a!important}.camera-stage.camera-live{box-shadow:inset 0 0 80px #0008,0 0 0 2px #16a34a55}.camera-stage.camera-live .camera-tag{background:#0a5b38dd;border-color:#38d98a}.camera-stage.camera-off .camera-tag{background:#64202bdd;border-color:#ff6377}.camera-stage.camera-wait .camera-tag{background:#6b4d0add;border-color:#ffd54a}.game-head .round{min-width:120px}.fullscreen-game{width:100vw!important;height:100vh!important;max-width:none!important;margin:0!important;border-radius:0!important;padding:14px!important;overflow:auto!important}.fullscreen-game .camera-stage{min-height:calc(100vh - 270px)}.fullscreen-game .battle{height:calc(100vh - 220px)}.fullscreen-game .arena{min-height:100%}
+@media(max-width:850px){.gesture-battle{grid-template-columns:1fr}.camera-stage{min-height:480px}.balloon{min-width:78px;width:22%;font-size:13px}.answer-preview{grid-template-columns:1fr 1fr}}
+
+/* V5 — camera-first battle layout based on the supplied reference screens */
+body.game-active{overflow:hidden;background:#02050d}
+body.game-active .top{display:none}
+body.game-active .app{max-width:none;padding:0;margin:0}
+body.game-active .screen{border:0;border-radius:0;padding:0;box-shadow:none;background:transparent}
+.game-screen{position:fixed!important;inset:0;z-index:1000;width:100vw!important;height:100vh!important;overflow:hidden!important}
+.battlefield{position:relative;width:100%;height:100%;overflow:hidden;background:#0a0d18}
+.battlefield video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1);filter:saturate(.78) brightness(.84) contrast(1.02)}
+.battlefield canvas{display:none}
+.camera-dim{position:absolute;inset:0;background:linear-gradient(90deg,#07111c22 0 49.8%,#07111c2b 50.2% 100%),linear-gradient(180deg,#02040b36 0,#02040b00 28%,#02040b24 100%);pointer-events:none}
+.center-divider{position:absolute;top:0;bottom:0;left:50%;width:3px;transform:translateX(-50%);border-left:2px dashed #fff8;opacity:.42;pointer-events:none}
+.round-badge{position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:20;padding:8px 24px;border-radius:999px;background:#111a31ee;border:1px solid #526a9a;color:#dbe5ff;font-weight:900;box-shadow:0 8px 24px #0005}
+.question-card{position:absolute;z-index:19;top:58px;left:50%;transform:translateX(-50%);width:min(360px,31vw);min-width:280px;text-align:center;padding:18px 20px 20px;border-radius:24px;background:linear-gradient(145deg,#433c9d,#332b80);border:4px solid #7470ff;box-shadow:0 12px 35px #0006}
+.question-subject{font-size:14px;font-weight:900;letter-spacing:.5px;color:#e2e5ff;text-transform:uppercase;margin-bottom:4px}.question-text{font-size:clamp(22px,2.4vw,36px);line-height:1.12;font-weight:950;color:#fff}
+.score-card{position:absolute;top:15px;z-index:21;width:195px;min-height:150px;padding:18px 16px;text-align:center;border-radius:20px;background:#29334cee;border:3px solid;box-shadow:0 10px 35px #0007;backdrop-filter:blur(7px)}
+.left-score-card{left:4.5%;border-color:#ffd000}.right-score-card{right:4.5%;border-color:#4c9cff}.side-label{display:inline-block;padding:5px 13px;border-radius:7px;font-size:12px;font-weight:950;color:#07111f;background:#ffd000}.right-score-card .side-label{background:#65aaff}.player-name{font-size:18px;font-weight:950;margin-top:7px;color:#ffe66e}.right-score-card .player-name{color:#8fc2ff}.player-score{font-size:42px;line-height:1.05;font-weight:950;margin-top:5px;color:#fff;text-shadow:0 3px 10px #0008}
+.answer-layer{position:absolute;inset:0;z-index:15;pointer-events:none}.left-layer{clip-path:polygon(0 0,49.7% 0,49.7% 100%,0 100%)}.right-layer{clip-path:polygon(50.3% 0,100% 0,100% 100%,50.3% 100%)}
+.balloon{position:absolute;width:clamp(105px,8.5vw,145px);height:clamp(105px,8.5vw,145px);min-width:0;min-height:0;border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;padding:16px;color:#fff;font-weight:950;font-size:clamp(15px,1.55vw,25px);line-height:1.08;border:4px solid;box-shadow:0 10px 28px #0008,inset 0 0 25px #ffffff1b;pointer-events:none;animation:answerFloat 2.8s ease-in-out infinite alternate}
+.balloon:after{content:"";position:absolute;bottom:-24px;width:2px;height:25px;background:#fff7}.balloon .letter{position:absolute;top:8px;left:10px;font-size:11px;background:#071426bb;border-radius:99px;padding:3px 6px}.balloon.hit{animation:none!important;transform:scale(1.16);opacity:.25}.balloon{will-change:transform}.balloon.correct,.balloon.wrong{animation:none!important}.balloon.correct{background:linear-gradient(145deg,#1bb66b,#08733f)!important;border-color:#52f09c!important}.balloon.wrong{background:linear-gradient(145deg,#e4485d,#8d1628)!important;border-color:#ff8b9b!important}
+.left-layer .balloon{border-color:#ffd000;background:linear-gradient(145deg,#263149,#101b2e)}.right-layer .balloon{border-color:#4c9cff;background:linear-gradient(145deg,#263149,#101b2e)}
+@keyframes answerFloat{from{transform:translateY(-5px)}to{transform:translateY(8px)}}
+.hand-cursor{position:absolute;z-index:25;width:18px;height:18px;border-radius:50%;display:block!important;border:3px solid #fff;background:#00d9ff;box-shadow:0 0 0 6px #00d9ff35,0 0 22px #00d9ffdd;pointer-events:none;transform:translate(-50%,-50%);opacity:0}.hand-cursor.detected{opacity:1}.right-cursor{background:#ffd000;box-shadow:0 0 0 6px #ffd00035,0 0 22px #ffd000dd;border-color:#fff}
+.camera-status{position:absolute;z-index:30;bottom:16px;left:50%;transform:translateX(-50%);padding:8px 14px;border-radius:999px;background:#071426d9;border:1px solid #3e5878;color:#d7e8ff;font-size:12px;font-weight:900}.camera-status.live{background:#075a39e6;border-color:#2ae28a;color:#a6ffd0}.camera-status.error{background:#681f2ae6;border-color:#ff667b}
+.battle-status{position:absolute;z-index:22;left:50%;bottom:48px;transform:translateX(-50%);padding:9px 18px;border-radius:999px;background:#111a31df;color:#dce8ff;border:1px solid #566c96;font-weight:800;white-space:nowrap}.battle-status.success{background:#0a6339ee;border-color:#39ee98}.battle-status.error{background:#691d2bee;border-color:#ff6c7d}
+.answer-progress{position:absolute;left:5%;right:5%;bottom:10px;height:5px;border-radius:99px;background:#fff2;overflow:hidden;z-index:22}.answer-progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffd000,#4c9cff)}
+.home-float,.fullscreen-float{position:absolute;z-index:50;width:54px;height:54px;border-radius:50%;border:2px solid #fff;background:#26334bdd;color:#fff;font-size:25px;box-shadow:0 8px 25px #0007}.home-float{left:16px;top:15px;border-color:#ff3348}.fullscreen-float{right:16px;top:15px;border-color:#7780ff}.home-float:hover,.fullscreen-float:hover{transform:scale(1.05)}
+.camera-error{position:absolute;z-index:60;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:30px;background:#020711e8;color:#fff;font-weight:800}.camera-error.hidden{display:none!important}
+@media(max-width:900px){.score-card{width:145px;min-height:116px;padding:11px 8px}.player-name{font-size:14px}.player-score{font-size:32px}.question-card{width:45vw;min-width:220px;top:62px}.balloon{width:78px;height:78px;font-size:12px;border-width:3px}.round-badge{top:8px;padding:6px 14px}.home-float,.fullscreen-float{width:44px;height:44px;font-size:20px}.left-score-card{left:3%}.right-score-card{right:3%}}
+@media(max-width:600px){.question-card{width:56vw;top:55px;padding:12px}.question-text{font-size:20px}.question-subject{font-size:10px}.score-card{top:9px;width:108px;min-height:86px;border-width:2px;border-radius:14px}.side-label{font-size:9px;padding:3px 8px}.player-name{font-size:11px}.player-score{font-size:25px}.balloon{width:66px;height:66px;font-size:10px;padding:9px}.battle-status{font-size:10px;bottom:38px}.camera-status{bottom:10px;font-size:10px}.answer-progress{bottom:3px}}
+
+
+/* V7 - proporsi soal dan skor diperkecil agar arena kamera lebih luas */
+.question-card{width:min(300px,24vw);min-width:230px;padding:12px 14px 14px;border-radius:18px;border-width:3px;top:58px}
+.question-subject{font-size:11px;margin-bottom:3px}
+.question-text{font-size:clamp(18px,1.65vw,27px);line-height:1.12}
+.score-card{width:150px;min-height:112px;padding:11px 10px;border-radius:16px;border-width:2px;top:14px}
+.side-label{font-size:10px;padding:4px 10px}
+.player-name{font-size:15px;margin-top:5px}
+.player-score{font-size:32px;margin-top:3px}
+@media(max-width:900px){.question-card{width:36vw;min-width:210px;top:60px;padding:10px 12px 12px}.question-text{font-size:18px}.score-card{width:125px;min-height:96px;padding:9px 7px}.player-name{font-size:13px}.player-score{font-size:28px}}
+@media(max-width:600px){.question-card{width:52vw;min-width:190px;top:52px;padding:9px 10px 10px}.question-subject{font-size:9px}.question-text{font-size:17px}.score-card{width:105px;min-height:80px;top:8px;padding:7px 5px}.side-label{font-size:8px;padding:3px 7px}.player-name{font-size:10px}.player-score{font-size:24px}}
+
+/* V8 — compact HUD; keep question clear of answer balloons */
+.question-card{width:220px!important;min-width:0!important;max-width:220px!important;padding:10px 12px 11px!important;top:66px!important;border-width:3px!important;border-radius:16px!important}
+.question-subject{font-size:10px!important;margin-bottom:3px!important}
+.question-text{font-size:clamp(15px,1.15vw,21px)!important;line-height:1.12!important}
+.score-card{width:120px!important;min-height:92px!important;padding:8px 7px!important;top:14px!important;border-width:2px!important;border-radius:14px!important}
+.left-score-card{left:3.5%!important}.right-score-card{right:3.5%!important}
+.side-label{font-size:9px!important;padding:3px 8px!important}
+.player-name{font-size:13px!important;margin-top:4px!important}
+.player-score{font-size:27px!important;margin-top:2px!important}
+.balloon{width:clamp(88px,6.8vw,118px)!important;height:clamp(88px,6.8vw,118px)!important;font-size:clamp(13px,1.2vw,20px)!important;padding:11px!important}
+@media(max-width:900px){.question-card{width:190px!important;max-width:190px!important;top:58px!important}.question-text{font-size:15px!important}.score-card{width:105px!important;min-height:82px!important}.player-score{font-size:24px!important}.player-name{font-size:11px!important}.balloon{width:72px!important;height:72px!important;font-size:11px!important}}
+@media(max-width:600px){.question-card{width:175px!important;max-width:175px!important;top:50px!important}.question-text{font-size:14px!important}.score-card{width:92px!important;min-height:72px!important}.side-label{font-size:8px!important}.player-name{font-size:10px!important}.player-score{font-size:21px!important}.balloon{width:62px!important;height:62px!important;font-size:9px!important}}
+</style>
+</head>
+<body><a href="index.html" style="position:fixed;z-index:10000;left:14px;top:14px;height:38px;padding:0 13px;display:flex;align-items:center;border-radius:20px;background:rgba(7,20,38,.86);border:1px solid rgba(38,198,255,.38);color:#fff;text-decoration:none;font:800 11px Inter,system-ui,sans-serif;box-shadow:0 8px 25px rgba(0,0,0,.25)">← Game Center</a>
+<div class="app">
+<header class="top"><div class="brand"><div class="logo">S2</div><div><h1>SPENDA Gesture Battle Edu</h1><small>SMP Negeri 2 Soyo Jaya • Berilmu • Berkarakter • Berprestasi</small></div></div><div class="pill" id="modePill">Mode: Siap</div></header>
+
+<section id="home" class="screen">
+ <div class="hero"><div class="pill">🎮 Kuis Edukasi Interaktif</div><h2>GESTURE BATTLE</h2><p>Dua siswa berlomba menjawab soal. Gunakan posisi tangan di depan kamera untuk menyentuh balon jawaban. Semua data soal tersimpan di perangkat ini.</p></div>
+ <div class="grid">
+  <div class="card"><h3>👥 Pemain</h3><div class="field"><label>Nama Siswa Kiri</label><input id="leftName" value="Siswa Kiri"></div><div class="field"><label>Nama Siswa Kanan</label><input id="rightName" value="Siswa Kanan"></div></div>
+  <div class="card"><h3>📚 Pengaturan Soal</h3><div class="field"><label>Jenjang</label><select id="level"><option>SMP</option><option>SD</option><option>SMA</option></select></div><div class="field"><label>Kelas</label><select id="grade"><option>VII</option><option>VIII</option><option>IX</option></select></div><div class="field"><label>Mata Pelajaran</label><select id="subject"><option>Informatika</option><option>Matematika</option><option>Bahasa Indonesia</option><option>Bahasa Inggris</option><option>IPA</option><option>IPS</option><option>PKN</option><option>PJOK</option><option>PAI</option></select></div><div class="field"><label>Jumlah Soal</label><input id="amount" type="number" min="1" max="30" value="10"></div></div>
+ </div>
+ <div class="card" style="margin-top:14px"><h3>✋ Kontrol Gesture Posisi</h3><div class="grid"><div><div class="notice"><b>Bukan gerakan ✊☝️✌️.</b> Kamera membaca <b>posisi tangan</b>. Ketika soal muncul, empat pilihan jawaban akan turun seperti balon. Siswa cukup mengangkat dan mengarahkan tangan ke balon jawaban yang dipilih.</div></div><div><div class="notice">📷 Kamera harus tetap menyala selama permainan. Saat tangan menyentuh balon jawaban, pilihan langsung terkunci.</div><div class="actions"><button class="btn" id="cameraBtn">📷 Tes Kamera</button><button class="btn" id="editBtn">🛠️ Kelola Bank Soal</button><button class="btn" id="exportBtn">⬇️ Ekspor JSON</button><label class="btn" style="display:inline-flex;align-items:center">⬆️ Impor JSON<input id="importFile" type="file" accept="application/json" hidden></label></div></div></div></div>
+ <div class="actions" style="justify-content:center"><button class="btn primary" id="startBtn">🚀 Gunakan Soal & Mulai Main</button></div>
+</section>
+
+<section id="game" class="screen hidden game-screen">
+ <button class="home-float" id="quitBtn" title="Kembali">⌂</button>
+ <button class="fullscreen-float" id="fullscreenBtn" title="Layar penuh">⛶</button>
+ <div class="battlefield">
+   <video id="video" autoplay playsinline muted></video>
+   <canvas id="overlay"></canvas>
+   <div class="camera-dim"></div>
+   <div class="center-divider"></div>
+   <div class="round-badge" id="roundNum">Soal: 1 / 10</div>
+   <div class="question-card">
+     <div class="question-subject" id="gSubject">INFORMATIKA</div>
+     <div class="question-text" id="qText">Siap?</div>
+   </div>
+   <div class="score-card left-score-card"><span class="side-label">KIRI</span><div class="player-name" id="gLeftName">Siswa Kiri</div><div class="player-score" id="gLeftScore">0</div></div>
+   <div class="score-card right-score-card"><span class="side-label">KANAN</span><div class="player-name" id="gRightName">Siswa Kanan</div><div class="player-score" id="gRightScore">0</div></div>
+   <div id="fallingAnswersLeft" class="answer-layer left-layer"></div>
+   <div id="fallingAnswersRight" class="answer-layer right-layer"></div>
+   <div class="hand-cursor left-cursor" id="leftCursor"></div>
+   <div class="hand-cursor right-cursor" id="rightCursor"></div>
+   <div class="camera-status" id="cameraTag">📷 KAMERA MENYIAPKAN…</div>
+   <div class="camera-error hidden" id="cameraError"></div>
+   <div class="battle-status" id="status">REBUTAN! Siapa paling cepat menyentuh balon, dia yang menjawab.</div>
+   <div class="answer-progress"><i id="progress"></i></div>
+ </div>
+</section>
+
+<section id="result" class="screen hidden"><div class="result"><div class="pill">🏁 Permainan Selesai</div><h2>HASIL PERTANDINGAN</h2><div class="winner" id="winnerText">SERI!</div><div class="grid"><div class="card"><h3 id="rLeftName">Siswa Kiri</h3><div class="score" id="rLeftScore">0</div></div><div class="card"><h3 id="rRightName">Siswa Kanan</h3><div class="score" id="rRightScore">0</div></div></div><div class="actions" style="justify-content:center"><button class="btn primary" id="againBtn">🔄 Main Lagi</button><button class="btn" id="homeBtn">🏠 Kembali ke Beranda</button></div></div></section>
+
+<div id="modal" class="modal hidden"><div class="modalbox"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><div><h2 style="margin:0">🛠️ Bank Soal</h2><small style="color:var(--muted)">Tidak ada kode guru. Anda dapat menambah, mengubah, menghapus, menyimpan, dan memuat soal.</small></div><button class="btn" id="closeModal">✕</button></div><div class="notice">Format jawaban harus A, B, C, atau D. Bank soal tersimpan di browser perangkat ini.</div><div id="questionEditor"></div><div class="actions"><button class="btn green" id="addQuestion">＋ Tambah Soal</button><button class="btn" id="saveQuestions">💾 Simpan Bank</button><button class="btn" id="modalExport">⬇️ Ekspor JSON</button><label class="btn">⬆️ Impor JSON<input id="modalImport" type="file" accept="application/json" hidden></label><button class="btn danger" id="resetQuestions">↺ Reset Contoh Soal</button></div></div></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+<script>
+const DEFAULT_QUESTIONS=[
+ {q:'Perangkat yang digunakan untuk memasukkan teks ke komputer adalah …',a:['Keyboard','Monitor','Printer','Speaker'],c:'A',s:'Informatika'},
+ {q:'Kepanjangan dari CPU adalah …',a:['Central Processing Unit','Computer Personal Unit','Control Program Utility','Central Print Unit'],c:'A',s:'Informatika'},
+ {q:'Manakah yang termasuk perangkat output?',a:['Keyboard','Mouse','Monitor','Scanner'],c:'C',s:'Informatika'},
+ {q:'Contoh sistem operasi pada komputer adalah …',a:['Windows','Google Chrome','WhatsApp','Canva'],c:'A',s:'Informatika'},
+ {q:'Fungsi utama browser adalah …',a:['Mengakses halaman web','Mencetak dokumen','Mengisi daya laptop','Menghapus RAM'],c:'A',s:'Informatika'},
+ {q:'Data yang tersusun dalam baris dan kolom biasanya disebut …',a:['Spreadsheet','Browser','Folder','Router'],c:'A',s:'Informatika'},
+ {q:'Bilangan biner hanya menggunakan angka …',a:['0 dan 1','1 dan 2','2 dan 3','0 sampai 9'],c:'A',s:'Informatika'},
+ {q:'Jaringan komputer dalam area sekolah umumnya termasuk …',a:['LAN','WAN','MAN','PAN'],c:'A',s:'Informatika'},
+ {q:'Alat untuk menghubungkan beberapa perangkat dalam jaringan lokal adalah …',a:['Switch','Monitor','Printer','Proyektor'],c:'A',s:'Informatika'},
+ {q:'Kata sandi yang baik sebaiknya …',a:['Mudah ditebak','Sama dengan nama','Panjang dan unik','Dibagikan kepada teman'],c:'C',s:'Informatika'},
+ {q:'Satuan untuk mengukur kapasitas penyimpanan adalah …',a:['Byte','Volt','Watt','Hertz'],c:'A',s:'Informatika'},
+ {q:'Contoh mesin pencari adalah …',a:['Google','Windows','Bluetooth','Excel'],c:'A',s:'Informatika'},
+ {q:'Apa fungsi folder?',a:['Mengelompokkan file','Mempercepat internet','Menyalakan monitor','Menghapus virus otomatis'],c:'A',s:'Informatika'},
+ {q:'Perangkat yang menangkap gambar dari dokumen kertas ke komputer adalah …',a:['Scanner','Speaker','Router','Keyboard'],c:'A',s:'Informatika'},
+ {q:'Phishing biasanya bertujuan untuk …',a:['Mencuri informasi dengan penyamaran','Memperbaiki komputer','Meningkatkan RAM','Membuat jaringan lebih cepat'],c:'A',s:'Informatika'},
+ {q:'AI merupakan singkatan dari …',a:['Artificial Intelligence','Automatic Internet','Advanced Input','Applied Informatics'],c:'A',s:'Informatika'},
+ {q:'Contoh media penyimpanan eksternal adalah …',a:['Flashdisk','CPU','Monitor','Keyboard'],c:'A',s:'Informatika'},
+ {q:'Ikon tempat menyimpan file yang dihapus pada Windows disebut …',a:['Recycle Bin','Control Panel','Taskbar','Desktop'],c:'A',s:'Informatika'},
+ {q:'Apa fungsi tombol Ctrl+C?',a:['Menyalin','Menempel','Membatalkan','Menyimpan'],c:'A',s:'Informatika'},
+ {q:'Apa fungsi tombol Ctrl+V?',a:['Menyalin','Menempel','Mencetak','Mengunci layar'],c:'B',s:'Informatika'}
+];
+let questions=JSON.parse(localStorage.getItem('spenda_gesture_questions')||'null')||DEFAULT_QUESTIONS.map(x=>({...x,a:[...x.a]}));
+let game={questions:[],index:0,left:0,right:0,leftName:'Siswa Kiri',rightName:'Siswa Kanan',locked:false,answered:false,stream:null,model:null,lastGesture:{left:null,right:null}};
+const $=id=>document.getElementById(id);const show=id=>$(id).classList.remove('hidden');const hide=id=>$(id).classList.add('hidden');
+function saveBank(){localStorage.setItem('spenda_gesture_questions',JSON.stringify(questions));}
+function downloadJSON(data,name='spenda-gesture-bank.json'){const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function importJSON(file){const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d))throw Error('Format harus array soal');questions=d.map(x=>({q:String(x.q||x.question||''),a:(x.a||x.answers||[]).map(String).slice(0,4),c:String(x.c||x.correct||'A').toUpperCase(),s:String(x.s||x.subject||$('subject').value)})).filter(x=>x.q&&x.a.length===4&&'ABCD'.includes(x.c));saveBank();alert('Bank soal berhasil dimuat: '+questions.length+' soal.');renderEditor()}catch(e){alert('JSON tidak valid: '+e.message)}};r.readAsText(file)}
+function renderEditor(){const box=$('questionEditor');box.innerHTML='';questions.forEach((x,i)=>{const row=document.createElement('div');row.className='qrow';row.innerHTML=`<input value="${esc(x.q)}" aria-label="Pertanyaan"><select><option ${x.c==='A'?'selected':''}>A</option><option ${x.c==='B'?'selected':''}>B</option><option ${x.c==='C'?'selected':''}>C</option><option ${x.c==='D'?'selected':''}>D</option></select><input value="${esc(x.s||'Informatika')}" aria-label="Mapel"><button class="btn danger">Hapus</button>`;const q=row.children[0],c=row.children[1],s=row.children[2];q.oninput=()=>x.q=q.value;c.onchange=()=>x.c=c.value;s.oninput=()=>x.s=s.value;row.querySelector('button').onclick=()=>{questions.splice(i,1);renderEditor()};box.appendChild(row);x.a.forEach((ans,j)=>{const ar=document.createElement('div');ar.className='qrow';ar.style.margin='-3px 0 8px 18px';ar.innerHTML=`<span style="color:#8eb2d4;font-size:12px">Jawaban ${String.fromCharCode(65+j)}</span><input style="grid-column:2/-1" value="${esc(ans)}">`;ar.querySelector('input').oninput=e=>x.a[j]=e.target.value;box.appendChild(ar)})})}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;')}
+function selectedQuestions(){let pool=questions.filter(x=>!$('subject').value||x.s===$('subject').value);if(pool.length<1)pool=questions.slice();pool=[...pool].sort(()=>Math.random()-.5);return pool.slice(0,Math.max(1,Math.min(30,+$('amount').value||10)))}
+// Real-time positional hand gesture detection: the hand/fingertip position selects falling answer balloons.
+let handsDetector=null, mpCamera=null, gestureRAF=null;
+let handPositions={left:null,right:null};
+let roundToken=0, balloonTimer=null;
+function stopBalloonRound(){
+  if(balloonTimer){clearTimeout(balloonTimer);balloonTimer=null;}
+  ['fallingAnswersLeft','fallingAnswersRight'].forEach(id=>{const box=$(id);if(box)box.innerHTML='';});
+}
+function balloonPositions(side){
+  // Four positions per side, matching the reference: distributed around the camera area.
+  const presets=side==='left'
+    ? [[5,48],[17,30],[28,64],[34,43]]
+    : [[56,52],[67,30],[78,45],[90,62]];
+  return presets.sort(()=>Math.random()-.5);
+}
+function spawnBalloons(){
+  stopBalloonRound();
+  const q=game.questions[game.index]; if(!q)return;
+  // Jawaban selalu berada di tempatnya masing-masing. Tidak jatuh ke bawah.
+  [['left','fallingAnswersLeft'],['right','fallingAnswersRight']].forEach(([side,id])=>{
+    const box=$(id); if(!box)return;
+    const positions=balloonPositions(side);
+    q.a.forEach((ans,i)=>{
+      const b=document.createElement('div');
+      b.className='balloon';
+      b.dataset.choice=String.fromCharCode(65+i);
+      b.dataset.idx=i;
+      const [x,y]=positions[i];
+      b.style.left=x+'%';
+      b.style.top=y+'%';
+      b.style.animationDelay=(i*.12)+'s';
+      b.innerHTML=`<span class="letter">${String.fromCharCode(65+i)}</span><span>${esc(ans)}</span>`;
+      box.appendChild(b);
+    });
+  });
+}
+function renderQuestion(){
+  const q=game.questions[game.index];
+  game.locked=false;game.answered=false;roundToken++;
+  $('roundNum').textContent=`Soal: ${game.index+1} / ${game.questions.length}`;
+  $('qText').textContent=q.q;
+  $('gSubject').textContent=($('subject').value||q.s||'INFORMATIKA').toUpperCase();
+  $('gLeftScore').textContent=game.left;$('gRightScore').textContent=game.right;
+  $('progress').style.width=((game.index)/game.questions.length*100)+'%';
+  $('status').className='battle-status';
+  $('status').textContent='REBUTAN! Siapa paling cepat menyentuh balon, dia yang menjawab.';
+  setCursor('leftCursor',null);setCursor('rightCursor',null);
+  spawnBalloons();
+}
+function setCursor(id,hand){
+  const el=$(id); if(!el)return;
+  if(!hand){el.classList.remove('detected');return;}
+  el.classList.add('detected');
+  el.style.left=((1-hand.x)*100)+'%';el.style.top=(hand.y*100)+'%';
+}
+function getHitCandidate(player,hand){
+  if(!hand)return null;
+  const layer=$(player==='Kiri'?'fallingAnswersLeft':'fallingAnswersRight');
+  if(!layer)return null;
+  const stage=layer.parentElement, sr=stage.getBoundingClientRect();
+  const px=sr.left+(1-hand.x)*sr.width;
+  const py=sr.top+hand.y*sr.height;
+  const balls=[...layer.querySelectorAll('.balloon:not(.hit)')];
+  let best=null;
+  for(const b of balls){
+    const r=b.getBoundingClientRect();
+    const cx=Math.max(r.left,Math.min(px,r.right));
+    const cy=Math.max(r.top,Math.min(py,r.bottom));
+    const distance=Math.hypot(px-cx,py-cy);
+    const radius=Math.max(28,r.width*.38);
+    if(distance<=radius && (!best || distance<best.distance)) best={ball:b,distance,px,py};
+  }
+  return best;
+}
+
+function answer(choice,who,ball){
+  // Hanya SATU pemain yang boleh mengunci soal. Pemain pertama yang menyentuh
+  // balon mendapatkan hak menjawab; pemain lain langsung terkunci pada ronde ini.
+  if(game.locked)return;
+  game.locked=true;
+  game.answered=true;
+  roundToken++;
+  const q=game.questions[game.index];
+  const correct=choice===q.c;
+
+  // Hanya balon yang benar-benar disentuh yang diberi efek jawaban.
+  // Balon di sisi lawan TIDAK ikut berubah.
+  if(ball){
+    ball.classList.add(correct?'correct':'wrong');
+    ball.classList.add('hit');
+  }
+
+  if(correct){
+    if(who==='Kiri')game.left+=100;
+    else game.right+=100;
+  }
+
+  $('gLeftScore').textContent=game.left;
+  $('gRightScore').textContent=game.right;
+  $('status').className='battle-status '+(correct?'success':'error');
+  $('status').textContent=correct
+    ? `${who} BENAR! +100 — Soal berikutnya…`
+    : `${who} SALAH — Soal berikutnya…`;
+  $('progress').style.width=(((game.index+1)/game.questions.length)*100)+'%';
+
+  // Jeda dibuat lebih panjang supaya hasil sentuhan terlihat jelas.
+  setTimeout(()=>{
+    if(game.index<game.questions.length-1){
+      game.index++;
+      renderQuestion();
+    }else finish();
+  },2200);
+}
+function next(){ /* intentionally disabled: the game advances automatically after a gesture answer */ }
+function drawHands(results){const c=$('overlay'),ctx=c.getContext('2d');c.width=results.image.width||640;c.height=results.image.height||480;ctx.clearRect(0,0,c.width,c.height);if(!results.multiHandLandmarks)return;results.multiHandLandmarks.forEach(lm=>{if(window.drawConnectors)drawConnectors(ctx,lm,HAND_CONNECTIONS,{color:'#54d3ff',lineWidth:3});if(window.drawLandmarks)drawLandmarks(ctx,lm,{color:'#fff',lineWidth:1,radius:3});});}
+function onHandsResults(results){
+  if(!results.multiHandLandmarks || game.locked){
+    setCursor('leftCursor',null);
+    setCursor('rightCursor',null);
+    return;
+  }
+
+  const hands=results.multiHandLandmarks.map((lm,i)=>({
+    lm,
+    x:lm[8].x,
+    y:lm[8].y,
+    screenX:1-lm[8].x,
+    label:results.multiHandedness?.[i]?.label||''
+  })).sort((a,b)=>a.screenX-b.screenX);
+
+  let left=null,right=null;
+  if(hands.length===1){
+    if(hands[0].screenX<.5) left=hands[0];
+    else right=hands[0];
+  }else{
+    left=hands[0];
+    right=hands[hands.length-1];
+  }
+
+  handPositions.left=left;
+  handPositions.right=right;
+  setCursor('leftCursor',left);
+  setCursor('rightCursor',right);
+
+  // Cari sentuhan dari kedua pemain pada frame yang sama.
+  // Hanya SATU kandidat yang boleh menang pada setiap ronde.
+  const candidates=[];
+  const lh=getHitCandidate('Kiri',left);
+  const rh=getHitCandidate('Kanan',right);
+  if(lh)candidates.push({who:'Kiri',...lh});
+  if(rh)candidates.push({who:'Kanan',...rh});
+
+  if(candidates.length){
+    // Bila keduanya mengenai balon pada frame yang sama, gunakan titik yang
+    // paling dekat dengan pusat balon sebagai tie-breaker. Tetap hanya satu.
+    candidates.sort((a,b)=>a.distance-b.distance);
+    const winner=candidates[0];
+    answer(winner.ball.dataset.choice,winner.who,winner.ball);
+  }
+}
+async function startGestureDetection(){
+  if(!game.stream)return false;
+  if(!window.Hands){
+    setCameraState('off','Library gesture belum termuat. Periksa koneksi internet lalu muat ulang halaman.');
+    return false;
+  }
+  if(handsDetector)return true;
+  try{
+    handsDetector=new Hands({locateFile:file=>`https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`});
+    handsDetector.setOptions({maxNumHands:2,modelComplexity:1,minDetectionConfidence:.55,minTrackingConfidence:.55});
+    handsDetector.onResults(onHandsResults);
+    const loop=async()=>{
+      if(!game.stream||!handsDetector)return;
+      if($('video').readyState>=2){
+        try{await handsDetector.send({image:$('video')});}
+        catch(e){console.warn('Gesture frame error',e);}
+      }
+      gestureRAF=requestAnimationFrame(loop);
+    };
+    loop();
+    setCameraState('live');
+    return true;
+  }catch(e){
+    console.error(e);
+    setCameraState('off','Deteksi tangan gagal dimulai. '+e.message);
+    return false;
+  }
+}
+function setCameraState(state,msg=''){
+  const tag=$('cameraTag'),err=$('cameraError'); if(!tag)return;
+  tag.classList.remove('live','error');
+  if(state==='live'){
+    tag.classList.add('live');tag.textContent='● KAMERA AKTIF';
+    if(err)err.classList.add('hidden');
+  }else if(state==='wait'){
+    tag.textContent='◌ MENYIAPKAN KAMERA…';
+    if(err)err.classList.add('hidden');
+  }else{
+    tag.classList.add('error');tag.textContent='● KAMERA TIDAK AKTIF';
+    if(err){err.textContent=msg||'Kamera tidak tersedia.';err.classList.remove('hidden');}
+  }
+}
+async function startCamera(){
+  if(game.stream)return true;
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+    const msg='Browser tidak menyediakan akses kamera. Gunakan Chrome/Edge melalui HTTPS atau localhost.';
+    setCameraState('off',msg);alert(msg);return false;
+  }
+  setCameraState('wait');
+  try{
+    game.stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:1920},height:{ideal:1080}},audio:false});
+    const video=$('video');video.srcObject=game.stream;await video.play();
+    const ok=await startGestureDetection();
+    if(!ok){stopCamera();return false;}
+    setCameraState('live');return true;
+  }catch(e){
+    game.stream=null;console.error(e);
+    let msg='Kamera gagal diaktifkan.';
+    if(e.name==='NotAllowedError'||e.name==='PermissionDeniedError')msg='Akses kamera ditolak. Izinkan kamera pada ikon kamera di address bar lalu muat ulang.';
+    else if(e.name==='NotFoundError')msg='Kamera tidak ditemukan. Pastikan webcam terpasang.';
+    else if(e.name==='NotReadableError')msg='Kamera sedang digunakan aplikasi lain. Tutup aplikasi tersebut.';
+    else if(location.protocol==='file:')msg='Jika file HTML dibuka langsung dan kamera diblokir, jalankan melalui localhost atau HTTPS.';
+    setCameraState('off',msg);alert(msg);return false;
+  }
+}
+function stopCamera(){
+  if(gestureRAF)cancelAnimationFrame(gestureRAF);gestureRAF=null;
+  if(mpCamera){try{mpCamera.stop()}catch(e){}mpCamera=null}
+  if(game.stream){game.stream.getTracks().forEach(t=>t.stop());game.stream=null}
+  if($('video'))$('video').srcObject=null;
+  if(handsDetector){try{handsDetector.close()}catch(e){}handsDetector=null}
+  handPositions={left:null,right:null};setCursor('leftCursor',null);setCursor('rightCursor',null);stopBalloonRound();
+  setCameraState('off','Kamera dimatikan.');
+}
+function finish(){
+  stopBalloonRound();
+  $('rLeftName').textContent=game.leftName;$('rRightName').textContent=game.rightName;
+  $('rLeftScore').textContent=game.left;$('rRightScore').textContent=game.right;
+  $('winnerText').textContent=game.left===game.right?'SERI!':(game.left>game.right?`${game.leftName} MENANG!`:`${game.rightName} MENANG!`);
+  stopCamera();document.body.classList.remove('game-active');
+  if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});
+  hide('game');show('result');$('modePill').textContent='Mode: Selesai';
+}
+async function startGame(){
+  requestGameFullscreen();
+  if(!game.stream){const ok=await startCamera();if(!ok)return;}
+  game.left=0;game.right=0;game.index=0;
+  game.leftName=$('leftName').value.trim()||'Siswa Kiri';game.rightName=$('rightName').value.trim()||'Siswa Kanan';
+  game.questions=selectedQuestions();if(!game.questions.length)return alert('Belum ada soal.');
+  $('gLeftName').textContent=game.leftName;$('gRightName').textContent=game.rightName;
+  $('gSubject').textContent=$('subject').value.toUpperCase();
+  hide('home');hide('result');show('game');
+  document.body.classList.add('game-active');$('modePill').textContent='Mode: Gesture';
+  renderQuestion();
+}
+async function requestGameFullscreen(){
+  const el=$('game');
+  if(!el||document.fullscreenElement)return;
+  try{await el.requestFullscreen();}catch(e){console.warn('Fullscreen otomatis tidak tersedia:',e);}
+}
+async function toggleFullscreen(){
+  try{if(document.fullscreenElement)await document.exitFullscreen();else await $('game').requestFullscreen();}
+  catch(e){console.warn('Fullscreen:',e);}
+}
+document.addEventListener('fullscreenchange',()=>{
+  const b=$('fullscreenBtn');if(b)b.textContent=document.fullscreenElement?'⛶':'⛶';
+});
+$('startBtn').onclick=startGame;
+$('quitBtn').onclick=async()=>{stopCamera();document.body.classList.remove('game-active');if(document.fullscreenElement)try{await document.exitFullscreen()}catch(e){}hide('game');show('home');$('modePill').textContent='Mode: Siap';};
+$('againBtn').onclick=startGame;
+$('homeBtn').onclick=async()=>{stopCamera();document.body.classList.remove('game-active');if(document.fullscreenElement)try{await document.exitFullscreen()}catch(e){}hide('result');show('home');$('modePill').textContent='Mode: Siap'};
+$('cameraBtn').onclick=startCamera;$('fullscreenBtn').onclick=toggleFullscreen;
+$('editBtn').onclick=()=>{renderEditor();show('modal')};$('closeModal').onclick=()=>hide('modal');$('addQuestion').onclick=()=>{questions.push({q:'Pertanyaan baru?',a:['Pilihan A','Pilihan B','Pilihan C','Pilihan D'],c:'A',s:$('subject').value});renderEditor()};$('saveQuestions').onclick=()=>{saveBank();alert('Bank soal tersimpan di perangkat ini.');};$('resetQuestions').onclick=()=>{if(confirm('Reset ke soal contoh?')){questions=DEFAULT_QUESTIONS.map(x=>({...x,a:[...x.a]}));saveBank();renderEditor()}};$('exportBtn').onclick=()=>downloadJSON(questions);$('modalExport').onclick=()=>downloadJSON(questions);$('importFile').onchange=e=>e.target.files[0]&&importJSON(e.target.files[0]);$('modalImport').onchange=e=>e.target.files[0]&&importJSON(e.target.files[0]);
+$('modal').addEventListener('click',e=>{if(e.target.id==='modal')hide('modal')});
+window.addEventListener('beforeunload',stopCamera);
+</script>
+</body></html>
