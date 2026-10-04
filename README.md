@@ -1,21 +1,13 @@
-# Kuis Interaktif BENAR / SALAH – V9
+# Kuis Interaktif BENAR / SALAH – V17
 
-V9 memakai model **eliminasi**, bukan sistem poin.
+Perbaikan V17 fokus pada tampilan saat menjawab:
+1. Warna area BENAR hijau dan SALAH merah **baru muncul ketika timer mencapai 0**.
+2. Banner hasil jawaban diperkecil dan tidak lagi menutupi kamera dengan overlay blur/full-screen.
+3. Ukuran soal diperkecil lagi.
+4. Garis pemisah tengah tetap ada.
+5. Label BENAR/SALAH tetap kecil di bagian bawah.
+6. Tidak ada deteksi tubuh/tangan/wajah/posisi.
+7. Tidak ada poin; model permainan tetap eliminasi.
+8. Countdown tetap ada tetapi compact dan tidak mengaburkan kamera.
 
-Perubahan:
-- **Tidak ada poin / skor**.
-- Tidak ada tampilan angka poin.
-- Siswa memilih dengan berpindah ke sisi BENAR atau SALAH.
-- Sisi **BENAR = hijau transparan**.
-- Sisi **SALAH = merah transparan**.
-- Tulisan BENAR dan SALAH diperkecil.
-- Saat kunci dibuka, sisi yang benar mendapat highlight hijau.
-- Sisi yang salah mendapat highlight merah.
-- Siswa yang berada di sisi yang salah dianggap tereliminasi pada soal tersebut.
-- Kamera hanya menjadi latar dan tidak mendeteksi tubuh/posisi siswa.
-- Setelah hasil, tetap ada jeda hasil dan countdown 3–2–1 sebelum soal berikutnya.
-- Pause tetap tersedia.
-- Bank soal tetap terpisah berdasarkan Jenjang + Kelas + Mata Pelajaran + Tingkat Kesulitan.
-
-Catatan:
-Karena permainan tidak menggunakan deteksi individu, eliminasi dilakukan secara fisik oleh peserta sendiri. Aplikasi tidak mencatat siapa yang tereliminasi.
+Database, editor soal, impor/ekspor JSON, jenjang, kelas, mapel, dan mode pause dipertahankan.

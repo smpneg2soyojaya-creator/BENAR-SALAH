@@ -1,6 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
 <rect width="256" height="256" rx="52" fill="#080d16"/>
-<circle cx="128" cy="128" r="92" fill="none" stroke="#21d46d" stroke-width="14"/>
-<path d="M77 130l27 27 50-61" fill="none" stroke="#21d46d" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M174 104l18 18-18 18" fill="none" stroke="#ff4f6c" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M128 40v176" stroke="#fff" stroke-width="8" opacity=".8"/>
+<rect x="30" y="78" width="86" height="100" rx="24" fill="#21d46d" opacity=".85"/>
+<rect x="140" y="78" width="86" height="100" rx="24" fill="#ff4f6c" opacity=".85"/>
+<text x="73" y="137" text-anchor="middle" font-family="Arial" font-size="16" font-weight="900" fill="#fff">BENAR</text>
+<text x="183" y="137" text-anchor="middle" font-family="Arial" font-size="16" font-weight="900" fill="#fff">SALAH</text>
 </svg>

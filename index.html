@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#080d16">
-<link rel="manifest" href="manifest.webmanifest">
+<script>if(location.protocol==="https:"||location.protocol==="http:"){const m=document.createElement("link");m.rel="manifest";m.href="manifest.webmanifest";document.head.appendChild(m)}</script>
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <title>Kuis Interaktif Benar Salah</title>
 <style>
@@ -88,7 +88,7 @@ button{cursor:pointer}
 .timer-wrap{position:absolute;z-index:22;left:50%;bottom:14px;transform:translateX(-50%)}.timer{--pct:100%;width:80px;height:80px;border-radius:50%;background:conic-gradient(var(--cyan) calc(var(--pct)*1%),rgba(255,255,255,.12) 0);display:grid;place-items:center;position:relative}.timer:before{content:"";position:absolute;inset:7px;border-radius:50%;background:rgba(7,12,19,.9);border:1px solid rgba(255,255,255,.09)}.timer span{position:relative;font-size:28px;font-weight:950}.timer.urgent{background:conic-gradient(var(--red) calc(var(--pct)*1%),rgba(255,255,255,.12) 0)}
 .status{position:absolute;left:16px;bottom:15px;z-index:20;padding:7px 10px;border-radius:999px;background:rgba(6,11,18,.7);border:1px solid rgba(255,255,255,.12);color:#aab6c4;font-size:10px}
 .menu{position:absolute;z-index:50;left:20px;top:105px;width:min(290px,calc(100% - 40px));padding:10px;background:rgba(7,12,20,.97);border:1px solid #364150;border-radius:14px;box-shadow:var(--shadow)}.menu button{display:block;width:100%;margin:5px 0;padding:10px;border-radius:9px;border:1px solid #303b48;background:#19212c;color:#fff;text-align:left;font-size:11px;font-weight:850}.menu .pause{background:#153d2a;border-color:#2b7951}
-.overlay{position:absolute;inset:0;z-index:70;display:grid;place-items:center;background:rgba(2,7,11,.68);backdrop-filter:blur(8px)}
+.overlay{position:absolute;inset:0;z-index:70;display:grid;place-items:center;background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}
 .overlay-card{width:min(760px,calc(100% - 30px));padding:29px;border-radius:27px;background:rgba(8,14,22,.95);border:1px solid #3b4654;box-shadow:var(--shadow);text-align:center}
 .result-title{font-size:clamp(52px,8vw,90px);line-height:.95;font-weight:950}.result-title.ok{color:var(--green)}.result-title.bad{color:var(--red)}
 .result-answer{font-size:21px;font-weight:900;margin-top:12px}.result-key{font-size:18px;font-weight:900;margin-top:7px}.result-key span{font-weight:950}
@@ -163,17 +163,352 @@ button{cursor:pointer}
 .choice-chip.true{background:rgba(33,212,109,.72)!important}
 .choice-chip.false{background:rgba(255,79,108,.72)!important}
 
+
+/* V10 — tampilan final untuk game eliminasi */
+.game{position:absolute;inset:0;overflow:hidden;background:#050a11}
+.camera{position:absolute;inset:0}
+.camera video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1);filter:brightness(.55) saturate(.9) contrast(1.04)}
+.camera.zoom video{transform:scaleX(-1) scale(1.16)}
+.cover{position:absolute;inset:0;background:
+  linear-gradient(to bottom,rgba(2,7,13,.76),rgba(2,7,13,.15) 28%,rgba(2,7,13,.14) 64%,rgba(2,7,13,.72)),
+  radial-gradient(circle at center,transparent 28%,rgba(0,0,0,.34) 100%)}
+
+/* Garis pemisah BENAR | SALAH */
+.game::after{
+  content:"";position:absolute;z-index:25;top:0;bottom:0;left:50%;
+  width:2px;transform:translateX(-1px);
+  background:rgba(255,255,255,.72);
+  box-shadow:0 0 18px rgba(255,255,255,.18);
+  pointer-events:none
+}
+.game .zone{position:absolute;z-index:10;top:0;bottom:0;width:50%;padding:0!important;display:block}
+.game .zone.left{left:0;background:rgba(33,212,109,.18);border:0!important}
+.game .zone.right{right:0;background:rgba(255,79,108,.18);border:0!important}
+
+/* Label kecil di bagian bawah */
+.game .zone-card{
+  position:absolute;left:50%;bottom:55px;transform:translateX(-50%);
+  min-width:0!important;max-width:none!important;min-height:0!important;
+  padding:6px 11px!important;border-radius:999px!important;
+  display:flex!important;align-items:center;justify-content:center;gap:6px;
+  background:rgba(7,12,18,.28)!important;
+  border:1px solid rgba(255,255,255,.25)!important;
+  box-shadow:none!important;backdrop-filter:blur(3px);
+}
+.game .zone.right .zone-card{flex-direction:row!important}
+.game .letter{
+  width:25px!important;height:25px!important;border-radius:8px!important;
+  font-size:14px!important;box-shadow:none!important;
+}
+.game .letter.true{background:rgba(33,212,109,.78)!important;color:#061b0d!important}
+.game .letter.false{background:rgba(255,79,108,.78)!important;color:#fff!important}
+.game .zone-text{
+  font-size:clamp(11px,1.05vw,14px)!important;
+  font-weight:900!important;letter-spacing:.25px;line-height:1;
+  text-shadow:0 2px 10px rgba(0,0,0,.55)
+}
+.game .zone.correct{background:rgba(33,212,109,.40)!important}
+.game .zone.wrong{background:rgba(255,79,108,.32)!important}
+.game .zone.correct .zone-card{
+  background:rgba(33,212,109,.34)!important;
+  border-color:rgba(115,239,170,.85)!important;
+}
+.game .zone.wrong .zone-card{
+  background:rgba(255,79,108,.30)!important;
+  border-color:rgba(255,130,150,.78)!important;
+}
+
+/* Soal kecil, mendekati screenshot */
+.game .quiz-head{
+  top:54px!important;width:min(650px,calc(100% - 28px))!important
+}
+.game .meta{font-size:11px!important;letter-spacing:.2px}
+.game .question{
+  font-size:clamp(18px,2.05vw,28px)!important;
+  line-height:1.15!important;font-weight:900!important;
+  margin-top:6px!important;
+}
+
+/* Header tetap ringan */
+.game .top{padding:16px 18px!important;z-index:45}
+.game .topbtn{height:40px!important}
+.game .topbtn.icon{width:40px!important}
+
+/* Timer tetap di bawah tengah */
+.game .timer-wrap{bottom:12px!important;z-index:45}
+.game .timer{width:70px!important;height:70px!important}
+.game .timer span{font-size:24px!important}
+
+/* Status kamera tetap kecil */
+.game .status{left:10px!important;bottom:12px!important;font-size:8px!important;padding:5px 8px!important;background:rgba(6,11,18,.52)!important}
+
+/* Overlay hasil dan countdown lebih proporsional */
+.game .overlay-card{width:min(520px,calc(100% - 32px));padding:20px;border-radius:18px}
+.game .result-title{font-size:clamp(34px,4.5vw,54px)}
+.game .result-answer{font-size:14px}.game .result-help{font-size:9px}
+.game .transition-overlay .overlay-card{max-width:300px;padding:13px 16px;border-radius:15px}
+.game .transition-title{font-size:15px}
+.game .transition-num{font-size:58px;margin:3px 0}
+.game .transition-help{font-size:9px}
+
+@media(max-width:780px){
+  .game .quiz-head{top:64px!important}
+  .game .question{font-size:19px!important}
+  .game .zone-card{bottom:49px!important}
+  .game .zone-text{font-size:10px!important}
+  .game .letter{width:23px!important;height:23px!important;font-size:12px!important}
+  .game .timer{width:64px!important;height:64px!important}
+}
+
+
+
+
+/* =========================================================
+   V17 — FINAL GAME VISUAL RULES
+   ========================================================= */
+
+/* Before timeout: camera visible, halves remain neutral. */
+.game .zone.left,
+.game .zone.right{
+  background:transparent !important;
+}
+
+/* Center divider stays visible throughout the question. */
+.game::after{
+  content:"";
+  position:absolute;
+  z-index:25;
+  top:0;
+  bottom:0;
+  left:50%;
+  width:2px;
+  transform:translateX(-1px);
+  background:rgba(255,255,255,.68);
+  box-shadow:0 0 14px rgba(255,255,255,.14);
+  pointer-events:none;
+}
+
+/* Compact bottom labels. */
+.game .zone-card{
+  position:absolute !important;
+  left:50% !important;
+  bottom:50px !important;
+  transform:translateX(-50%) !important;
+  min-width:0 !important;
+  max-width:max-content !important;
+  min-height:0 !important;
+  padding:6px 10px !important;
+  margin:0 !important;
+  border-radius:999px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:6px !important;
+  background:rgba(7,12,18,.24) !important;
+  border:1px solid rgba(255,255,255,.22) !important;
+  box-shadow:none !important;
+  backdrop-filter:blur(2px) !important;
+}
+.game .zone.right .zone-card{
+  flex-direction:row !important;
+}
+
+/* Small BENAR/SALAH markers. */
+.game .letter{
+  width:24px !important;
+  height:24px !important;
+  border-radius:7px !important;
+  font-size:13px !important;
+  box-shadow:none !important;
+}
+.game .letter.true{
+  background:rgba(33,212,109,.74) !important;
+  color:#062012 !important;
+}
+.game .letter.false{
+  background:rgba(255,79,108,.74) !important;
+  color:#fff !important;
+}
+.game .zone-text{
+  font-size:clamp(10px,1vw,13px) !important;
+  line-height:1 !important;
+  font-weight:900 !important;
+  letter-spacing:.25px !important;
+}
+
+/* Only AFTER time expires do the sides receive the result colors. */
+.game .zone.correct{
+  background:rgba(33,212,109,.40) !important;
+}
+.game .zone.wrong{
+  background:rgba(255,79,108,.34) !important;
+}
+.game .zone.correct .zone-card{
+  background:rgba(33,212,109,.32) !important;
+  border-color:rgba(112,247,160,.78) !important;
+}
+.game .zone.wrong .zone-card{
+  background:rgba(255,79,108,.27) !important;
+  border-color:rgba(255,130,150,.72) !important;
+}
+
+/* Smaller question. */
+.game .quiz-head{
+  top:52px !important;
+  width:min(630px,calc(100% - 28px)) !important;
+}
+.game .meta{
+  font-size:10px !important;
+}
+.game .question{
+  font-size:clamp(17px,1.9vw,26px) !important;
+  line-height:1.15 !important;
+  font-weight:900 !important;
+  margin-top:5px !important;
+}
+.game .badge{
+  font-size:8px !important;
+  padding:4px 8px !important;
+}
+
+/* Result overlay: NO full-screen darkening and NO blur.
+   Only a small floating banner is shown. */
+.game .result-overlay,
+.game .transition-overlay,
+.game .pause-overlay{
+  background:transparent !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+.game .result-overlay{
+  align-items:flex-start !important;
+  justify-items:center !important;
+  padding-top:145px !important;
+  pointer-events:none !important;
+}
+.game .result-overlay .overlay-card{
+  width:min(380px,calc(100% - 28px)) !important;
+  max-width:380px !important;
+  padding:13px 16px !important;
+  border-radius:16px !important;
+  background:rgba(7,13,21,.88) !important;
+  border:1px solid rgba(255,255,255,.18) !important;
+  box-shadow:0 15px 45px rgba(0,0,0,.28) !important;
+}
+.game .result-title{
+  font-size:clamp(28px,3vw,40px) !important;
+  line-height:1 !important;
+  margin:0 !important;
+}
+.game .result-answer{
+  margin-top:6px !important;
+  font-size:12px !important;
+}
+.game .result-key{
+  font-size:12px !important;
+  margin-top:4px !important;
+}
+.game .result-help{
+  font-size:8px !important;
+  margin-top:6px !important;
+  line-height:1.35 !important;
+}
+
+/* Countdown is also compact and does not hide the camera. */
+.game .transition-overlay{
+  place-items:center !important;
+  pointer-events:none !important;
+}
+.game .transition-overlay .overlay-card{
+  width:min(280px,calc(100% - 28px)) !important;
+  max-width:280px !important;
+  padding:12px 14px !important;
+  border-radius:15px !important;
+  background:rgba(7,13,21,.82) !important;
+  border:1px solid rgba(255,255,255,.17) !important;
+  box-shadow:0 14px 40px rgba(0,0,0,.24) !important;
+}
+.game .transition-title{
+  font-size:14px !important;
+  letter-spacing:.35px !important;
+}
+.game .transition-num{
+  font-size:54px !important;
+  line-height:.88 !important;
+  margin:3px 0 !important;
+}
+.game .transition-help{
+  font-size:8px !important;
+  line-height:1.3 !important;
+}
+
+/* Keep pause readable but also compact. */
+.game .pause-overlay .overlay-card{
+  width:min(430px,calc(100% - 28px)) !important;
+  padding:18px !important;
+  border-radius:17px !important;
+  background:rgba(7,13,21,.92) !important;
+}
+
+/* Header and timer remain unobtrusive. */
+.game .top{
+  padding:14px 16px !important;
+}
+.game .topbtn{
+  height:39px !important;
+}
+.game .topbtn.icon{
+  width:39px !important;
+}
+.game .timer-wrap{
+  bottom:10px !important;
+}
+.game .timer{
+  width:68px !important;
+  height:68px !important;
+}
+.game .timer span{
+  font-size:23px !important;
+}
+.game .status{
+  bottom:10px !important;
+  left:9px !important;
+  font-size:8px !important;
+  padding:5px 8px !important;
+}
+
+@media(max-width:780px){
+  .game .quiz-head{top:60px !important}
+  .game .question{font-size:18px !important}
+  .game .zone-card{bottom:45px !important}
+  .game .zone-text{font-size:9px !important}
+  .game .letter{width:22px !important;height:22px !important;font-size:11px !important}
+  .game .result-overlay{padding-top:135px !important}
+  .game .result-overlay .overlay-card{width:min(340px,calc(100% - 24px)) !important}
+  .game .timer{width:62px !important;height:62px !important}
+}
+@media(max-width:520px){
+  .game .quiz-head{top:64px !important}
+  .game .question{font-size:17px !important}
+  .game .zone-card{bottom:42px !important;padding:5px 9px !important}
+  .game .zone-text{font-size:8px !important}
+  .game .letter{width:20px !important;height:20px !important;font-size:10px !important}
+  .game .result-overlay{padding-top:128px !important}
+}
+
 </style>
 </head>
 <body>
 <div class="app">
+
+</div>
 
 <section class="home" id="home">
   <div class="home-wrap">
     <div class="home-card">
       <div class="title">Kuis Interaktif</div>
       <div class="rule"></div>
-      <div class="subtitle">Siswa melompat ke sisi <b>BENAR</b> atau <b>SALAH</b>. Siswa yang memilih jawaban salah tereliminasi.</div>
+      <div class="subtitle">Siswa melompat ke sisi <b>BENAR</b> atau <b>SALAH</b>. Siswa berpindah ke sisi BENAR atau SALAH. Jawaban benar akan disorot hijau setelah waktu habis.</div>
 
       <div class="choice-row">
         <div class="choice-chip true">BENAR</div>
@@ -210,11 +545,11 @@ button{cursor:pointer}
           <button class="btn primary" id="loadBtn">Muat soal ini</button>
           <button class="btn" id="loadEditBtn">Muat lalu buka Edit soal</button>
         </div>
-        <div class="notice" id="notice"></div>
+        <div class="notice" id="notice"></div><div id="importStatus" style="margin-top:6px;color:#7f8ea0;font-size:10px"></div><div style="margin-top:6px;color:#78879a;font-size:10px">Kamera tidak wajib untuk memulai permainan. Jika <b>index.html</b> dibuka langsung, game tetap berjalan walaupun webcam tidak tersedia.</div>
       </div>
 
       <div class="home-bottom"><button class="btn" id="editorBtn">Edit soal</button><button class="btn" id="cameraInfoBtn">Kamera sebagai latar</button></div>
-      <div class="home-bottom"><button class="link" id="importBtn">Impor soal (.json)</button><button class="link" id="exportBtn">Ekspor soal (.json)</button><input id="file" type="file" accept=".json,application/json" class="hidden"></div>
+      <div class="home-bottom"><button class="link" id="importBtn">Impor soal (.json)</button><button class="link" id="exportBtn">Ekspor soal (.json)</button><input id="file" type="file" accept=".json,application/json,text/json" aria-label="Pilih file JSON" style="position:fixed;left:-9999px;width:2px;height:2px;opacity:0"></div>
     </div>
   </div>
 </section>
@@ -231,9 +566,9 @@ button{cursor:pointer}
       <div class="field"><label>Jenjang</label><select id="eLevel"></select></div><div class="field"><label>Kelas</label><select id="eClass"></select></div>
       <div class="field"><label>Mapel</label><select id="eSubject"></select></div><div class="field"><label>Kesulitan</label><select id="eDiff"><option>Mudah</option><option selected>Sedang</option><option>Sulit</option></select></div>
     </div>
-    <div class="editor-info" id="editorInfo"></div>
+    <div class="editor-info" id="editorInfo"></div><div id="dbNote" style="display:block;margin-top:6px;padding:7px 9px;border-radius:8px;background:#111925;border:1px solid #2d3948;color:#aab6c4;font-size:10px">Database soal aktif: <b>IndexedDB</b>. Data edit disimpan otomatis pada browser/perangkat ini.</div>
     <div class="q-list" id="qList"></div>
-    <div class="json hidden" id="jsonPanel"><textarea id="jsonText"></textarea><div class="actions"><button class="btn primary" id="applyJson">Terapkan JSON</button><button class="btn" id="closeJson">Tutup</button></div></div>
+    <div class="json hidden" id="jsonPanel"></div>
     <div class="actions" style="justify-content:center"><button class="btn primary" id="saveBank">Simpan bank soal</button><button class="btn" id="backHome2">Kembali</button></div>
   </div>
 </section>
@@ -263,7 +598,7 @@ button{cursor:pointer}
 
   <div class="overlay hidden" id="pauseOverlay"><div class="overlay-card"><div class="pause-title">PERMAINAN DIJEDA</div><div class="pause-help">Timer dan pembacaan posisi berhenti sementara.</div><div class="actions" style="justify-content:center;margin-top:18px"><button class="btn primary" id="resumeBtn">▶ Lanjutkan</button><button class="btn" id="restartPause">↻ Ulangi</button><button class="btn" id="homePause">⌂ Beranda</button></div></div></div>
 
-  <div class="overlay result-overlay hidden" id="resultOverlay"><div class="overlay-card"><div class="result-title" id="resultTitle">BENAR</div><div class="result-answer" id="resultAnswer"></div><div class="result-key" id="resultKey"></div><div class="result-help">Hasil tetap tampil beberapa detik. Siswa yang salah tereliminasi, kemudian semua bersiap untuk soal berikutnya.</div></div></div>
+  <div class="overlay result-overlay hidden" id="resultOverlay"><div class="overlay-card"><div class="result-title" id="resultTitle">BENAR</div><div class="result-answer" id="resultAnswer"></div><div class="result-key" id="resultKey"></div><div class="result-help">Jawaban benar ditandai hijau. Sisi lainnya merah.</div></div></div>
 
   <div class="overlay transition-overlay hidden" id="transitionOverlay"><div class="overlay-card" style="max-width:500px"><div class="transition-title">BERSIAP PINDAH POSISI</div><div class="transition-num" id="transitionNum">3</div><div class="transition-help">Pindah ke sisi BENAR atau SALAH untuk soal berikutnya.</div></div></div>
 </section>
@@ -317,37 +652,195 @@ const state={
 
 const $=id=>document.getElementById(id);
 const key=()=>[state.level,state.klass,state.subject,state.difficulty].join("|");
+
+function normalizeQ(q){
+  const statement=String(
+    q?.statement ??
+    q?.question ??
+    q?.pertanyaan ??
+    q?.soal ??
+    q?.pernyataan ??
+    q?.q ??
+    ""
+  ).trim();
+
+  let raw=q?.answer ??
+    q?.correct ??
+    q?.jawaban ??
+    q?.kunci ??
+    q?.kunciJawaban ??
+    q?.kunci_jawaban ??
+    "BENAR";
+
+  if(typeof raw==="boolean")raw=raw?"BENAR":"SALAH";
+
+  const answer=String(raw).trim().toUpperCase()==="SALAH" ? "SALAH" : "BENAR";
+  return {statement,answer};
+}
+
+function seedForKey(){
+  const arr=BANK_SEEDS[key()] || [
+    [`Pernyataan untuk materi ${state.subject}.`,"BENAR"]
+  ];
+  const source=Array.isArray(arr)&&arr.length?arr:[[`Pernyataan baru.`,"BENAR"]];
+  const result=[];
+  for(let i=0;i<25;i++){
+    const row=source[i%source.length];
+    result.push({statement:String(row[0]),answer:String(row[1]).toUpperCase()==="SALAH"?"SALAH":"BENAR"});
+  }
+  return result;
+}
 const escapeHtml=s=>String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 const escapeAttr=s=>escapeHtml(s).replace(/\n/g,"&#10;");
 const clone=o=>JSON.parse(JSON.stringify(o));
 
-function seedBank(){
-  if(localStorage.getItem("true_false_banks")) return;
-  const banks={};
-  Object.entries(BANK_SEEDS).forEach(([k,arr])=>{
-    banks[k]=Array.from({length:25},(_,i)=>{
-      const row=arr[i%arr.length];
-      return {statement:row[0],answer:row[1]};
-    });
-  });
-  localStorage.setItem("true_false_banks",JSON.stringify(banks));
-}
-function banks(){try{return JSON.parse(localStorage.getItem("true_false_banks")||"{}")}catch(e){return {}}}
-function saveBanks(b){localStorage.setItem("true_false_banks",JSON.stringify(b))}
-function seedForKey(){
-  const arr=BANK_SEEDS[key()]||[[`Pernyataan untuk materi ${state.subject}.`,"BENAR"]];
-  return Array.from({length:25},(_,i)=>({statement:arr[i%arr.length][0],answer:arr[i%arr.length][1]}));
-}
-function getBank(){
-  const b=banks(),k=key();
-  if(!Array.isArray(b[k])||!b[k].length){b[k]=seedForKey();saveBanks(b)}
-  return b[k].map(normalizeQ);
-}
-function saveBank(qs){const b=banks();b[key()]=qs.map(normalizeQ);saveBanks(b)}
-function normalizeQ(q){return {statement:String(q.statement??q.q??"").trim(),answer:String(q.answer??q.correct??"BENAR").toUpperCase()==="SALAH"?"SALAH":"BENAR"}}
+let QUESTION_BANKS = {};
+let QUESTION_DB = null;
+let QUESTION_DB_READY = false;
+let QUESTION_DB_PROMISE = null;
+const FALLBACK_KEY = "true_false_banks_v14";
 
+const DB_NAME = "KuisInteraktifDB";
+const DB_VERSION = 1;
+const STORE_NAME = "banks";
+
+function legacyBanks(){
+  try{return JSON.parse(localStorage.getItem("true_false_banks_v10_fallback")||localStorage.getItem("true_false_banks")||"{}")}catch(e){return {}}
+}
+
+function localBanks(){
+  try{return JSON.parse(localStorage.getItem(FALLBACK_KEY)||"{}")}catch(e){return {}}
+}
+
+function saveLocalBank(id,questions){
+  try{
+    const b=localBanks();
+    b[id]=questions.map(normalizeQ);
+    localStorage.setItem(FALLBACK_KEY,JSON.stringify(b));
+  }catch(e){console.error(e)}
+}
+
+function openQuestionDB(){
+  return new Promise((resolve,reject)=>{
+    if(!window.indexedDB){reject(new Error("IndexedDB tidak tersedia."));return}
+    let done=false;
+    const fail=e=>{if(!done){done=true;reject(e)}};
+    const req=indexedDB.open(DB_NAME,DB_VERSION);
+    req.onupgradeneeded=e=>{
+      const db=e.target.result;
+      if(!db.objectStoreNames.contains(STORE_NAME))db.createObjectStore(STORE_NAME,{keyPath:"id"});
+    };
+    req.onsuccess=()=>{if(!done){done=true;QUESTION_DB=req.result;resolve(QUESTION_DB)}};
+    req.onerror=()=>fail(req.error||new Error("Database tidak dapat dibuka."));
+    req.onblocked=()=>fail(new Error("Database sedang diblokir."));
+  });
+}
+
+function dbReadAll(){
+  return new Promise((resolve,reject)=>{
+    try{
+      const tx=QUESTION_DB.transaction(STORE_NAME,"readonly");
+      const req=tx.objectStore(STORE_NAME).getAll();
+      req.onsuccess=()=>resolve(req.result||[]);
+      req.onerror=()=>reject(req.error||new Error("Gagal membaca database."));
+    }catch(e){reject(e)}
+  });
+}
+
+function dbWrite(id,questions){
+  const normalized=questions.map(normalizeQ);
+  saveLocalBank(id,normalized); // immediate safety copy
+  if(!QUESTION_DB_READY||!QUESTION_DB)return;
+  try{
+    const tx=QUESTION_DB.transaction(STORE_NAME,"readwrite");
+    tx.objectStore(STORE_NAME).put({id,questions:normalized,updatedAt:new Date().toISOString()});
+  }catch(e){console.error("IndexedDB write:",e)}
+}
+
+async function initQuestionDatabase(){
+  if(QUESTION_DB_PROMISE)return QUESTION_DB_PROMISE;
+  QUESTION_DB_PROMISE=(async()=>{
+    try{
+      QUESTION_DB=await openQuestionDB();
+      const records=await dbReadAll();
+
+      if(records.length){
+        QUESTION_BANKS={};
+        records.forEach(r=>{
+          if(r?.id&&Array.isArray(r.questions))QUESTION_BANKS[r.id]=r.questions.map(normalizeQ);
+        });
+      }else{
+        const seedLocal=localBanks();
+        const legacy=legacyBanks();
+        QUESTION_BANKS=Object.keys(seedLocal).length?seedLocal:legacy;
+        Object.entries(QUESTION_BANKS).forEach(([id,qs])=>{
+          if(Array.isArray(qs))dbWrite(id,qs);
+        });
+      }
+      QUESTION_DB_READY=true;
+    }catch(e){
+      console.warn("IndexedDB tidak tersedia, gunakan localStorage:",e);
+      QUESTION_DB_READY=false;
+      const fb=localBanks();
+      const legacy=legacyBanks();
+      QUESTION_BANKS=Object.keys(fb).length?fb:legacy;
+    }
+
+    // starter banks
+    for(const id of Object.keys(BANK_SEEDS)){
+      if(!Array.isArray(QUESTION_BANKS[id])||!QUESTION_BANKS[id].length){
+        const old={level:state.level,klass:state.klass,subject:state.subject,difficulty:state.difficulty};
+        const [level,klass,subject,difficulty]=id.split("|");
+        state.level=level;state.klass=klass;state.subject=subject;state.difficulty=difficulty;
+        QUESTION_BANKS[id]=seedForKey();
+        dbWrite(id,QUESTION_BANKS[id]);
+        Object.assign(state,old);
+      }
+    }
+
+    if(!Array.isArray(QUESTION_BANKS[key()])||!QUESTION_BANKS[key()].length){
+      const qs=seedForKey();
+      QUESTION_BANKS[key()]=qs;
+      dbWrite(key(),qs);
+    }
+    return true;
+  })();
+  return QUESTION_DB_PROMISE;
+}
+
+function getBank(){
+  const k=key();
+  if(!Array.isArray(QUESTION_BANKS[k])||!QUESTION_BANKS[k].length){
+    QUESTION_BANKS[k]=seedForKey();
+    dbWrite(k,QUESTION_BANKS[k]);
+  }
+  return QUESTION_BANKS[k].map(normalizeQ);
+}
+
+function saveBank(qs){
+  const normalized=qs.map(normalizeQ);
+  QUESTION_BANKS[key()]=normalized;
+  dbWrite(key(),normalized);
+}
+
+function databaseLabel(){
+  return QUESTION_DB_READY
+    ? "Database soal: IndexedDB"
+    : "Penyimpanan soal: lokal";
+}
 function populateLevel(select){
-  select.innerHTML='<option value="SD">SD (Kelas 1-6)</option><option value="SMP">SMP (Kelas 7-9)</option><option value="SMA">SMA (Kelas 10-12)</option>';
+  select.innerHTML="";
+  const levels=[
+    {value:"SD",text:"SD (Kelas 1-6)"},
+    {value:"SMP",text:"SMP (Kelas 7-9)"},
+    {value:"SMA",text:"SMA (Kelas 10-12)"}
+  ];
+  levels.forEach(item=>{
+    const o=document.createElement("option");
+    o.value=item.value;
+    o.textContent=item.text;
+    select.appendChild(o);
+  });
 }
 function populateClass(select,level){
   select.innerHTML="";
@@ -363,20 +856,26 @@ function refreshHome(){
   document.querySelectorAll(".chip").forEach(c=>c.classList.toggle("active",Number(c.dataset.time)===state.seconds));
   const n=Math.min(30,Math.max(1,Number($("count").value)||20));$("count").value=n;
   const bank=getBank();$("homeMeta").textContent=`${Math.min(n,bank.length)} soal • ${state.subject} • ${state.klass} • ${state.difficulty} • ${state.seconds} detik/soal`;
-  $("notice").textContent=`Bank soal tersimpan: ${bank.length} pernyataan. Kombinasi mapel, kelas, dan kesulitan memiliki bank masing-masing.`;
+  $("notice").textContent=`${databaseLabel()} • ${bank.length} soal pada bank aktif.`;
 }
 function openHome(){
   stopTimers();hide("editor");hide("game");hide("final");hide("pauseOverlay");hide("resultOverlay");hide("transitionOverlay");show("home");
   state.phase="home";state.paused=false;refreshHome()
 }
-function openEditor(){stopTimers();hide("home");hide("game");hide("final");show("editor");state.phase="editor";syncEditor();renderEditor()}
+async function openEditor(){
+  await initQuestionDatabase();
+  stopTimers();hide("home");hide("game");hide("final");show("editor");
+  state.phase="editor";
+  syncEditor();
+  renderEditor();
+}
 function syncEditor(){
   populateLevel($("eLevel"));populateClass($("eClass"),state.level);populateSubject($("eSubject"),state.level);
   $("eLevel").value=state.level;$("eClass").value=state.klass;$("eSubject").value=state.subject;$("eDiff").value=state.difficulty;
-  $("editorSubtitle").textContent=`${state.subject} • ${state.klass} • ${state.level} • ${state.difficulty}`;
+  $("editorSubtitle").textContent=`${state.subject} • ${state.klass} • ${state.level} • ${state.difficulty} • Database IndexedDB`;
 }
 function renderEditor(){
-  syncEditor();const qs=getBank();$("editorInfo").textContent=`${qs.length} soal. Setiap perubahan tersimpan otomatis ke bank ${state.subject}.`;
+  syncEditor();const qs=getBank();$("editorInfo").textContent=`${qs.length} soal • tersimpan otomatis ke Database IndexedDB.`;
   const list=$("qList");list.innerHTML="";
   qs.forEach((q,i)=>{
     const card=document.createElement("div");card.className="q-card";card.dataset.i=i;
@@ -400,23 +899,165 @@ function renderEditor(){
     saveBank(b);renderEditor();
   })
 }
-function addQuestion(){const b=getBank();b.push({statement:"Pernyataan baru...",answer:"BENAR"});saveBank(b);renderEditor()}
-function restore(){if(!confirm("Kembalikan bank soal ini ke contoh awal?"))return;const b=banks();b[key()]=seedForKey();saveBanks(b);renderEditor();refreshHome()}
+async function addQuestion(){
+  await initQuestionDatabase();
+  const b=getBank();
+  b.push({statement:"Pernyataan baru...",answer:"BENAR"});
+  saveBank(b);
+  renderEditor();
+  setTimeout(()=>{
+    const cards=document.querySelectorAll("#qList .q-card");
+    cards[cards.length-1]?.scrollIntoView({behavior:"smooth",block:"center"});
+  },50);
+}
+function restore(){if(!confirm("Kembalikan bank soal ini ke contoh awal?"))return;saveBank(seedForKey());renderEditor();refreshHome()}
 function exportBank(){download(`soal-${slug(state.subject)}-${slug(state.klass)}.json`,JSON.stringify({version:3,bank:{level:state.level,class:state.klass,subject:state.subject,difficulty:state.difficulty},questions:getBank()},null,2),"application/json")}
-function importFile(file){const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result),qs=(Array.isArray(o)?o:o.questions);if(!Array.isArray(qs)||!qs.length)throw Error("Daftar soal tidak ditemukan.");saveBank(qs.map(normalizeQ));renderEditor();refreshHome();alert("Soal berhasil diimpor.")}catch(e){alert("Impor gagal: "+e.message)}};r.readAsText(file)}
-function download(name,text,type){const blob=new Blob([text],{type}),u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}
-function slug(s){return String(s).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")}
+function parseImportedQuestions(obj){
+  if(Array.isArray(obj)) return obj;
+  if(Array.isArray(obj?.questions)) return obj.questions;
+  if(Array.isArray(obj?.data)) return obj.data;
+  if(Array.isArray(obj?.soal)) return obj.soal;
+  if(Array.isArray(obj?.items)) return obj.items;
+  return null;
+}
 
+function normalizeImportedQuestion(q){
+  const statement=String(
+    q?.statement ?? q?.question ?? q?.pertanyaan ?? q?.soal ??
+    q?.pernyataan ?? q?.q ?? ""
+  ).trim();
+
+  let raw=q?.answer ?? q?.correct ?? q?.jawaban ?? q?.kunci ??
+    q?.kunciJawaban ?? q?.kunci_jawaban ?? "";
+
+  if(typeof raw==="boolean")raw=raw?"BENAR":"SALAH";
+
+  const answer=String(raw).trim().toUpperCase();
+  return {statement,answer:answer==="SALAH"?"SALAH":"BENAR"};
+}
+
+function importedBankMeta(obj){
+  const bank=obj?.bank || obj?.metadata || {};
+  return {
+    level:bank.level || bank.jenjang || null,
+    klass:bank.class || bank.klass || bank.kelas || null,
+    subject:bank.subject || bank.mapel || bank.mataPelajaran || bank.mata_pelajaran || null,
+    difficulty:bank.difficulty || bank.kesulitan || null
+  };
+}
+
+async function importJsonText(text){
+  const cleaned=String(text||"").replace(/^\uFEFF/,"").trim();
+  if(!cleaned)throw new Error("File JSON kosong.");
+
+  const obj=JSON.parse(cleaned);
+  const rawQuestions=parseImportedQuestions(obj);
+  if(!rawQuestions)throw new Error("Format JSON tidak berisi daftar soal.");
+
+  const normalized=rawQuestions.map(normalizeImportedQuestion);
+  if(!normalized.length)throw new Error("Daftar soal kosong.");
+
+  normalized.forEach((q,i)=>{
+    if(!q.statement)throw new Error(`Soal nomor ${i+1} tidak memiliki pernyataan.`);
+    if(q.answer!=="BENAR"&&q.answer!=="SALAH")throw new Error(`Kunci soal nomor ${i+1} harus BENAR atau SALAH.`);
+  });
+
+  const meta=importedBankMeta(obj);
+  if(meta.level&&["SD","SMP","SMA"].includes(meta.level))state.level=meta.level;
+  if(meta.klass)state.klass=String(meta.klass);
+  if(meta.subject)state.subject=String(meta.subject);
+  if(meta.difficulty&&["Mudah","Sedang","Sulit"].includes(meta.difficulty))state.difficulty=String(meta.difficulty);
+
+  saveBank(normalized);
+  if($("importStatus")){
+    $("importStatus").textContent=`Berhasil: ${normalized.length} soal → ${state.subject} • ${state.klass} • ${state.difficulty}`;
+  }
+  return normalized.length;
+}
+
+function importFromSelectedFile(file){
+  if(!file) return;
+
+  const name=String(file.name||"").toLowerCase();
+  if(!name.endsWith(".json")){
+    const msg="Pilih file dengan ekstensi .json";
+    if($("importStatus"))$("importStatus").textContent=msg;
+    alert(msg);
+    return;
+  }
+
+  const reader=new FileReader();
+  reader.onload=async()=>{
+    try{
+      await initQuestionDatabase();
+      const count=await importJsonText(reader.result);
+      refreshHome();
+      if(state.phase==="editor")renderEditor();
+      alert(`Berhasil mengimpor ${count} soal.`);
+    }catch(err){
+      console.error(err);
+      const msg="Import JSON gagal: "+(err.message||err);
+      if($("importStatus"))$("importStatus").textContent=msg;
+      alert(msg);
+    }
+  };
+  reader.onerror=()=>{
+    const msg="File JSON tidak dapat dibaca.";
+    if($("importStatus"))$("importStatus").textContent=msg;
+    alert(msg);
+  };
+  reader.readAsText(file);
+}
+
+// Fungsi inti permainan dan ekspor, dipulihkan dari versi awal.
+function download(name,content,type="application/json"){
+  const blob=new Blob([content],{type});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function slug(s){return String(s).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")}
 function chooseQuestions(){
-  return clone(getBank()).slice(0,Math.min(30,Number($("count").value)||20)).map(normalizeQ);
+  const amount=Math.max(1,Math.min(30,Number($("count").value)||20));
+  return getBank().filter(q=>q.statement.trim()).slice(0,amount).map(normalizeQ);
 }
+
 async function beginGame(){
-  state.level=$("level").value;state.klass=$("klass").value;state.subject=$("subject").value;state.difficulty=$("difficulty").value;
-  state.questions=chooseQuestions();state.current=0;state.answers=[];
-  if(!state.questions.length){alert("Bank soal kosong.");return}
-  try{await initCamera()}catch(e){alert("Kamera gagal dibuka. Izinkan kamera dan gunakan HTTPS/GitHub Pages.\n\n"+e.message);return}
-  hide("home");hide("final");show("game");state.phase="question";state.paused=false;renderQuestion();startTimer();
+  state.level=$("level").value;
+  state.klass=$("klass").value;
+  state.subject=$("subject").value;
+  state.difficulty=$("difficulty").value;
+
+  await initQuestionDatabase();
+
+  state.questions=chooseQuestions();
+  state.current=0;
+  state.answers=[];
+
+  if(!state.questions.length){
+    alert("Bank soal kosong.");
+    return;
+  }
+
+  // Webcam is optional because it is only a visual background.
+  try{
+    if(location.protocol==="file:")throw new Error("Kamera memerlukan HTTPS atau localhost.");
+    await initCamera();
+  }catch(e){
+    console.warn("Kamera tidak tersedia; game tetap berjalan tanpa kamera.",e);
+    $("status").textContent="Kamera: tidak tersedia • game tetap berjalan";
+  }
+
+  hide("home");
+  hide("final");
+  show("game");
+  state.phase="question";
+  state.paused=false;
+  renderQuestion();
+  startTimer();
 }
+
 async function initCamera(){
   if(state.stream)return;
   if(!navigator.mediaDevices?.getUserMedia)throw new Error("Browser tidak mendukung kamera.");
@@ -464,6 +1105,8 @@ function evaluate(){
   // Correct side = green, opposite side = red.
   state.answers[state.current]={key};
 
+  // IMPORTANT: green/red screen treatment starts only after the timer reaches 0.
+  // Before this point the zones are neutral/transparent.
   if(key==="BENAR"){
     $("trueZone").classList.add("correct");
     $("falseZone").classList.add("wrong");
@@ -578,21 +1221,37 @@ let audio=null;
 function unlock(){try{audio=audio||new(window.AudioContext||window.webkitAudioContext)();if(audio.state==="suspended")audio.resume()}catch(e){}}
 function beep(type){if(!state.sound)return;try{unlock();if(!audio)return;const now=audio.currentTime,o=audio.createOscillator(),g=audio.createGain();o.type="sine";if(type==="correct"){o.frequency.setValueAtTime(680,now);o.frequency.linearRampToValueAtTime(920,now+.22)}else if(type==="wrong"){o.frequency.setValueAtTime(240,now);o.frequency.linearRampToValueAtTime(170,now+.2)}else{o.frequency.setValueAtTime(520,now)}g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(.17,now+.01);g.gain.exponentialRampToValueAtTime(.0001,now+(type==="tick"?0.11:0.34));o.connect(g);g.connect(audio.destination);o.start(now);o.stop(now+(type==="tick"?0.12:0.35))}catch(e){}}
 
-seedBank();refreshHome();
+initQuestionDatabase()
+  .then(()=>refreshHome())
+  .catch(err=>{
+    console.error(err);
+    try{refreshHome()}catch(e){console.error("refreshHome:",e)}
+    if($("notice"))$("notice").textContent="Penyimpanan lokal aktif. Game tetap bisa digunakan.";
+  });
 
 /* HOME */
 $("level").onchange=()=>{state.level=$("level").value;populateClass($("klass"),state.level);populateSubject($("subject"),state.level);state.klass=$("klass").value;state.subject=$("subject").value;refreshHome()};
 $("klass").onchange=()=>{state.klass=$("klass").value;refreshHome()};$("subject").onchange=()=>{state.subject=$("subject").value;refreshHome()};$("difficulty").onchange=()=>{state.difficulty=$("difficulty").value;refreshHome()};
-$("count").oninput=refreshHome;$("startBtn").onclick=beginGame;$("loadBtn").onclick=beginGame;$("loadEditBtn").onclick=()=>{state.level=$("level").value;state.klass=$("klass").value;state.subject=$("subject").value;state.difficulty=$("difficulty").value;openEditor()};
-$("editorBtn").onclick=()=>{state.level=$("level").value;state.klass=$("klass").value;state.subject=$("subject").value;state.difficulty=$("difficulty").value;openEditor()};
-$("cameraInfoBtn").onclick=()=>alert("Kamera sebagai latar saat kuis dimulai. Sistem membaca posisi tubuh, bukan tombol jawaban.");
+$("count").oninput=refreshHome;$("startBtn").onclick=beginGame;$("loadBtn").onclick=beginGame;$("loadEditBtn").onclick=async()=>{state.level=$("level").value;state.klass=$("klass").value;state.subject=$("subject").value;state.difficulty=$("difficulty").value;await openEditor()};
+$("editorBtn").onclick=async()=>{state.level=$("level").value;state.klass=$("klass").value;state.subject=$("subject").value;state.difficulty=$("difficulty").value;await openEditor()};
+$("cameraInfoBtn").onclick=()=>alert("Kamera hanya menjadi latar video. Kamera tidak membaca tubuh, tangan, wajah, atau posisi siswa. Game tetap dapat dimainkan tanpa kamera.");
 document.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{state.seconds=+c.dataset.time;refreshHome()});$("minus5").onclick=()=>{state.seconds=Math.max(5,state.seconds-5);refreshHome()};$("plus5").onclick=()=>{state.seconds=Math.min(60,state.seconds+5);refreshHome()};
-$("exportBtn").onclick=exportBank;$("importBtn").onclick=()=>$("file").click();$("file").onchange=e=>{if(e.target.files?.[0])importFile(e.target.files[0]);e.target.value=""};
+$("exportBtn").onclick=exportBank;
+$("importBtn").onclick=()=>{
+  const input=$("file");
+  input.value="";
+  input.click();
+};
+$("file").addEventListener("change",e=>importFromSelectedFile(e.target.files?.[0]||null));
 
 /* EDITOR */
+populateLevel($("eLevel"));populateClass($("eClass"),state.level);populateSubject($("eSubject"),state.level);
 $("backHome").onclick=openHome;$("backHome2").onclick=openHome;$("addQ").onclick=addQuestion;$("restoreBtn").onclick=restore;$("exportEditorBtn").onclick=exportBank;
-$("jsonBtn").onclick=()=>{ $("jsonText").value=JSON.stringify(getBank(),null,2);show("jsonPanel")};$("closeJson").onclick=()=>hide("jsonPanel");
-$("applyJson").onclick=()=>{try{const p=JSON.parse($("jsonText").value);if(!Array.isArray(p)||!p.length)throw Error("JSON kosong");saveBank(p.map(normalizeQ));renderEditor();hide("jsonPanel");alert("JSON berhasil diterapkan")}catch(e){alert("JSON tidak valid: "+e.message)}};
+$("jsonBtn").onclick=()=>{
+  const input=$("file");
+  input.value="";
+  input.click();
+};
 $("saveBank").onclick=()=>{saveBank(getBank());alert("Bank soal tersimpan.")};
 $("eLevel").onchange=()=>{state.level=$("eLevel").value;populateClass($("eClass"),state.level);populateSubject($("eSubject"),state.level);state.klass=$("eClass").value;state.subject=$("eSubject").value;renderEditor()};
 $("eClass").onchange=()=>{state.klass=$("eClass").value;renderEditor()};$("eSubject").onchange=()=>{state.subject=$("eSubject").value;renderEditor()};$("eDiff").onchange=()=>{state.difficulty=$("eDiff").value;renderEditor()};$("editFs").onclick=()=>document.documentElement.requestFullscreen?.();
@@ -611,6 +1270,6 @@ window.addEventListener("beforeunload",()=>{stopTimers();if(state.stream)state.s
 syncEditor();
 })();
 </script>
-<script>if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script>
+<script>if((location.protocol==="https:"||location.hostname==="localhost")&&"serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script>
 </body>
 </html>

@@ -3,6 +3,5 @@ window.GAME_CONFIG = {
   schoolName: "SMP Negeri 2 Soyo Jaya",
   secondsPerQuestion: 10,
   resultSeconds: 5,
-  transitionSeconds: 2,
-  selectionHoldMs: 260
+  transitionSeconds: 2
 };
