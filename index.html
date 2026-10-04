@@ -496,6 +496,38 @@ button{cursor:pointer}
   .game .result-overlay{padding-top:128px !important}
 }
 
+
+/* V18 hard override: result is a small banner only, camera stays visible. */
+.result-banner.hidden{display:none !important}
+.result-banner:not(.hidden){
+  display:block !important;
+  position:absolute !important;
+  top:132px !important;
+  left:50% !important;
+  transform:translateX(-50%) !important;
+  width:min(340px,calc(100% - 28px)) !important;
+  padding:10px 14px !important;
+  background:rgba(7,13,21,.90) !important;
+  border:1px solid rgba(255,255,255,.18) !important;
+  border-radius:14px !important;
+  box-shadow:0 12px 34px rgba(0,0,0,.24) !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  pointer-events:none !important;
+  text-align:center !important;
+}
+.result-banner .result-title{
+  font-size:34px !important;
+  line-height:1 !important;
+  margin:0 !important;
+}
+.result-banner .result-answer{font-size:11px !important;margin-top:5px !important}
+.result-banner .result-key{font-size:11px !important;margin-top:3px !important}
+@media(max-width:780px){
+  .result-banner:not(.hidden){top:124px !important;width:min(310px,calc(100% - 22px)) !important;padding:9px 12px !important}
+  .result-banner .result-title{font-size:29px !important}
+}
+
 </style>
 </head>
 <body>
@@ -598,7 +630,15 @@ button{cursor:pointer}
 
   <div class="overlay hidden" id="pauseOverlay"><div class="overlay-card"><div class="pause-title">PERMAINAN DIJEDA</div><div class="pause-help">Timer dan pembacaan posisi berhenti sementara.</div><div class="actions" style="justify-content:center;margin-top:18px"><button class="btn primary" id="resumeBtn">▶ Lanjutkan</button><button class="btn" id="restartPause">↻ Ulangi</button><button class="btn" id="homePause">⌂ Beranda</button></div></div></div>
 
-  <div class="overlay result-overlay hidden" id="resultOverlay"><div class="overlay-card"><div class="result-title" id="resultTitle">BENAR</div><div class="result-answer" id="resultAnswer"></div><div class="result-key" id="resultKey"></div><div class="result-help">Jawaban benar ditandai hijau. Sisi lainnya merah.</div></div></div>
+  <div id="resultOverlay" class="result-banner hidden"
+    style="position:absolute;top:132px;left:50%;transform:translateX(-50%);z-index:90;
+    width:min(340px,calc(100% - 28px));padding:10px 14px;border-radius:14px;
+    background:rgba(7,13,21,.90);border:1px solid rgba(255,255,255,.18);
+    box-shadow:0 12px 34px rgba(0,0,0,.24);text-align:center;pointer-events:none;">
+    <div id="resultTitle" style="font-size:34px;line-height:1;font-weight:950;color:#21d46d;">JAWABAN</div>
+    <div id="resultAnswer" style="margin-top:5px;font-size:11px;font-weight:800;color:#f4f6fb;"></div>
+    <div id="resultKey" style="margin-top:3px;font-size:11px;font-weight:900;color:#21d46d;"></div>
+</div>
 
   <div class="overlay transition-overlay hidden" id="transitionOverlay"><div class="overlay-card" style="max-width:500px"><div class="transition-title">BERSIAP PINDAH POSISI</div><div class="transition-num" id="transitionNum">3</div><div class="transition-help">Pindah ke sisi BENAR atau SALAH untuk soal berikutnya.</div></div></div>
 </section>
@@ -1070,7 +1110,7 @@ async function initCamera(){
 function onPose(){ /* Tidak digunakan. Game ini sengaja tanpa deteksi tubuh/posisi. */ }
 function renderQuestion(){
   const q=state.questions[state.current];
-  $("meta").textContent=`SOAL ${state.current+1} / ${state.questions.length}`;
+  $("meta").textContent=`SOAL ${state.current+1} / ${state.questions.length}`;$("resultOverlay").classList.add("hidden");
   $("question").textContent=q.statement;
   $("badge").textContent=`${state.subject} • ${state.klass} • ${state.difficulty}`;
   $("trueZone").className="zone left";
@@ -1116,7 +1156,7 @@ function evaluate(){
   }
 
   $("resultTitle").textContent=`JAWABAN: ${key}`;
-  $("resultTitle").className="result-title ok";
+  $("resultTitle").className="result-title";
   $("resultAnswer").textContent=key==="BENAR"
     ? "Pernyataan ini BENAR."
     : "Pernyataan ini SALAH.";
@@ -1271,5 +1311,28 @@ syncEditor();
 })();
 </script>
 <script>if((location.protocol==="https:"||location.hostname==="localhost")&&"serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script>
+
+<script>
+(function(){
+  const KEY="kuis_interaktif_v18_cache_reset";
+  if(localStorage.getItem(KEY)==="done") return;
+  localStorage.setItem(KEY,"done");
+
+  if("serviceWorker" in navigator){
+    navigator.serviceWorker.getRegistrations().then(regs=>{
+      return Promise.all(regs.map(r=>r.unregister()));
+    }).then(()=>{
+      if(window.caches && caches.keys){
+        return caches.keys().then(keys=>{
+          return Promise.all(keys
+            .filter(k=>/benar-salah|kuis-interaktif/i.test(k))
+            .map(k=>caches.delete(k)));
+        });
+      }
+    }).catch(()=>{});
+  }
+})();
+</script>
+
 </body>
 </html>

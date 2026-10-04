@@ -1,13 +1,17 @@
-# Kuis Interaktif BENAR / SALAH – V17
+# Kuis Interaktif BENAR / SALAH – V18
 
-Perbaikan V17 fokus pada tampilan saat menjawab:
-1. Warna area BENAR hijau dan SALAH merah **baru muncul ketika timer mencapai 0**.
-2. Banner hasil jawaban diperkecil dan tidak lagi menutupi kamera dengan overlay blur/full-screen.
-3. Ukuran soal diperkecil lagi.
-4. Garis pemisah tengah tetap ada.
-5. Label BENAR/SALAH tetap kecil di bagian bawah.
-6. Tidak ada deteksi tubuh/tangan/wajah/posisi.
-7. Tidak ada poin; model permainan tetap eliminasi.
-8. Countdown tetap ada tetapi compact dan tidak mengaburkan kamera.
+Perbaikan tampilan hasil:
+- Kamera tidak lagi ditutup overlay gelap/buram.
+- Hasil jawaban menjadi banner kecil di atas tengah.
+- Banner tidak memakai blur dan tidak menutup layar.
+- Pertanyaan tetap kecil.
+- Warna sisi BENAR/SALAH untuk hasil tetap baru aktif setelah timer habis.
+- Garis tengah dan label bawah tetap.
+- Tidak ada deteksi tubuh/posisi.
+- Tidak ada poin.
 
-Database, editor soal, impor/ekspor JSON, jenjang, kelas, mapel, dan mode pause dipertahankan.
+Perbaikan deployment:
+- Service worker V18 dibuat network-first untuk index.html agar deploy GitHub Pages tidak tertahan oleh cache lama.
+- Pada pembukaan pertama V18, service worker lama yang terdaftar untuk game ini akan dilepas dan cache game lama dibersihkan sekali.
+
+Database/editor/import/jenjang/kelas/mapel tetap dipertahankan.
