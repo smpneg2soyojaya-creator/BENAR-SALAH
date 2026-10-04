@@ -62,15 +62,6 @@ button{cursor:pointer}
 @media(max-width:760px){.bank-bar{grid-template-columns:1fr 1fr}.editor-bar{align-items:flex-start}.q-card{grid-template-columns:27px 1fr 29px}}
 @media(max-width:520px){.bank-bar{grid-template-columns:1fr}.q-card{grid-template-columns:27px 1fr}.q-tools{grid-column:2;flex-direction:row}.key-row{align-items:flex-start}}
 
-$("startNowBtn").onclick=()=>{
-  hide("readyOverlay");
-  state.phase="question";
-  state.paused=false;
-  unlock();
-  renderQuestion();
-  startTimer();
-};
-
 /* GAME */
 .game{position:absolute;inset:0;background:#050a11;overflow:hidden}
 .camera{position:absolute;inset:0;background:linear-gradient(135deg,#101b2a,#06101a)}
@@ -1133,10 +1124,13 @@ async function beginGame(){
     return;
   }
 
-  // Webcam is optional because it is only a visual background.
+  // Kamera hanya sebagai latar. Tidak boleh menghambat awal permainan.
   try{
-    if(location.protocol==="file:")throw new Error("Kamera memerlukan HTTPS atau localhost.");
-    await initCamera();
+    if(location.protocol!=="file:"){
+      await initCamera();
+    }else{
+      $("status").textContent="Kamera: gunakan GitHub Pages/HTTPS";
+    }
   }catch(e){
     console.warn("Kamera tidak tersedia; game tetap berjalan tanpa kamera.",e);
     $("status").textContent="Kamera: tidak tersedia • game tetap berjalan";
@@ -1144,11 +1138,22 @@ async function beginGame(){
 
   hide("home");
   hide("final");
+  hide("pauseOverlay");
+  hide("resultOverlay");
+  hide("transitionOverlay");
+
   show("game");
-  state.phase="question";
+
+  // Tahap persiapan: timer BELUM berjalan.
+  state.phase="ready";
   state.paused=false;
+
   renderQuestion();
-  startTimer();
+
+  $("readyInfo").textContent=
+    `${state.questions.length} soal • ${state.subject} • ${state.klass} • ${state.seconds} detik per soal.`;
+
+  show("readyOverlay");
 }
 
 async function initCamera(){
@@ -1304,11 +1309,14 @@ function restart(){
   state.questions=chooseQuestions();
   state.current=0;
   state.answers=[];
+
   $("trueZone").className="zone left";
   $("falseZone").className="zone right";
+
   renderQuestion();
 
   state.phase="ready";
+  state.paused=false;
   $("readyInfo").textContent=
     `${state.questions.length} soal • ${state.subject} • ${state.klass} • ${state.seconds} detik per soal.`;
   show("readyOverlay");
@@ -1329,6 +1337,17 @@ initQuestionDatabase()
     try{refreshHome()}catch(e){console.error("refreshHome:",e)}
     if($("notice"))$("notice").textContent="Penyimpanan lokal aktif. Game tetap bisa digunakan.";
   });
+
+
+$("startNowBtn").addEventListener("click",()=>{
+  if(state.phase!=="ready") return;
+  hide("readyOverlay");
+  state.phase="question";
+  state.paused=false;
+  unlock();
+  renderQuestion();
+  startTimer();
+});
 
 /* HOME */
 $("level").onchange=()=>{state.level=$("level").value;populateClass($("klass"),state.level);populateSubject($("subject"),state.level);state.klass=$("klass").value;state.subject=$("subject").value;refreshHome()};

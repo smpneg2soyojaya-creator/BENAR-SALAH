@@ -1,23 +1,12 @@
-# SPENDA Game Center V5
+# SPENDA Game Center V6
 
-Perbaikan utama:
-- Launcher tidak lagi memakai `button + JavaScript location.href`.
-- Semua game dibuka menggunakan **tautan HTML langsung `<a href>`**.
-- Ini menghilangkan ketergantungan pada JavaScript launcher untuk navigasi.
-- Semua file game berada sejajar di root repository.
-- Keempat game tetap terpisah sehingga fitur internalnya tidak tercampur.
+Perbaikan game BENAR/SALAH:
+- Klik "Mulai Kuis" hanya menyiapkan permainan.
+- Timer belum berjalan.
+- Muncul "SIAP BERMAIN?".
+- Timer baru berjalan setelah "▶ Mulai Permainan" ditekan.
+- Bug V5 diperbaiki: handler tombol sekarang benar-benar berada di dalam blok JavaScript.
+- "Ulangi" juga kembali ke layar siap, bukan langsung memulai timer.
+- Menu game tidak tertutup tombol Game Center.
 
-File root:
-- index.html
-- benar-salah.html
-- spenda-family-100.html
-- spenda-gesture-battle.html
-- clash-of-champions.html
-- logo-sekolah.png
-- icon-192.png
-- icon-512.png
-- manifest.webmanifest
-- sw.js
-
-GitHub Pages:
-upload semua file di atas ke root repository.
+Semua file berada sejajar di root repository.
