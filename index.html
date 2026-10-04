@@ -53,7 +53,7 @@ h1{margin:0;font-size:clamp(30px,5vw,50px);font-weight:950;letter-spacing:.2px}
 .card p{position:relative;margin:9px 0 14px;color:var(--muted);font-size:12px;line-height:1.6}
 .tags{display:flex;gap:6px;flex-wrap:wrap;position:relative;margin-top:auto}
 .tag{padding:6px 8px;border-radius:999px;background:#0c1723;border:1px solid #2a3d51;color:#b7c8d9;font-size:10px;font-weight:800}
-.launch{position:relative;margin-top:14px;height:43px;border:0;border-radius:13px;color:#fff;font-weight:900;font-size:12px}
+.launch{position:relative;margin-top:14px;height:43px;border:0;border-radius:13px;color:#fff;font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;text-decoration:none}
 .tf .launch{background:linear-gradient(135deg,#159a55,#21c76a)}
 .family .launch{background:linear-gradient(135deg,#e3a215,#c37a0c)}
 .gesture .launch{background:linear-gradient(135deg,#138ef5,#0755c8)}
@@ -83,7 +83,7 @@ h1{margin:0;font-size:clamp(30px,5vw,50px);font-weight:950;letter-spacing:.2px}
     <h2>BENAR / SALAH</h2>
     <p>Game eliminasi. Siswa berpindah ke sisi BENAR atau SALAH. Tidak ada sistem poin dan tidak ada deteksi tubuh siswa.</p>
     <div class="tags"><span class="tag">Eliminasi</span><span class="tag">Timer</span><span class="tag">Tanpa Poin</span></div>
-    <button class="launch" data-href="benar-salah.html">Mulai Game</button>
+    <a class="launch" href="./benar-salah.html">Mulai Game</a>
    </article>
 
    <article class="card family">
@@ -91,7 +91,7 @@ h1{margin:0;font-size:clamp(30px,5vw,50px);font-weight:950;letter-spacing:.2px}
     <h2>SPENDA FAMILY 100</h2>
     <p>Game Family 100 dengan sistem tim, babak, bank soal, dan papan jawaban dari aplikasi yang Anda kirim.</p>
     <div class="tags"><span class="tag">Family 100</span><span class="tag">Tim</span><span class="tag">Bank Soal</span></div>
-    <button class="launch" data-href="spenda-family-100.html">Mulai Game</button>
+    <a class="launch" href="./spenda-family-100.html">Mulai Game</a>
    </article>
 
    <article class="card gesture">
@@ -99,7 +99,7 @@ h1{margin:0;font-size:clamp(30px,5vw,50px);font-weight:950;letter-spacing:.2px}
     <h2>GESTURE BATTLE EDU</h2>
     <p>Game gesture berbasis kamera dari aplikasi yang Anda kirim. Mekanisme game aslinya tetap dipertahankan.</p>
     <div class="tags"><span class="tag">Kamera</span><span class="tag">Gesture</span><span class="tag">Battle</span></div>
-    <button class="launch" data-href="spenda-gesture-battle.html">Mulai Game</button>
+    <a class="launch" href="./spenda-gesture-battle.html">Mulai Game</a>
    </article>
 
    <article class="card clash">
@@ -107,19 +107,14 @@ h1{margin:0;font-size:clamp(30px,5vw,50px);font-weight:950;letter-spacing:.2px}
     <h2>CLASH OF CHAMPIONS</h2>
     <p>Game rebutan bendera berbasis tim dengan arena Vault, tingkat kesulitan, timer, dashboard guru, dan rekap pertandingan.</p>
     <div class="tags"><span class="tag">6 Tim</span><span class="tag">Vault</span><span class="tag">Bendera</span><span class="tag">Timer</span></div>
-    <button class="launch" style="background:linear-gradient(135deg,#0789e8,#0755b5)" data-href="clash-of-champions.html">Mulai Game</button>
+    <a class="launch" style="background:linear-gradient(135deg,#0789e8,#0755b5);display:flex;align-items:center;justify-content:center;text-decoration:none" href="./clash-of-champions.html">Mulai Game</a>
    </article>
   </main>
 
-  <div class="about">Kamera pada game yang memerlukannya bekerja paling baik saat game dibuka sebagai halaman HTTPS (GitHub Pages). Launcher tidak menggunakan iframe sehingga tidak menghambat izin kamera.</div>
+  <div class="about">Setiap permainan dibuka sebagai halaman tersendiri di root GitHub Pages; tidak menggunakan iframe.</div>
   <div class="footer">SPENDA Game Center • 4 Game • SMP Negeri 2 Soyo Jaya</div>
  </div>
 </section>
 
-<script>
-document.querySelectorAll("[data-href]").forEach(btn=>{
-  btn.addEventListener("click",()=>{ location.href=btn.dataset.href; });
-});
-</script>
 </body>
 </html>

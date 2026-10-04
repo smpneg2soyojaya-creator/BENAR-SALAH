@@ -1,6 +1,13 @@
-# SPENDA Game Center V4
+# SPENDA Game Center V5
 
-Sekarang berisi 4 game dalam satu repository, seluruh file berada sejajar di root:
+Perbaikan utama:
+- Launcher tidak lagi memakai `button + JavaScript location.href`.
+- Semua game dibuka menggunakan **tautan HTML langsung `<a href>`**.
+- Ini menghilangkan ketergantungan pada JavaScript launcher untuk navigasi.
+- Semua file game berada sejajar di root repository.
+- Keempat game tetap terpisah sehingga fitur internalnya tidak tercampur.
+
+File root:
 - index.html
 - benar-salah.html
 - spenda-family-100.html
@@ -12,15 +19,5 @@ Sekarang berisi 4 game dalam satu repository, seluruh file berada sejajar di roo
 - manifest.webmanifest
 - sw.js
 
-Game baru:
-**Clash of Champions: Cipher Vault Arena**
-diambil dari file yang Anda kirim. Game ini memiliki pengaturan jumlah tim, durasi pertandingan, arena Vault, timer, dashboard guru, dan sistem rebutan bendera.
-
-Tombol kembali ke SPENDA Game Center pada game Clash ditempatkan hanya di halaman setup agar tidak menutupi kontrol/game menu.
-
-## Deploy GitHub Pages
-Upload semua file langsung ke root repository. Tidak ada folder `games`.
-
-Settings → Pages → Deploy from branch → main → root.
-
-Karena aplikasi menggunakan beberapa library CDN, koneksi internet tetap diperlukan saat pertama kali memuat resource eksternal.
+GitHub Pages:
+upload semua file di atas ke root repository.
