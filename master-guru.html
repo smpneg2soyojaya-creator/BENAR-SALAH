@@ -4,37 +4,53 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#06111f">
-<link rel="icon" href="favicon.ico" type="image/x-icon">
 <title>Master Guru • SPENDA Game Center</title>
 <style>
 :root{--bg:#050b13;--panel:#0d1723;--panel2:#09131f;--line:#2a3d50;--text:#eef6fb;--muted:#91a5b8;--blue:#2d8cff;--green:#16a34a;--red:#c73550;--gold:#c99218}
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% -10%,#10243a 0,transparent 42%),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
-body{overflow-x:hidden}.wrap{width:min(980px,calc(100% - 24px));margin:auto;padding:16px 0 38px}.topbar{display:flex;margin-bottom:7px}.back-btn{display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 12px;border-radius:10px;background:#182735;border:1px solid #31465a;color:#dbe8f3;font-size:11px;font-weight:900;text-decoration:none}.head{text-align:center;margin-bottom:14px}.head img{width:58px;height:58px;object-fit:contain;border-radius:14px}.head h1{margin:7px 0 3px;font-size:24px}.head small{font-size:10px;color:var(--muted)}
-.panel{background:linear-gradient(165deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:15px;padding:15px;margin-top:11px;box-shadow:0 14px 36px #0003}.brandline{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:900}.branddot{width:10px;height:10px;border-radius:50%;background:var(--gold);box-shadow:0 0 14px #f4c64d66}.field{margin-top:10px}.field label{display:block;font-size:11px;color:#a6bacd;margin-bottom:5px}.field input,.field select{width:100%;background:#07101a;border:1px solid #364a5e;color:#fff;border-radius:9px;padding:11px 12px;outline:none;font:inherit}.field input:focus,.field select:focus{border-color:#4b8ac9;box-shadow:0 0 0 2px #2d8cff18}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:10px;padding:10px 14px;background:#273847;color:#fff;font-weight:850;font-size:11px;cursor:pointer;text-decoration:none}.btn.primary{background:var(--blue)}.btn.red{background:var(--red)}.btn:disabled{opacity:.5;cursor:not-allowed}.status{font-size:10px;line-height:1.5;color:#a7bbcd;background:#09121c;border:1px solid #26394c;border-radius:9px;padding:10px;margin-top:10px}.status.ok{color:#92f2b7;border-color:#2d7953}.status.err{color:#ff9eae;border-color:#6d3544}.note{font-size:10px;line-height:1.55;color:#9bb0c3;background:#08111b;border:1px solid #26384a;border-radius:9px;padding:10px;margin-top:9px}.hidden{display:none!important}.admin-account{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:10px;background:#0a1722;border:1px solid #263b50}.admin-account strong{display:block;font-size:12px}.admin-account span{display:block;color:#8399ac;font-size:10px;margin-top:2px}.grid4{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(120px,.7fr) minmax(0,1.3fr) minmax(0,1fr);gap:9px}.tablewrap{overflow:auto;border:1px solid #26384a;border-radius:9px;margin-top:10px}table{border-collapse:collapse;width:100%;font-size:10px}th,td{padding:9px;border-bottom:1px solid #253544;text-align:left;white-space:nowrap}th{background:#142231;position:sticky;top:0}tbody tr:last-child td{border-bottom:0}.tiny{font-size:9px;color:var(--muted);line-height:1.5}
-@media(max-width:720px){.wrap{width:min(640px,calc(100% - 16px));padding-top:10px}.panel{padding:13px}.admin-account{align-items:flex-start;flex-direction:column}.grid4{grid-template-columns:1fr}.actions .btn{flex:1 1 180px}.tablewrap table{min-width:500px}.head h1{font-size:22px}}
+.wrap{width:min(980px,calc(100% - 24px));margin:auto;padding:18px 0 40px}.topbar{display:flex;margin-bottom:8px}.back-btn{display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 12px;border-radius:10px;background:#182735;border:1px solid #31465a;color:#dbe8f3;font-size:11px;font-weight:900;text-decoration:none}.head{text-align:center;margin-bottom:16px}.head img{width:58px;height:58px;object-fit:contain;border-radius:14px}.head h1{margin:7px 0 3px;font-size:25px}.head small{font-size:10px;color:var(--muted)}
+.panel{background:linear-gradient(165deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:15px;padding:16px;margin-top:12px;box-shadow:0 14px 36px #0003}.brandline{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:900}.branddot{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 14px #20d46d66}.login-grid{width:min(460px,100%);margin:18px auto;display:grid;grid-template-columns:1fr;gap:12px}.login-panel{margin:0}.login-admin .branddot{background:var(--gold);box-shadow:0 0 14px #f4c64d66}.field{margin-top:11px}.field label{display:block;font-size:11px;color:#a6bacd;margin-bottom:5px}.field input,.field select{width:100%;background:#07101a;border:1px solid #364a5e;color:#fff;border-radius:9px;padding:11px 12px;outline:none;font:inherit}.field input:focus,.field select:focus{border-color:#4b8ac9;box-shadow:0 0 0 2px #2d8cff18}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}.btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:10px;padding:10px 14px;background:#273847;color:#fff;font-weight:850;font-size:11px;cursor:pointer}.btn.primary{background:var(--blue)}.btn.red{background:var(--red)}.btn.gold{background:var(--gold);color:#17120a}.btn:disabled{opacity:.5;cursor:not-allowed}.status{font-size:10px;line-height:1.5;color:#a7bbcd;background:#09121c;border:1px solid #26394c;border-radius:9px;padding:10px;margin-top:10px}.status.ok{color:#92f2b7;border-color:#2d7953}.status.err{color:#ff9eae;border-color:#6d3544}.note{font-size:10px;line-height:1.5;color:#9bb0c3;background:#08111b;border:1px solid #26384a;border-radius:9px;padding:10px;margin-top:9px}.hidden{display:none!important}
+.admin-panel{width:100%;margin:0 auto}.admin-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.admin-account{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:10px;background:#0a1722;border:1px solid #263b50}.admin-account strong{display:block;font-size:12px}.admin-account span{display:block;color:#8399ac;font-size:10px;margin-top:2px}.section-title{font-size:16px;font-weight:900;margin-bottom:4px}.section-sub{font-size:10px;line-height:1.5;color:var(--muted)}assign-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(110px,.75fr) minmax(0,1.3fr) minmax(0,1fr);gap:10px}.account-status{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:10px}.badge{display:inline-flex;align-items:center;padding:5px 8px;border-radius:999px;font-size:9px;font-weight:900;background:#29394a;color:#dbe8f3}.badge.ok{background:#12482e;color:#9df0bb}.badge.wait{background:#453511;color:#f8d77d}.tablewrap{overflow:auto;border:1px solid #26384a;border-radius:9px;margin-top:11px}table{border-collapse:collapse;width:100%;font-size:10px}th,td{padding:9px;border-bottom:1px solid #253544;text-align:left;white-space:nowrap}th{background:#142231;position:sticky;top:0}tbody tr:last-child td{border-bottom:0}
+@media(max-width:720px){.login-grid{grid-template-columns:1fr}.wrap{width:min(640px,calc(100% - 16px));padding-top:12px}.panel{padding:13px;border-radius:13px}.head img{width:50px;height:50px}.head h1{font-size:22px}.admin-account{align-items:flex-start;flex-direction:column}actions .btn{flex:1 1 180px}.tablewrap table{min-width:560px}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="topbar"><a class="back-btn" href="index.html">← Beranda</a></div>
-  <div class="head"><img src="logo-sekolah.png" alt="Logo SMP Negeri 2 Soyo Jaya"><h1>Master Guru</h1><small>Penugasan Mapel & Kelas</small></div>
+  <div class="head">
+    <img src="logo-sekolah.png" alt="Logo SMP Negeri 2 Soyo Jaya">
+    <h1>Master Guru</h1>
+    <small>Akun Guru • Penugasan Mapel & Kelas</small>
+  </div>
 
-  <section id="loginPanel" class="panel">
-    <div class="brandline"><span class="branddot"></span>LOGIN ADMIN</div>
-    <div class="note">Login Admin hanya diperlukan untuk mengatur penugasan Mapel dan Kelas. Data Guru, akun Guru, dan password dikelola langsung di Supabase.</div>
-    <div class="field"><label>Email Admin</label><input id="loginEmail" type="email" autocomplete="username" placeholder="Email Admin"></div>
-    <div class="field"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Password"></div>
-    <div class="actions"><button id="loginBtn" class="btn primary" style="flex:1">🔐 Masuk Admin</button></div>
-    <div id="loginStatus" class="status">Masukkan email dan password Admin.</div>
-  </section>
+  <div id="loginGrid" class="login-grid">
+    <section id="loginPanel" class="panel login-panel login-admin">
+      <div class="brandline"><span class="branddot"></span>LOGIN ADMIN</div>
+      <div class="note">Masukkan email dan password Admin untuk membuka Master Guru.</div>
+      <div class="field"><label>Email Admin</label><input id="loginEmail" type="email" autocomplete="username" placeholder="Email Admin"></div>
+      <div class="field"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Password"></div>
+      <div class="actions"><button id="loginBtn" class="btn primary" style="flex:1">🔐 Masuk Admin</button></div>
+      <div id="loginStatus" class="status">Masukkan email dan password Admin.</div>
+    </section>
+  </div>
 
-  <main id="admin" class="hidden">
-    <section class="panel"><div class="admin-account"><div><strong id="adminName">ADMIN SPENDA</strong><span id="adminEmail">-</span></div><div class="actions" style="margin-top:0"><button id="logoutBtn" class="btn red">Keluar</button><a href="bank-soal.html" class="btn">Database Soal</a></div></div></section>
+  <main id="admin" class="hidden admin-panel">
+    <section class="panel">
+      <div class="admin-account">
+        <div><strong id="adminName">ADMIN SPENDA</strong><span id="adminEmail">-</span></div>
+        <div class="actions" style="margin-top:0"><button id="logoutBtn" class="btn red">Keluar</button><a href="bank-soal.html" class="btn">Database Soal</a></div>
+      </div>
+    </section>
 
     <section class="panel">
-      <div class="brandline"><span class="branddot" style="background:var(--green);box-shadow:0 0 14px #20d46d66"></span>Penugasan Mapel & Kelas</div>
-      <div class="note">Data Guru ditambah atau diubah langsung pada tabel <b>teacher_master</b> di Supabase. Password Guru diatur langsung pada <b>Authentication → Users</b>. Halaman ini hanya untuk Penugasan Mapel dan Kelas. Satu Guru dapat memiliki beberapa Mapel dan Kelas.</div>
-      <div class="grid4">
+      <div class="section-title">Data Guru</div>
+      <div class="section-sub">Data Guru dan password login dikelola langsung di Supabase pada tabel <b>teacher_master</b>.</div>
+    </section>
+
+    <section class="panel">
+      <div class="section-title">Penugasan Mapel & Kelas</div>
+      <div class="section-sub">Satu Guru dapat mempunyai lebih dari satu Mapel dan lebih dari satu Kelas.</div>
+      <div class="assign-grid">
         <div class="field"><label>Guru</label><select id="teacherSelect"><option value="">Memuat Guru…</option></select></div>
         <div class="field"><label>Jenjang</label><select id="assignLevel"><option>SD</option><option selected>SMP</option><option>SMA</option></select></div>
         <div class="field"><label>Mapel</label><input id="assignSubject" placeholder="Matematika"></div>
@@ -42,38 +58,116 @@ body{overflow-x:hidden}.wrap{width:min(980px,calc(100% - 24px));margin:auto;padd
       </div>
       <div class="actions"><button id="saveAssignment" class="btn primary">＋ Tambah Penugasan</button></div>
       <div id="assignStatus" class="status">Pilih Guru.</div>
-      <div class="tablewrap"><table><thead><tr><th>Mapel</th><th>Jenjang</th><th>Kelas</th><th>Aksi</th></tr></thead><tbody id="assignmentRows"><tr><td colspan="4">Pilih Guru.</td></tr></tbody></table></div>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Mapel</th><th>Jenjang</th><th>Kelas</th><th>Aksi</th></tr></thead>
+          <tbody id="assignmentRows"></tbody>
+        </table>
+      </div>
     </section>
   </main>
 </div>
-<script src="config.js?v=final"></script><script src="spenda-db.js?v=final"></script>
+
+<script src="config.js"></script>
+<script src="spenda-db.js"></script>
 <script>
-(()=>{
-  'use strict';
-  const $=id=>document.getElementById(id);
-  let teachers=[],adminAuthenticated=false;
-  function status(id,msg,ok=false){const e=$(id);e.textContent=msg;e.className='status '+(ok?'ok':'err')}
-  function showLogin(){adminAuthenticated=false;$('loginPanel').classList.remove('hidden');$('admin').classList.add('hidden')}
+(() => {
+  "use strict";
+  const $ = id => document.getElementById(id);
+  let teachers = [];
+  let adminAuthenticated = false;
+
+  function setStatus(id, message, ok = false) {
+    const el = $(id); if (!el) return;
+    el.textContent = message;
+    el.className = "status " + (ok ? "ok" : "err");
+  }
+  function esc(v){return String(v??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));}
+
+  function showLogin(){
+    adminAuthenticated=false;
+    $("loginGrid").classList.remove("hidden");
+    $("admin").classList.add("hidden");
+  }
+
+  async function resetExistingSession(){
+    // Master Guru selalu meminta login Admin saat halaman dibuka.
+    // Ini mencegah session lama/browser autofill membuka dashboard otomatis.
+    try{ await SPENDADB.authSignOut(); }catch(_){ }
+    showLogin();
+  }
+
   async function loadTeachers(){
     teachers=await SPENDADB.adminListTeachers();
-    const sel=$('teacherSelect');sel.innerHTML='<option value="">Pilih Nama Guru</option>';
-    teachers.filter(t=>t.active!==false).forEach(t=>{const o=document.createElement('option');o.value=String(t.id);o.textContent=t.full_name;sel.appendChild(o)});
-    $('assignmentRows').innerHTML='<tr><td colspan="4">Pilih Guru untuk melihat penugasan.</td></tr>';
+    const lists=[$("teacherSelect")];
+    lists.forEach(sel=>{
+      sel.innerHTML='<option value="">Pilih Nama Guru</option>';
+      teachers.filter(t=>t.active!==false).forEach(t=>{
+        const o=document.createElement("option");
+        o.value=String(t.id); o.textContent=t.full_name;
+        sel.appendChild(o);
+      });
+    });
+    $("teacherSelect").value="";
+    $("assignmentRows").innerHTML='<tr><td colspan="4">Pilih Guru untuk melihat penugasan.</td></tr>';
   }
-  async function loginAdmin(){
-    const email=$('loginEmail').value.trim(),password=$('loginPassword').value;
-    if(!email||!password){status('loginStatus','Email dan password wajib diisi.');return}
-    $('loginBtn').disabled=true;status('loginStatus','Memproses login…',true);
-    try{await SPENDADB.authSignIn(email,password);const r=await SPENDADB.requireAdminSession();adminAuthenticated=true;$('adminName').textContent=r.profile.full_name||'ADMIN SPENDA';$('adminEmail').textContent=r.session.user.email||email;$('loginPanel').classList.add('hidden');$('admin').classList.remove('hidden');await loadTeachers();status('loginStatus','Login Admin berhasil.',true)}
-    catch(e){try{await SPENDADB.authSignOut()}catch(_){}showLogin();status('loginStatus','Login Admin gagal: '+e.message)}
-    finally{$('loginBtn').disabled=false}
+
+  async function loadAssignments(){
+    const masterId=$("teacherSelect").value;
+    if(!masterId){$("assignmentRows").innerHTML='<tr><td colspan="4">Pilih Guru.</td></tr>';return;}
+    try{
+      const rows=await SPENDADB.adminListAssignments(masterId);
+      $("assignmentRows").innerHTML=rows.map(r=>`<tr><td>${esc(r.subject)}</td><td>${esc(r.level)}</td><td>${esc(r.class_name)}</td><td><button class="btn red" data-del-assignment="${esc(r.id)}">Hapus</button></td></tr>`).join("")||'<tr><td colspan="4">Belum ada penugasan.</td></tr>';
+    }catch(e){setStatus("assignStatus","Gagal memuat penugasan: "+e.message);}
   }
-  async function loadAssignments(){const masterId=$('teacherSelect').value;if(!masterId){$('assignmentRows').innerHTML='<tr><td colspan="4">Pilih Guru.</td></tr>';return}try{const rows=await SPENDADB.adminListAssignments(masterId);$('assignmentRows').innerHTML=rows.map(r=>`<tr><td>${esc(r.subject)}</td><td>${esc(r.level)}</td><td>${esc(r.class_name)}</td><td><button class="btn red" data-del-assignment="${esc(r.id)}">Hapus</button></td></tr>`).join('')||'<tr><td colspan="4">Belum ada penugasan.</td></tr>'}catch(e){status('assignStatus','Gagal memuat penugasan: '+e.message)}}
-  function esc(v){return String(v??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
-  async function saveAssignment(){if(!adminAuthenticated){showLogin();return}const masterId=$('teacherSelect').value,t=teachers.find(x=>String(x.id)===String(masterId)),subject=$('assignSubject').value.trim(),className=$('assignClass').value.trim();if(!t){status('assignStatus','Pilih Guru terlebih dahulu.');return}if(!t.user_id){status('assignStatus','Akun Guru untuk nama ini belum terhubung. Buat akun Guru di Supabase Authentication → Users terlebih dahulu.');return}if(!subject||!className){status('assignStatus','Mapel dan Kelas wajib diisi.');return}$('saveAssignment').disabled=true;try{await SPENDADB.adminSaveAssignment({teacher_master_id:t.id,teacher_user_id:null,teacher_nip:t.nip,subject,level:$('assignLevel').value,class_name:className});$('assignSubject').value='';$('assignClass').value='';status('assignStatus','Penugasan berhasil ditambahkan.',true);await loadAssignments()}catch(e){status('assignStatus','Gagal menyimpan penugasan: '+e.message)}finally{$('saveAssignment').disabled=false}}
-  async function deleteAssignment(id){if(!adminAuthenticated)return;if(!confirm('Hapus penugasan ini?'))return;try{await SPENDADB.adminDeleteAssignment(id);status('assignStatus','Penugasan dihapus.',true);await loadAssignments()}catch(e){status('assignStatus','Gagal menghapus penugasan: '+e.message)}}
-  $('loginBtn').onclick=loginAdmin;$('loginPassword').onkeydown=e=>{if(e.key==='Enter')loginAdmin()};$('logoutBtn').onclick=async()=>{try{await SPENDADB.authSignOut()}finally{location.reload()}};$('teacherSelect').onchange=loadAssignments;$('saveAssignment').onclick=saveAssignment;$('assignmentRows').onclick=e=>{const b=e.target.closest('button[data-del-assignment]');if(b)deleteAssignment(b.dataset.delAssignment)};
-  showLogin();
-  (async()=>{if(!SPENDADB.cloudConfigured?.()){status('loginStatus','Supabase belum dikonfigurasi di config.js.');return}try{await SPENDADB.authSignOut();await SPENDADB.ping();status('loginStatus','Supabase aktif. Silakan login Admin.',true)}catch(e){status('loginStatus','Supabase belum siap: '+e.message)}})();
+
+  async function saveAssignment(){
+    if(!adminAuthenticated){showLogin();return;}
+    const masterId=$("teacherSelect").value;
+    const t=teachers.find(x=>String(x.id)===String(masterId));
+    const subject=$("assignSubject").value.trim();
+    const className=$("assignClass").value.trim();
+    if(!t){setStatus("assignStatus","Pilih Guru terlebih dahulu.");return;}
+    if(!subject||!className){setStatus("assignStatus","Mapel dan Kelas wajib diisi.");return;}
+    $("saveAssignment").disabled=true;
+    try{
+      await SPENDADB.adminSaveAssignment({teacher_master_id:t.id,teacher_nip:t.nip,subject,level:$("assignLevel").value,class_name:className});
+      $("assignSubject").value=""; $("assignClass").value="";
+      setStatus("assignStatus","Penugasan berhasil ditambahkan.",true);
+      await loadAssignments();
+    }catch(e){setStatus("assignStatus","Gagal menyimpan penugasan: "+e.message);}
+    finally{$("saveAssignment").disabled=false;}
+  }
+
+  async function deleteAssignment(id){
+    if(!adminAuthenticated)return;
+    if(!confirm("Hapus penugasan ini?"))return;
+    try{await SPENDADB.adminDeleteAssignment(id);setStatus("assignStatus","Penugasan dihapus.",true);await loadAssignments();}
+    catch(e){setStatus("assignStatus","Gagal menghapus penugasan: "+e.message);}
+  }
+
+  $("loginBtn").onclick=loginAdmin;
+  $("loginPassword").onkeydown=e=>{if(e.key==="Enter")loginAdmin();};
+  $("logoutBtn").onclick=async()=>{try{await SPENDADB.authSignOut();}finally{location.reload();}};
+  $("teacherSelect").onchange=loadAssignments;
+  $("saveAssignment").onclick=saveAssignment;
+  $("assignmentRows").onclick=e=>{const b=e.target.closest("button[data-del-assignment]");if(b)deleteAssignment(b.dataset.delAssignment);};
+
+  // Jangan pasang listener SIGNED_OUT yang reload otomatis.
+  // Halaman ini sengaja selalu kembali ke form login hanya saat logout tombol ditekan.
+  (async()=>{
+    showLogin();
+    if(!SPENDADB.cloudConfigured?.()){
+      setStatus("loginStatus","Supabase belum dikonfigurasi di config.js.");
+      return;
+    }
+    await resetExistingSession();
+    try{
+      await SPENDADB.ping();
+      setStatus("loginStatus","Supabase aktif. Silakan login Admin.",true);
+    }catch(e){setStatus("loginStatus","Supabase belum siap: "+e.message);}
+  })();
 })();
-</script></body></html>
+</script>
+</body>
+</html>
