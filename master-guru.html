@@ -2,7 +2,8 @@
 .topbar{display:flex;justify-content:flex-start;align-items:center;margin-bottom:6px}.back-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:38px;padding:0 13px;border-radius:10px;background:#182735;border:1px solid #31465a;color:#dbe8f3;text-decoration:none;font-size:11px;font-weight:900;box-shadow:0 8px 22px #0003}.back-btn:hover{background:#22374a;color:#fff}.login-grid{width:min(860px,100%);margin:20px auto;display:grid;grid-template-columns:1fr 1fr;gap:12px}.login-grid .login-wrap{width:100%;margin:0}.login-secondary{background:#0a141e}.login-secondary .branddot{background:var(--gold);box-shadow:0 0 16px #f4c64d66}@media(max-width:720px){.login-grid{grid-template-columns:1fr}}
 .admin-panel{width:min(1180px,100%);margin:0 auto}
 @media(max-width:720px){.panel{padding:13px;border-radius:13px}.grid{grid-template-columns:1fr!important}.actions{flex-wrap:wrap}.actions .btn{flex:1 1 150px}.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch}.tablewrap table{min-width:620px}.head img{width:54px;height:54px}.head h1{font-size:23px}}
-</style></head><body><div class="wrap"><div class="topbar"><a class="back-btn" href="index.html">← Game Center</a></div><div class="head"><img src="logo-sekolah.png" alt="Logo SMP Negeri 2 Soyo Jaya"><h1>Master Guru</h1><small>Guru • Mapel • Kelas • Akun Login</small></div><div id="loginGrid" class="login-grid"><section id="teacherLoginPanel" class="panel login-wrap"><div class="brandline"><span class="branddot"></span>LOGIN GURU</div><div class="note">Pilih nama Guru dari <b>teacher_master</b>. Guru masuk menggunakan NIP sebagai ID dan password yang ditentukan Admin.</div><div class="field"><label>Nama Guru</label><select id="teacherLoginSelect" autocomplete="username"><option value="">Memuat daftar Guru…</option></select></div><div class="field"><label>Password</label><input id="teacherLoginPassword" type="password" autocomplete="current-password" placeholder="Password"></div><div class="actions"><button id="teacherLoginBtn" class="btn primary" style="flex:1">🔐 Masuk sebagai Guru</button></div><div id="teacherLoginStatus" class="status">Memeriksa daftar Guru…</div></section><section id="loginPanel" class="panel login-wrap login-secondary"><div class="brandline"><span class="branddot"></span>LOGIN ADMIN</div><div class="note">Gunakan akun Supabase yang ber-role <b>admin</b>. Login Admin tetap menggunakan email dan password.</div><div class="field"><label>Email Admin</label><input id="loginEmail" type="email" autocomplete="username"></div><div class="field"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password"></div><div class="actions"><button id="loginBtn" class="btn primary" style="flex:1">🔐 Masuk Admin</button></div><div id="loginStatus" class="status">Memeriksa Supabase…</div></section></div><main id="admin" class="hidden admin-panel"><section class="panel"><div class="account"><div><strong id="adminName">-</strong><span id="adminEmail">-</span></div><div class="actions" style="margin-top:0"><button id="logoutBtn" class="btn red">Keluar</button><a href="bank-soal.html" class="btn">Database Soal</a></div></div></section><section class="panel"><b>Data Guru</b><div class="hint">NIP adalah ID Guru. Password akun ditentukan Admin melalui akun Supabase Auth. Tidak perlu mengisi email pada data Guru.</div><div class="grid"><div class="field"><label>Nama Lengkap</label><input id="full_name"></div><div class="field"><label>NIP</label><input id="nip"></div><div class="field"><label>No. HP</label><input id="no_hp"></div></div><div class="actions"><button id="newTeacher" class="btn">＋ Guru Baru</button><button id="saveTeacher" class="btn primary">💾 Simpan Guru</button></div><div id="teacherStatus" class="status">-</div></section><section class="panel"><b>Daftar Guru</b><div class="hint" style="margin-top:7px">Data Guru diedit melalui formulir di halaman ini. <b>teacher_master</b> adalah tabel utama; <b>teacher_master_summary</b> hanya ringkasan dan memang read-only.</div><div class="tablewrap"><table><thead><tr><th>Nama</th><th>NIP</th><th>Akun</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="teacherRows"></tbody></table></div></section><section class="panel"><b>Akun Login Guru</b><div class="hint">NIP adalah ID Guru. Admin menentukan password dari halaman ini. Sistem membuat akun login internal Supabase secara otomatis; email internal tidak ditampilkan kepada Guru.</div><div class="grid"><div class="field"><label>Guru</label><select id="accountTeacher"></select></div><div class="field"><label>ID Guru (NIP)</label><input id="accountNip" readonly></div><div class="field"><label>Password Baru</label><input id="accountPassword" type="password" minlength="6" placeholder="Minimal 6 karakter"></div><div class="field"><label>Ulangi Password</label><input id="accountPassword2" type="password" minlength="6" placeholder="Ulangi password"></div></div><div class="actions"><button id="saveTeacherPassword" class="btn primary">🔐 Buat / Ubah Password Guru</button></div><div id="accountStatus" class="status">Pilih Guru.</div></section><section class="panel"><b>Penugasan Mapel & Kelas</b><div class="grid"><div class="field"><label>Guru Terpilih</label><select id="teacherSelect"></select></div><div class="field"><label>Jenjang</label><select id="assignLevel"><option>SD</option><option selected>SMP</option><option>SMA</option></select></div><div class="field"><label>Mapel</label><input id="assignSubject" placeholder="Matematika"></div><div class="field"><label>Kelas</label><input id="assignClass" placeholder="VII / Kelas 7"></div></div><div class="actions"><button id="syncAccount" class="btn gold">🔐 Atur Akun Guru</button><button id="saveAssignment" class="btn primary">＋ Tambah Penugasan</button></div><div id="assignStatus" class="status">Pilih Guru.</div><div class="tablewrap"><table><thead><tr><th>Mapel</th><th>Jenjang</th><th>Kelas</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="assignmentRows"></tbody></table></div></section></main></div><script src="config.js"></script><script src="spenda-db-v31.js"></script><script>
+@media(min-width:721px){.admin-panel{width:min(1040px,100%)}.account-simple-grid{grid-template-columns:1.25fr 1fr 1fr}}
+</style></head><body><div class="wrap"><div class="topbar"><a class="back-btn" href="index.html">← Game Center</a></div><div class="head"><img src="logo-sekolah.png" alt="Logo SMP Negeri 2 Soyo Jaya"><h1>Master Guru</h1><small>Guru • Mapel • Kelas • Akun Login</small></div><div id="loginGrid" class="login-grid"><section id="teacherLoginPanel" class="panel login-wrap"><div class="brandline"><span class="branddot"></span>LOGIN GURU</div><div class="note">Pilih Nama Guru lalu masukkan password yang dibuat Admin.</div><div class="field"><label>Nama Guru</label><select id="teacherLoginSelect" autocomplete="username"><option value="">Memuat daftar Guru…</option></select></div><div class="field"><label>Password</label><input id="teacherLoginPassword" type="password" autocomplete="current-password" placeholder="Password"></div><div class="actions"><button id="teacherLoginBtn" class="btn primary" style="flex:1">🔐 Masuk sebagai Guru</button></div><div id="teacherLoginStatus" class="status">Memeriksa daftar Guru…</div></section><section id="loginPanel" class="panel login-wrap login-secondary"><div class="brandline"><span class="branddot"></span>LOGIN ADMIN</div><div class="note">Gunakan akun Supabase yang ber-role <b>admin</b>. Login Admin tetap menggunakan email dan password.</div><div class="field"><label>Email Admin</label><input id="loginEmail" type="email" autocomplete="username"></div><div class="field"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password"></div><div class="actions"><button id="loginBtn" class="btn primary" style="flex:1">🔐 Masuk Admin</button></div><div id="loginStatus" class="status">Masukkan email dan password Admin.</div></section></div><main id="admin" class="hidden admin-panel"><section class="panel"><div class="account"><div><strong id="adminName">-</strong><span id="adminEmail">-</span></div><div class="actions" style="margin-top:0"><button id="logoutBtn" class="btn red">Keluar</button><a href="bank-soal.html" class="btn">Database Soal</a></div></div></section><section class="panel"><b>Data Guru</b><div class="hint">NIP adalah ID Guru. Password akun ditentukan Admin melalui akun Supabase Auth. Tidak perlu mengisi email pada data Guru.</div><div class="grid"><div class="field"><label>Nama Lengkap</label><input id="full_name"></div><div class="field"><label>NIP</label><input id="nip"></div><div class="field"><label>No. HP</label><input id="no_hp"></div></div><div class="actions"><button id="newTeacher" class="btn">＋ Guru Baru</button><button id="saveTeacher" class="btn primary">💾 Simpan Guru</button></div><div id="teacherStatus" class="status">-</div></section><section class="panel"><b>Daftar Guru</b><div class="hint" style="margin-top:7px">Data Guru diedit melalui formulir di halaman ini. <b>teacher_master</b> adalah tabel utama; <b>teacher_master_summary</b> hanya ringkasan dan memang read-only.</div><div class="tablewrap"><table><thead><tr><th>Nama</th><th>NIP</th><th>Akun</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="teacherRows"></tbody></table></div></section><section class="panel"><b>Akun Login Guru</b><div class="hint">Pilih Guru → buat password → Simpan. Setelah itu Guru cukup memilih namanya pada dropdown Login Guru dan memasukkan password.</div><div class="grid account-simple-grid"><div class="field"><label>Guru</label><select id="accountTeacher"></select></div><div class="field"><label>Password</label><input id="accountPassword" type="password" minlength="6" placeholder="Buat password"></div><div class="field"><label>Ulangi Password</label><input id="accountPassword2" type="password" minlength="6" placeholder="Ulangi password"></div></div><div class="actions"><button id="saveTeacherPassword" class="btn primary">🔐 Simpan Password Guru</button></div><div id="accountStatus" class="status">Pilih Guru dan buat password.</div></section><section class="panel"><b>Penugasan Mapel & Kelas</b><div class="hint">Satu Guru boleh memegang beberapa Mapel dan Kelas. Tambahkan satu per satu.</div><div class="grid"><div class="field"><label>Guru</label><select id="teacherSelect"></select></div><div class="field"><label>Jenjang</label><select id="assignLevel"><option>SD</option><option selected>SMP</option><option>SMA</option></select></div><div class="field"><label>Mapel</label><input id="assignSubject" placeholder="Matematika"></div><div class="field"><label>Kelas</label><input id="assignClass" placeholder="VII / Kelas 7"></div></div><div class="actions"><button id="saveAssignment" class="btn primary">＋ Tambah Penugasan</button></div><div id="assignStatus" class="status">Pilih Guru.</div><div class="tablewrap"><table><thead><tr><th>Mapel</th><th>Jenjang</th><th>Kelas</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="assignmentRows"></tbody></table></div></section></main></div><script src="config.js"></script><script src="spenda-db-v34.js"></script><script>
 (() => {
   "use strict";
   const $ = id => document.getElementById(id);
@@ -130,6 +131,8 @@
         </td>
       </tr>`).join("") || '<tr><td colspan="5">Belum ada data guru.</td></tr>';
 
+    const previousTeacherId = String($("teacherSelect").value||"");
+    const previousAccountId = String($("accountTeacher").value||"");
     const sel = $("teacherSelect");
     sel.innerHTML = "";
     teachers.forEach(t => {
@@ -146,7 +149,16 @@
       o.textContent=t.full_name+(t.user_id?" ✓":"");
       acc.appendChild(o);
     });
-    if(teachers.length)selectAccountTeacher(teachers[0].id);
+    const preferred = [previousTeacherId, previousAccountId, String(editingId||'')].find(id => id && teachers.some(t=>String(t.id)===id));
+    if (preferred) {
+      $('teacherSelect').value = preferred;
+      $('accountTeacher').value = preferred;
+      selectAccountTeacher(preferred, false);
+    } else if (teachers.length) {
+      $('teacherSelect').value = String(teachers[0].id);
+      $('accountTeacher').value = String(teachers[0].id);
+      selectAccountTeacher(teachers[0].id, false);
+    }
     await loadAssignments();
   }
 
@@ -188,15 +200,14 @@
     }
   }
 
-  function selectAccountTeacher(masterId){
+  function selectAccountTeacher(masterId, focusPassword=true){
     const t=teachers.find(x=>String(x.id)===String(masterId));
     if(!t)return;
     $("accountTeacher").value=String(t.id);
-    $("accountNip").value=t.nip||"";
     $("accountPassword").value="";
     $("accountPassword2").value="";
-    setStatus("accountStatus", t.user_id ? "Akun sudah terhubung. Masukkan password baru untuk mengganti password." : "Akun belum dibuat. Masukkan password untuk membuat akun.", t.user_id ? true : false);
-    $("accountPassword").focus();
+    setStatus("accountStatus", t.user_id ? "Akun sudah aktif. Masukkan password baru untuk menggantinya." : "Belum ada akun. Buat password untuk Guru ini.", t.user_id ? true : false);
+    if(focusPassword) $("accountPassword").focus();
   }
 
   async function saveTeacherPassword(){
@@ -207,14 +218,14 @@
     if(p1.length<6){setStatus("accountStatus","Password minimal 6 karakter.");return;}
     if(p1!==p2){setStatus("accountStatus","Ulangi password tidak sama.");return;}
     $("saveTeacherPassword").disabled=true;
-    setStatus("accountStatus","Membuat/memperbarui akun Guru…");
+    setStatus("accountStatus","Menyimpan password Guru…");
     try{
       const r=await SPENDADB.adminSetTeacherPassword(masterId,p1);
       $("accountPassword").value="";$("accountPassword2").value="";
-      setStatus("accountStatus",`Akun ${r.full_name} berhasil disiapkan. ID login: ${r.login_id}.`,true);
       await loadTeachers();
-      selectAccountTeacher(masterId);
-    }catch(e){setStatus("accountStatus","Gagal menyiapkan akun: "+e.message);}
+      $("accountTeacher").value=String(masterId);
+      setStatus("accountStatus",`Password Guru ${r.full_name} berhasil disimpan. Guru login dengan memilih namanya lalu memasukkan password.`,true);
+    }catch(e){setStatus("accountStatus","Gagal menyimpan password: "+e.message);}
     finally{$("saveTeacherPassword").disabled=false;}
   }
 
@@ -229,16 +240,10 @@
     }
   }
 
-  async function syncSelected() {
-    const id = $("teacherSelect").value;
-    if (!id) { setStatus("assignStatus", "Pilih guru."); return; }
-    selectAccountTeacher(id);
-  }
-
   async function saveAssignment() {
     const t = teachers.find(x => String(x.id) === String($("teacherSelect").value));
     if (!t?.user_id) {
-      setStatus("assignStatus", "Guru belum terhubung ke akun Auth. Hubungkan akun terlebih dahulu.");
+      setStatus("assignStatus", "Guru belum memiliki akun. Buat password Guru terlebih dahulu.");
       return;
     }
     const subject = $("assignSubject").value.trim();
@@ -249,7 +254,9 @@
     }
     try {
       await SPENDADB.adminSaveAssignment({
+        teacher_master_id: t.id,
         teacher_user_id: t.user_id,
+        teacher_nip: t.nip,
         subject,
         level: $("assignLevel").value,
         class_name: className
@@ -288,7 +295,6 @@
   $("teacherSelect").onchange = loadAssignments;
   $("accountTeacher").onchange = ()=>selectAccountTeacher($("accountTeacher").value);
   $("saveTeacherPassword").onclick = saveTeacherPassword;
-  $("syncAccount").onclick = syncSelected;
   $("saveAssignment").onclick = saveAssignment;
 
   $("teacherRows").onclick = async e => {

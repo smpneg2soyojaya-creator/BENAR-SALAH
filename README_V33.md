@@ -1,4 +1,4 @@
-# SPENDA Game Center V33
+# SPENDA Game Center V34
 
 Perbaikan utama pada `master-guru.html`:
 - Dashboard Admin TIDAK dibuka otomatis hanya karena session Supabase tersimpan.

@@ -18,12 +18,12 @@ body{min-height:100vh}.wrap{width:min(1100px,calc(100% - 24px));margin:auto;padd
 
   <section id="loginPanel" class="panel login-wrap">
     <div class="brandline"><span class="branddot"></span>LOGIN GURU</div>
-    <div class="note">Halaman ini khusus untuk mengelola bank soal. Akun Guru dibuat oleh Admin Supabase. Tidak ada pendaftaran mandiri dari halaman ini.</div>
+    <div class="note">Pilih Nama Guru dan masukkan password yang dibuat Admin.</div>
     <div class="field"><label>Nama Guru</label><select id="loginTeacher" autocomplete="username"><option value="">Memuat daftar guru…</option></select></div>
     <div class="field"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Password"></div>
     <div class="actions"><button id="loginBtn" class="btn primary" style="flex:1">🔐 Masuk sebagai Guru</button></div>
     <div id="loginStatus" class="status">Memuat daftar Guru…</div>
-    <div class="login-help">Nama Guru diambil langsung dari <b>teacher_master</b>. NIP digunakan sebagai ID Guru. Password ditentukan Admin melalui akun Supabase Auth.</div>
+    <div class="login-help">Nama Guru berasal dari data sekolah. Password dibuat oleh Admin.</div>
   </section>
 
   <main id="manager" class="hidden">
@@ -52,7 +52,7 @@ body{min-height:100vh}.wrap{width:min(1100px,calc(100% - 24px));margin:auto;padd
     <section class="panel"><b>Bank milik akun ini</b><div class="tablewrap"><table><thead><tr><th>Game</th><th>Guru</th><th>Mapel</th><th>Jenjang</th><th>Kelas</th><th>Kesulitan</th><th>Soal</th></tr></thead><tbody id="rows"></tbody></table></div></section>
   </main>
 </div>
-<script src="config.js"></script><script src="spenda-db-v31.js"></script><script src="spenda-import.js"></script>
+<script src="config.js"></script><script src="spenda-db-v34.js"></script><script src="spenda-import.js"></script>
 <script>
 (()=>{
   const $=id=>document.getElementById(id);
