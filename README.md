@@ -14,3 +14,14 @@ Login `bank-soal.html` → Nama Guru otomatis → pilih penugasan → import Wor
 
 ## Game
 PID/IFP tetap membaca `question_banks` dari Supabase; mekanisme game dipertahankan.
+
+
+## V21 – Login Guru Dropdown + Tombol Back
+Pada `master-guru.html`: Login Guru tersedia melalui dropdown Nama Guru dari `teacher_master`, password tetap divalidasi melalui Supabase Auth, dan terdapat tombol `← Game Center`. Login Admin tetap terpisah.
+
+
+### V21 Login Guru pada Master Guru
+- `master-guru.html` menampilkan Login Guru dengan dropdown Nama Guru dari `teacher_master`.
+- Dropdown menampilkan seluruh Guru aktif; jika email belum diisi, nama tetap tampil tetapi login akan ditolak sampai Admin mengisi email.
+- Tombol `← Game Center` tersedia di bagian atas.
+- Login Admin tetap terpisah dan menggunakan email/password.

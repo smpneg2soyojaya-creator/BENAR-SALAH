@@ -1,4 +1,4 @@
-const CACHE="spenda-game-center-v17";
+const CACHE="spenda-game-center-v21";
 const CORE=[
   "./","./index.html","./manifest.webmanifest","./config.js","./spenda-db.js","./spenda-import.js","./bank-soal.html","./master-guru.html",
   "./icon-192.png","./icon-512.png","./logo-sekolah.png",
