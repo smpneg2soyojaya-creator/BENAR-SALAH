@@ -25,6 +25,7 @@
     ASSIGNMENT_TABLE: "teacher_assignments",
     REQUEST_TIMEOUT_MS: 8000,
     AUTH_PERSIST_SESSION: true,
-    AUTH_AUTO_REFRESH_TOKEN: true
+    AUTH_AUTO_REFRESH_TOKEN: true,
+    TEACHER_ACCOUNT_FUNCTION: "spenda-admin-teacher-account"
   }, window.SPENDA_CONFIG || {});
 })();

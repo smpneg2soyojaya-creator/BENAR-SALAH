@@ -23,12 +23,12 @@ body{min-height:100vh}.wrap{width:min(1100px,calc(100% - 24px));margin:auto;padd
     <div class="field"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Password"></div>
     <div class="actions"><button id="loginBtn" class="btn primary" style="flex:1">🔐 Masuk sebagai Guru</button></div>
     <div id="loginStatus" class="status">Memuat daftar Guru…</div>
-    <div class="login-help">Nama Guru diambil langsung dari <b>teacher_master</b>. Email login tidak perlu diketik. Password hanya digunakan untuk Supabase Auth.</div>
+    <div class="login-help">Nama Guru diambil langsung dari <b>teacher_master</b>. NIP digunakan sebagai ID Guru. Password ditentukan Admin melalui akun Supabase Auth.</div>
   </section>
 
   <main id="manager" class="hidden">
     <section class="panel">
-      <div class="account"><div><strong id="teacherName">-</strong><span id="teacherEmail">-</span></div><button id="logoutBtn" class="btn red">Keluar</button></div>
+      <div class="account"><div><strong id="teacherName">-</strong><span id="teacherNip">-</span></div><button id="logoutBtn" class="btn red">Keluar</button></div>
     </section>
 
     <section class="panel">
@@ -72,7 +72,7 @@ body{min-height:100vh}.wrap{width:min(1100px,calc(100% - 24px));margin:auto;padd
   function populateClasses(){const lv=$("level").value,sub=$("subject").value;const classes=unique(assignments.filter(a=>a.level===lv&&a.subject===sub).map(a=>a.class_name));setOptions($("className"),classes,classes.length?'Pilih kelas':'Tidak ada kelas');if(classes.length){$("className").value=classes[0];loadActive()}}
   async function refreshBanks(){try{const bs=await SPENDADB.listBanks({teacherUserId:session.user.id,game:$('game').value});$("rows").innerHTML=bs.map(r=>`<tr><td>${names[r.game]||esc(r.game)}</td><td>${esc(r.teacher)}</td><td>${esc(r.subject)}</td><td>${esc(r.level)}</td><td>${esc(r.className)}</td><td>${esc(r.difficulty)}</td><td>${(r.questions||[]).length}</td></tr>`).join('')||'<tr><td colspan="7">Belum ada bank milik akun ini.</td></tr>'}catch(e){status('Gagal membaca bank: '+e.message)}}
   async function loadActive(){const m=requireFields();if(!m)return;try{const r=await SPENDADB.getBank(m);if(!r){$("active").textContent='Bank aktif belum ada.';$("preview").textContent='';return}$("active").textContent=`${names[r.game]} • ${r.teacher} • ${r.subject} • ${r.level} • ${r.className} • ${r.difficulty} • ${(r.questions||[]).length} soal`;$("preview").textContent=(r.questions||[]).slice(0,50).map((x,i)=>`${i+1}. ${x.statement||x.q||x.pertanyaan||''}${x.answer?' → '+x.answer:''}${x.c?' → '+x.c:''}`).join('\n')}catch(e){status('Gagal memuat bank: '+e.message)}}
-  async function showManager(){try{const result=await SPENDADB.requireTeacherSession();session=result.session;profile=result.profile;$("teacherName").textContent=profile.full_name;$("teacherEmail").textContent=session.user.email||profile.email||'';$("teacher").value=profile.full_name;if(profile.role==='admin')$("adminLink").classList.remove('hidden');assignments=await SPENDADB.getMyAssignments();$("loginPanel").classList.add('hidden');$("manager").classList.remove('hidden');if(!assignments.length){$("level").innerHTML='<option value="">Belum ada penugasan</option>';$("level").disabled=true;$("subject").innerHTML='<option value="">Belum ada penugasan</option>';$("subject").disabled=true;$("className").innerHTML='<option value="">Belum ada penugasan</option>';$("className").disabled=true;status('Akun aktif, tetapi belum ada Mapel/Kelas yang ditugaskan Admin.',false);return}populateAssignments();status('Supabase aktif. Nama Guru berasal dari akun login.',true);await refreshBanks();await loadActive()}catch(e){$("manager").classList.add('hidden');$("loginPanel").classList.remove('hidden');loginStatus(e.message,false)}}
+  async function showManager(){try{const result=await SPENDADB.requireTeacherSession();session=result.session;profile=result.profile;$("teacherName").textContent=profile.full_name;$("teacherNip").textContent="NIP: "+(profile.teacher_nip||"");$("teacher").value=profile.full_name;if(profile.role==='admin')$("adminLink").classList.remove('hidden');assignments=await SPENDADB.getMyAssignments();$("loginPanel").classList.add('hidden');$("manager").classList.remove('hidden');if(!assignments.length){$("level").innerHTML='<option value="">Belum ada penugasan</option>';$("level").disabled=true;$("subject").innerHTML='<option value="">Belum ada penugasan</option>';$("subject").disabled=true;$("className").innerHTML='<option value="">Belum ada penugasan</option>';$("className").disabled=true;status('Akun aktif, tetapi belum ada Mapel/Kelas yang ditugaskan Admin.',false);return}populateAssignments();status('Supabase aktif. Nama Guru berasal dari akun login.',true);await refreshBanks();await loadActive()}catch(e){$("manager").classList.add('hidden');$("loginPanel").classList.remove('hidden');loginStatus(e.message,false)}}
   async function loadTeacherLoginList(){
     const sel=$("loginTeacher");
     sel.disabled=true;
@@ -87,7 +87,7 @@ body{min-height:100vh}.wrap{width:min(1100px,calc(100% - 24px));margin:auto;padd
         sel.appendChild(o);
       });
       sel.disabled=!loginTeachers.length;
-      if(!loginTeachers.length) loginStatus('Belum ada Guru aktif yang memiliki Email login di teacher_master. Isi kolom email terlebih dahulu.');
+      if(!loginTeachers.length) loginStatus('Belum ada Guru aktif di teacher_master.');
       else loginStatus('Pilih Nama Guru lalu masukkan password.',true);
     }catch(e){
       sel.innerHTML='<option value="">Gagal memuat daftar Guru</option>';
@@ -100,16 +100,17 @@ body{min-height:100vh}.wrap{width:min(1100px,calc(100% - 24px));margin:auto;padd
     const teacher=loginTeachers.find(t=>String(t.id)===String(id));
     const pass=$("loginPassword").value;
     if(!teacher){loginStatus('Silakan pilih Nama Guru.');return}
-    if(!teacher.email){loginStatus('Guru ini belum memiliki Email login di teacher_master. Admin perlu mengisi email terlebih dahulu.');return}
+    if(!teacher.nip){loginStatus('Guru ini belum memiliki NIP sebagai ID login.');return}
+    if(teacher.account_ready===false){loginStatus('Akun Guru ini belum dibuat oleh Admin.');return}
     if(!pass){loginStatus('Password wajib diisi.');return}
     $("loginBtn").disabled=true;loginStatus('Memproses login…');
-    try{await SPENDADB.authSignIn(teacher.email,pass);$("loginPassword").value='';await showManager()}
+    try{await SPENDADB.authSignInByNip(teacher.nip,pass);$("loginPassword").value='';await showManager()}
     catch(e){loginStatus('Login gagal: '+e.message)}
     finally{$("loginBtn").disabled=false}
   }
   async function logout(){try{await SPENDADB.authSignOut()}catch(e){}session=null;profile=null;assignments=[];$("manager").classList.add('hidden');$("loginPanel").classList.remove('hidden');loginStatus('Anda sudah keluar dari akun Guru.',true)}
   $("loginBtn").onclick=login;$("loginPassword").addEventListener('keydown',e=>{if(e.key==='Enter')login()});
-  $("loginTeacher").onchange=()=>{const t=loginTeachers.find(x=>String(x.id)===String($("loginTeacher").value)); if(t&&!t.email) loginStatus('Guru ini belum memiliki Email login. Admin perlu melengkapinya di Master Guru.'); else if(t) loginStatus('Silakan masukkan password untuk '+t.full_name+'.',true)};$("logoutBtn").onclick=logout;
+  $("loginTeacher").onchange=()=>{const t=loginTeachers.find(x=>String(x.id)===String($("loginTeacher").value)); if(t&&!t.nip) loginStatus('Guru ini belum memiliki NIP sebagai ID login.'); else if(t&&t.account_ready===false) loginStatus('Akun Guru ini belum dibuat oleh Admin.'); else if(t) loginStatus('Silakan masukkan password untuk '+t.full_name+'.',true)};$("logoutBtn").onclick=logout;
   $("level").onchange=async()=>{populateSubjects();await refreshBanks()};$("subject").onchange=async()=>{populateClasses();await refreshBanks()};$("className").onchange=async()=>{await refreshBanks();await loadActive()};$("game").onchange=async()=>{await refreshBanks();await loadActive()};$("difficulty").onchange=loadActive;
   $("import").onclick=async()=>{if(!session||!profile){alert('Silakan login sebagai Guru terlebih dahulu.');return}const f=$("file").files[0],m=requireFields();if(!f||!m)return;if(!assignments.some(a=>a.level===m.level&&a.subject===m.subject&&a.class_name===m.className)){alert('Kombinasi Mapel dan Kelas ini belum ditugaskan kepada akun Anda.');return}try{status('Mengimpor dan menyimpan ke Supabase…');const r=await SPENDAIMPORT.importFile(f,m.game,m);status(`Berhasil mengimpor ${r.rows} soal • ${names[m.game]} • ${profile.full_name} • ${m.subject} • ${m.className}.`,true);$("file").value='';await refreshBanks();await loadActive()}catch(e){console.error(e);status('Import gagal: '+e.message);alert('Import gagal: '+e.message)}};
   $("load").onclick=loadActive;

@@ -1,27 +1,80 @@
-# SPENDA Game Center V19
+# SPENDA Game Center V26
 
-V19 menambahkan Master Guru, Penugasan Mapel/Kelas, dan keterkaitan dengan akun Supabase Auth. Pada `bank-soal.html`, Nama Guru otomatis berasal dari akun login dan Jenjang/Mapel/Kelas hanya menampilkan penugasan guru.
+## Fokus versi ini
+V26 melanjutkan aplikasi Game Center yang sama. Tidak membuat game baru.
+
+Perubahan inti:
+- NIP menjadi ID Guru aplikasi.
+- Tidak ada email Guru pada `teacher_master`.
+- Guru login dengan dropdown Nama Guru + Password.
+- Admin dapat membuat/mengubah password Guru dari halaman Master Guru.
+- Master Guru menyimpan penugasan Guru -> Mapel -> Kelas.
+- Bank soal tetap terkait Game + Guru + Jenjang + Kelas + Mapel + Kesulitan.
+- Game membaca bank soal Supabase; soal bawaan bukan sumber permainan.
+
+## Database Supabase
+Jalankan `SUPABASE_V26.sql` pada Supabase SQL Editor.
+
+Jika editor menampilkan peringatan RLS, pilih `Run and enable RLS`.
+
+SQL ini tidak drop table atau drop column.
+
+## Akun Guru
+Untuk membuat/mengubah password dari aplikasi, Edge Function `spenda-admin-teacher-account` harus dideploy.
+
+Supabase menyediakan secret keys untuk Edge Functions; jangan pernah memasukkan secret/service key ke GitHub atau kode browser. Publishable key digunakan pada browser. RLS membatasi akses database.
+
+## Edge Function
+Folder:
+`supabase/functions/spenda-admin-teacher-account/index.ts`
+
+`supabase/config.toml` memastikan `verify_jwt = true`.
+
+### Deploy dengan Supabase CLI
+```bash
+supabase login
+supabase link --project-ref gygngkucqzjtgswwenuh
+supabase functions deploy spenda-admin-teacher-account
+```
+
+Untuk fungsi ini, platform menyediakan secret key server-side. Jangan menyalin secret key ke `config.js`.
+
+Edge Function menggunakan Supabase Auth Admin API di server untuk membuat atau mengubah password akun Guru. Supabase mendokumentasikan bahwa fungsi admin Auth yang memerlukan secret/service key harus dijalankan hanya di server. 
+
+## Aplikasi GitHub Pages
+Upload seluruh isi folder V26 ke repository GitHub Pages.
+
+`config.js` sudah berisi Project URL dan Publishable Key yang digunakan pada project Anda.
 
 ## Alur Admin
-1. Jalankan `SUPABASE_V19_MASTER_GURU.sql` setelah V18.
-2. Lengkapi email guru pada `teacher_master`.
-3. Buat akun Guru di Supabase Authentication menggunakan email yang sama.
-4. Buka `master-guru.html` sebagai Admin dan Hubungkan Akun bila belum otomatis terhubung.
-5. Tambahkan penugasan Mapel + Jenjang + Kelas.
+1. Buka `master-guru.html`.
+2. Login Admin.
+3. Pilih Guru.
+4. Buat/Ubah Password Guru.
+5. Tambahkan Mapel + Jenjang + Kelas.
 
 ## Alur Guru
-Login `bank-soal.html` → Nama Guru otomatis → pilih penugasan → import Word/Excel.
+1. Buka `bank-soal.html`.
+2. Pilih Nama Guru dari dropdown.
+3. Masukkan Password yang ditentukan Admin.
+4. Mapel dan Kelas muncul sesuai penugasan.
+5. Import Word/Excel.
 
-## Game
-PID/IFP tetap membaca `question_banks` dari Supabase; mekanisme game dipertahankan.
+## Alur PID/IFP
+1. Buka Game Center.
+2. Pilih game.
+3. Pilih Guru, Mapel, Kelas.
+4. Game membaca hanya bank yang sesuai dari Supabase.
 
+## Catatan keamanan
+Password Guru tidak disimpan pada `teacher_master`.
+NIP hanya menjadi identitas Guru aplikasi dan dasar untuk membentuk identifier login internal pada Supabase Auth.
 
-## V21 – Login Guru Dropdown + Tombol Back
-Pada `master-guru.html`: Login Guru tersedia melalui dropdown Nama Guru dari `teacher_master`, password tetap divalidasi melalui Supabase Auth, dan terdapat tombol `← Game Center`. Login Admin tetap terpisah.
+Publishable key aman berada di frontend jika RLS dikonfigurasi dengan benar; secret/service key hanya berada di Edge Function. RLS Supabase bekerja berdasarkan policy dan `auth.uid()`.
 
-
-### V21 Login Guru pada Master Guru
-- `master-guru.html` menampilkan Login Guru dengan dropdown Nama Guru dari `teacher_master`.
-- Dropdown menampilkan seluruh Guru aktif; jika email belum diisi, nama tetap tampil tetapi login akan ditolak sampai Admin mengisi email.
-- Tombol `← Game Center` tersedia di bagian atas.
-- Login Admin tetap terpisah dan menggunakan email/password.
+## V26: akun Guru tanpa email
+- NIP menjadi ID Guru.
+- Password ditentukan Admin.
+- `teacher_master` tidak membutuhkan email Guru.
+- Admin membuat/mengubah password melalui Edge Function `spenda-admin-teacher-account`.
+- Halaman Bank Soal menampilkan dropdown Nama Guru dan mengambil nama dari `teacher_master`.
