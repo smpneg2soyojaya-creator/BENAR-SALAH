@@ -30,7 +30,7 @@ body{min-height:100vh}.wrap{width:min(1100px,calc(100% - 24px));margin:auto;padd
 
   <main id="manager" class="hidden">
     <section class="panel">
-      <div class="account"><div><strong id="teacherName">-</strong><span id="teacherNip">-</span></div><button id="logoutBtn" class="btn red">Keluar</button></div>
+      <div class="account"><div><strong id="teacherName">-</strong></div><button id="logoutBtn" class="btn red">Keluar</button></div>
     </section>
 
     <section class="panel">
@@ -43,8 +43,8 @@ body{min-height:100vh}.wrap{width:min(1100px,calc(100% - 24px));margin:auto;padd
         <div class="field"><label>Tingkat Kesulitan</label><select id="difficulty"><option value="Mudah">Mudah</option><option value="Sedang" selected>Sedang</option><option value="Sulit">Sulit</option><option value="Semua">Semua</option></select></div>
         <div class="field" style="grid-column:span 2"><label>File Word / Excel / CSV / JSON <span class="req">*</span></label><input id="file" type="file" accept=".docx,.xlsx,.xls,.csv,.json"></div>
       </div>
-      <div class="note"><b>Alur:</b> akun Guru menentukan Nama Guru. Pilih Mapel dan Kelas yang sudah ditugaskan Admin → pilih file soal → Import. Nama Guru tidak dapat diubah dari halaman ini.</div>
-      <div class="actions"><button id="import" class="btn primary">⬆ Import Word / Excel / JSON</button><button id="load" class="btn green">Muat Bank</button><button id="export" class="btn">⬇ Export JSON</button><button id="delete" class="btn red">Hapus Bank</button><a id="adminLink" href="master-guru.html" class="btn hidden">⚙ Master Guru</a><a href="index.html" class="btn">← Beranda</a></div>
+      <div class="note"><b>Alur:</b> akun Guru menentukan Nama Guru. Pilih Mapel dan Kelas yang sudah ditugaskan Admin → pilih file soal → Import. Nama Guru mengikuti akun yang sedang login.</div>
+      <div class="actions"><button id="import" class="btn primary">⬆ Import Word / Excel / JSON</button><button id="load" class="btn green">Muat Bank</button><button id="export" class="btn">⬇ Export JSON</button><button id="delete" class="btn red">Hapus Bank</button><a href="index.html" class="btn">← Beranda</a></div>
       <div id="status" class="status">Menyiapkan database…</div>
     </section>
 
@@ -54,7 +54,7 @@ body{min-height:100vh}.wrap{width:min(1100px,calc(100% - 24px));margin:auto;padd
     <section class="panel"><b>Bank milik akun ini</b><div class="tablewrap"><table><thead><tr><th>Game</th><th>Guru</th><th>Mapel</th><th>Jenjang</th><th>Kelas</th><th>Kesulitan</th><th>Soal</th></tr></thead><tbody id="rows"></tbody></table></div></section>
   </main>
 </div>
-<script src="config.js?v=final"></script><script src="spenda-db.js?v=final"></script><script src="spenda-import.js?v=final"></script>
+<script src="config.js?v=20261007"></script><script src="spenda-db.js?v=20261007"></script><script src="spenda-import.js?v=20261007"></script>
 <script>
 (()=>{
   const $=id=>document.getElementById(id);
@@ -74,7 +74,7 @@ body{min-height:100vh}.wrap{width:min(1100px,calc(100% - 24px));margin:auto;padd
   function populateClasses(){const lv=$("level").value,sub=$("subject").value;const classes=unique(assignments.filter(a=>a.level===lv&&a.subject===sub).map(a=>a.class_name));setOptions($("className"),classes,classes.length?'Pilih kelas':'Tidak ada kelas');if(classes.length){$("className").value=classes[0];loadActive()}}
   async function refreshBanks(){try{const bs=await SPENDADB.listBanks({teacherUserId:session.user.id,game:$('game').value});$("rows").innerHTML=bs.map(r=>`<tr><td>${names[r.game]||esc(r.game)}</td><td>${esc(r.teacher)}</td><td>${esc(r.subject)}</td><td>${esc(r.level)}</td><td>${esc(r.className)}</td><td>${esc(r.difficulty)}</td><td>${(r.questions||[]).length}</td></tr>`).join('')||'<tr><td colspan="7">Belum ada bank milik akun ini.</td></tr>'}catch(e){status('Gagal membaca bank: '+e.message)}}
   async function loadActive(){const m=requireFields();if(!m)return;try{const r=await SPENDADB.getBank(m);if(!r){$("active").textContent='Bank aktif belum ada.';$("preview").textContent='';return}$("active").textContent=`${names[r.game]} • ${r.teacher} • ${r.subject} • ${r.level} • ${r.className} • ${r.difficulty} • ${(r.questions||[]).length} soal`;$("preview").textContent=(r.questions||[]).slice(0,50).map((x,i)=>`${i+1}. ${x.statement||x.q||x.pertanyaan||''}${x.answer?' → '+x.answer:''}${x.c?' → '+x.c:''}`).join('\n')}catch(e){status('Gagal memuat bank: '+e.message)}}
-  async function showManager(){try{const result=await SPENDADB.requireTeacherSession();session=result.session;profile=result.profile;$("teacherName").textContent=profile.full_name;$("teacherNip").textContent="NIP: "+(profile.teacher_nip||"");$("teacher").value=profile.full_name;if(profile.role==='admin')$("adminLink").classList.remove('hidden');assignments=await SPENDADB.getMyAssignments();$("loginPanel").classList.add('hidden');$("manager").classList.remove('hidden');if(!assignments.length){$("level").innerHTML='<option value="">Belum ada penugasan</option>';$("level").disabled=true;$("subject").innerHTML='<option value="">Belum ada penugasan</option>';$("subject").disabled=true;$("className").innerHTML='<option value="">Belum ada penugasan</option>';$("className").disabled=true;status('Akun aktif, tetapi belum ada Mapel/Kelas yang ditugaskan Admin.',false);return}populateAssignments();status('Supabase aktif. Nama Guru berasal dari akun login.',true);await refreshBanks();await loadActive()}catch(e){$("manager").classList.add('hidden');$("loginPanel").classList.remove('hidden');loginStatus(e.message,false)}}
+  async function showManager(){try{const result=await SPENDADB.requireTeacherSession();session=result.session;profile=result.profile;$("teacherName").textContent=profile.full_name;$("teacher").value=profile.full_name;assignments=await SPENDADB.getMyAssignments();$("loginPanel").classList.add('hidden');$("manager").classList.remove('hidden');if(!assignments.length){$("level").innerHTML='<option value="">Belum ada penugasan</option>';$("level").disabled=true;$("subject").innerHTML='<option value="">Belum ada penugasan</option>';$("subject").disabled=true;$("className").innerHTML='<option value="">Belum ada penugasan</option>';$("className").disabled=true;status('Akun aktif, tetapi belum ada Mapel/Kelas yang ditugaskan Admin.',false);return}populateAssignments();status('Supabase aktif. Nama Guru berasal dari akun login.',true);await refreshBanks();await loadActive()}catch(e){$("manager").classList.add('hidden');$("loginPanel").classList.remove('hidden');loginStatus(e.message,false)}}
   async function loadTeacherLoginList(){
     const sel=$("loginTeacher");
     sel.disabled=true;

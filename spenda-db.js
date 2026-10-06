@@ -249,40 +249,6 @@
     return (data||[]).map(x=>({teacher_nip:r.profile.teacher_nip||r.profile.nip,subject:x.subject,level:x.level,class_name:x.class_name,active:true}));
   }
 
-  async function adminListTeachers(){const c=await getClient();const {data,error}=await withTimeout(c.from(masterTable()).select("id,school_id,full_name,nip,no_hp,active,created_at,updated_at").eq("school_id",schoolId()).order("full_name"));if(error)throw dbError(error);return data||[];}
-  async function adminSaveTeacherMaster(row){
-    const c=await getClient();
-    const payload={school_id:schoolId(),full_name:clean(row.full_name),nip:clean(row.nip)||null,no_hp:clean(row.no_hp)||null,active:row.active!==false};
-    if(row.id)payload.id=row.id;
-    const {data,error}=await withTimeout(c.from(masterTable()).upsert(payload,{onConflict:"id"}).select("*").single());if(error)throw dbError(error);return data;
-  }
-  async function adminDeleteTeacherMaster(id){const c=await getClient();const {error}=await withTimeout(c.from(masterTable()).delete().eq("id",id).eq("school_id",schoolId()));if(error)throw dbError(error);return{ok:true};}
-  async function adminListAssignments(masterId){
-    const c=await getClient();
-    const {data,error}=await withTimeout(c.from(assignmentTable()).select("id,teacher_master_id,teacher_user_id,teacher_nip,subject,level,class_name,active,created_at,updated_at").eq("school_id",schoolId()).eq("teacher_master_id",masterId).order("level").order("subject").order("class_name"));
-    if(error)throw dbError(error);
-    return data||[];
-  }
-  async function adminSaveAssignment(row){
-    const c=await getClient();
-    const payload={school_id:schoolId(),teacher_master_id:Number(row.teacher_master_id),teacher_user_id:clean(row.teacher_user_id)||null,teacher_nip:clean(row.teacher_nip),subject:clean(row.subject),level:levelCanonical(row.level),class_name:clean(row.class_name),active:row.active!==false};
-    if(!payload.teacher_master_id||!payload.teacher_nip)throw new Error("Guru belum lengkap. Pilih Guru.");
-    if(!payload.subject||!payload.class_name)throw new Error("Mapel dan Kelas wajib diisi.");
-    if(row.id){
-      const {data,error}=await withTimeout(c.from(assignmentTable()).update(payload).eq("id",row.id).eq("school_id",schoolId()).select("*").single());
-      if(error)throw dbError(error);return data;
-    }
-    const {data:existing,error:findError}=await withTimeout(c.from(assignmentTable()).select("id").eq("school_id",schoolId()).eq("teacher_master_id",payload.teacher_master_id).eq("teacher_nip",payload.teacher_nip).eq("subject",payload.subject).eq("level",payload.level).eq("class_name",payload.class_name).maybeSingle());
-    if(findError)throw dbError(findError);
-    if(existing){
-      const {data,error}=await withTimeout(c.from(assignmentTable()).update({teacher_user_id:null,active:true,updated_at:new Date().toISOString()}).eq("id",existing.id).select("*").single());
-      if(error)throw dbError(error);return data;
-    }
-    const {data,error}=await withTimeout(c.from(assignmentTable()).insert(payload).select("*").single());
-    if(error)throw dbError(error);return data;
-  }
-  async function adminDeleteAssignment(id){const c=await getClient();const {error}=await withTimeout(c.from(assignmentTable()).delete().eq("id",id));if(error)throw dbError(error);return{ok:true};}
-
   async function queryBanks(filters={}){
     const c=await getClient();let q=c.from(table()).select("id,school_id,game,teacher,teacher_user_id,level,class_name,subject,difficulty,questions,source,created_at,updated_at").eq("school_id",schoolId()).order("updated_at",{ascending:false});
     if(filters.game)q=q.eq("game",clean(filters.game));
@@ -328,10 +294,9 @@
   async function ping(){const c=await getClient();const {data,error}=await withTimeout(c.from(table()).select("id").eq("school_id",schoolId()).limit(1));if(error)throw dbError(error);return true;}
 
   window.SPENDADB={
-    DB_NAME:"SPENDA_SUPABASE_QUESTION_DATABASE_V26",init:localInit,ping,putBank,getBank,getQuestions,getQuestionsStrict,listBanks,listTeachers,remove,
+    DB_NAME:"SPENDA_SUPABASE_QUESTION_DATABASE_FINAL",init:localInit,ping,putBank,getBank,getQuestions,getQuestionsStrict,listBanks,listTeachers,remove,
     classMatch,sameSubject,sameLevel,norm,clean,cloudConfigured:configured,
     authGetSession,authGetUser,authSignIn,authSignInByNip,teacherAuthEmailFromNip,authSignOut,authOnChange,
     getTeacherLoginList,getTeacherProfile,requireTeacherSession,requireAdminSession,getMyAssignments,
-    adminListTeachers,adminSaveTeacherMaster,adminDeleteTeacherMaster,adminListAssignments,adminSaveAssignment,adminDeleteAssignment
   };
 })();
