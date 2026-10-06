@@ -327,6 +327,14 @@
     return data;
   }
 
+  async function getTeacherLoginList(){
+    const c=client();
+    if(!c) throw new Error("Supabase belum dikonfigurasi.");
+    const {data,error}=await withTimeout(c.rpc("get_spenda_teacher_login_list", {p_school_id: SCHOOL_ID()}));
+    if(error) throw error;
+    return Array.isArray(data)?data:[];
+  }
+
   async function authSignOut(){
     const c=await getClient();
     const {error}=await withTimeout(c.auth.signOut());
@@ -631,6 +639,6 @@
     putBank,getBank,getQuestions,getQuestionsStrict,listBanks,listTeachers,remove,
     classMatch,sameSubject,sameLevel,norm,clean,
     cloudConfigured:configured,
-    authGetSession,authGetUser,authSignIn,authSignOut,authOnChange,getTeacherProfile,requireTeacherSession,requireAdminSession,getMyAssignments,adminListTeachers,adminSaveTeacherMaster,adminDeleteTeacherMaster,adminSyncTeacherAccount,adminListAssignments,adminSaveAssignment,adminDeleteAssignment
+    authGetSession,authGetUser,authSignIn,authSignOut,getTeacherLoginList,authOnChange,getTeacherProfile,requireTeacherSession,requireAdminSession,getMyAssignments,adminListTeachers,adminSaveTeacherMaster,adminDeleteTeacherMaster,adminSyncTeacherAccount,adminListAssignments,adminSaveAssignment,adminDeleteAssignment
   };
 })();
