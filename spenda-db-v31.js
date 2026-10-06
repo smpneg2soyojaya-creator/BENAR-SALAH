@@ -188,7 +188,7 @@
   function dbError(e){
     if(!e)return null;
     const m=e.message||e.details||e.hint||String(e);
-    if(/infinite recursion detected/i.test(m)) return new Error("Konfigurasi RLS teacher_profiles masih bermasalah. Periksa policy teacher_profiles di Supabase.");
+    if(/infinite recursion detected/i.test(m)) return new Error("Konfigurasi RLS teacher_profiles belum diperbaiki. Jalankan SUPABASE_V31_FIX.sql.");
     if(/row-level security|permission denied|not allowed/i.test(m))return new Error("Akses Supabase ditolak. Pastikan akun ini terdaftar sebagai Admin dan RLS V31 sudah dijalankan.");
     if(/function .* does not exist/i.test(m))return new Error("Fungsi database SPENDA belum tersedia. Jalankan SUPABASE_V31_FIX.sql.");
     return new Error(m);
@@ -257,16 +257,7 @@
     if(!clean(password)||clean(password).length<6)throw new Error("Password minimal 6 karakter.");
     const c=await getClient();
     const {data,error}=await withTimeout(c.functions.invoke(accountFunction(),{body:{action:"set_password",teacher_master_id:Number(masterId),password:String(password)}}));
-    if(error){
-      let msg=error.message||"Gagal membuat akun Guru.";
-      const status=Number(error.status||error.context?.status||0);
-      if(status===404 || /404|not found|failed to send a request/i.test(msg)){
-        msg="Edge Function spenda-admin-teacher-account belum tersedia di Supabase. Deploy fungsi tersebut ke project ini terlebih dahulu.";
-      } else {
-        try{if(error.context){const j=await error.context.json();msg=j?.error||msg;}}catch{}
-      }
-      throw new Error(msg);
-    }
+    if(error){let msg=error.message||"Gagal membuat akun Guru.";try{if(error.context){const j=await error.context.json();msg=j?.error||msg;}}catch{}throw new Error(msg);}
     if(!data?.ok)throw new Error(data?.error||"Gagal membuat akun Guru.");
     return data;
   }
