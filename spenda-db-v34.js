@@ -260,7 +260,7 @@
     if(error){
       let msg=error.message||"Gagal membuat akun Guru.";
       try{if(error.context){const j=await error.context.json();msg=j?.error||msg;}}catch{}
-      if(/404|not found|failed to send a request/i.test(msg)) msg="Layanan pembuatan password Guru belum aktif di Supabase. Deploy Edge Function 'spenda-admin-teacher-account' satu kali.";
+      if(/404|not found|failed to send a request/i.test(msg)) msg="Belum berhasil menyimpan password Guru. Silakan coba kembali.";
       throw new Error(msg);
     }
     if(!data?.ok)throw new Error(data?.error||"Gagal membuat akun Guru.");
