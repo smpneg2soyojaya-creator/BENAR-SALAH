@@ -603,6 +603,7 @@ button{cursor:pointer}
         <div class="grid">
           <div class="field"><label>Jenjang</label><select id="level"></select></div>
           <div class="field"><label>Kelas</label><select id="klass"></select></div>
+          <div class="field"><label>Nama Guru</label><input id="teacher" list="teacherList" value="Umum" placeholder="Nama guru"></div>
           <div class="field"><label>Mapel</label><select id="subject"></select></div>
           <div class="field"><label>Tingkat kesulitan</label><select id="difficulty"><option>Mudah</option><option selected>Sedang</option><option>Sulit</option></select></div>
           <div class="field"><label>Jumlah soal (maks. 30)</label><input id="count" type="number" min="1" max="30" value="20"></div>
@@ -614,8 +615,8 @@ button{cursor:pointer}
         <div class="notice" id="notice"></div><div id="importStatus" style="margin-top:6px;color:#7f8ea0;font-size:10px"></div><div style="margin-top:6px;color:#78879a;font-size:10px">Kamera tidak wajib untuk memulai permainan. Jika <b>index.html</b> dibuka langsung, game tetap berjalan walaupun webcam tidak tersedia.</div>
       </div>
 
-      <div class="home-bottom"><button class="btn" id="editorBtn">Edit soal</button><button class="btn" id="cameraInfoBtn">Kamera sebagai latar</button></div>
-      <div class="home-bottom"><button class="link" id="importBtn">Impor soal (.json)</button><button class="link" id="exportBtn">Ekspor soal (.json)</button><input id="file" type="file" accept=".json,application/json,text/json" aria-label="Pilih file JSON" style="position:fixed;left:-9999px;width:2px;height:2px;opacity:0"></div>
+      <div class="home-bottom"><button class="btn" id="editorBtn">Edit soal</button><a class="btn" href="bank-soal.html?game=benar-salah" style="text-decoration:none">Database / Import Word &amp; Excel</a><button class="btn" id="cameraInfoBtn">Kamera sebagai latar</button></div>
+      <div class="home-bottom"><button class="link" id="importBtn">Impor soal (.json)</button><button class="link" id="exportBtn">Ekspor soal (.json)</button><datalist id="teacherList"></datalist><input id="file" type="file" accept=".json,application/json,text/json" aria-label="Pilih file JSON" style="position:fixed;left:-9999px;width:2px;height:2px;opacity:0"></div>
     </div>
   </div>
 </section>
@@ -632,7 +633,7 @@ button{cursor:pointer}
       <div class="field"><label>Jenjang</label><select id="eLevel"></select></div><div class="field"><label>Kelas</label><select id="eClass"></select></div>
       <div class="field"><label>Mapel</label><select id="eSubject"></select></div><div class="field"><label>Kesulitan</label><select id="eDiff"><option>Mudah</option><option selected>Sedang</option><option>Sulit</option></select></div>
     </div>
-    <div class="editor-info" id="editorInfo"></div><div id="dbNote" style="display:block;margin-top:6px;padding:7px 9px;border-radius:8px;background:#111925;border:1px solid #2d3948;color:#aab6c4;font-size:10px">Database soal aktif: <b>IndexedDB</b>. Data edit disimpan otomatis pada browser/perangkat ini.</div>
+    <div class="editor-info" id="editorInfo"></div><div id="dbNote" style="display:block;margin-top:6px;padding:7px 9px;border-radius:8px;background:#111925;border:1px solid #2d3948;color:#aab6c4;font-size:10px">Bank soal tersimpan ke <b>Database Sekolah</b> saat koneksi database aktif. Data lokal hanya menjadi cadangan.</div>
     <div class="q-list" id="qList"></div>
     <div class="json hidden" id="jsonPanel"></div>
     <div class="actions" style="justify-content:center"><button class="btn primary" id="saveBank">Simpan bank soal</button><button class="btn" id="backHome2">Kembali</button></div>
@@ -693,6 +694,7 @@ button{cursor:pointer}
 
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
 <script src="config.js"></script>
+<script src="spenda-db.js"></script><script src="spenda-import.js"></script>
 <script>
 (() => {
 "use strict";
@@ -727,7 +729,7 @@ const BANK_SEEDS={
 };
 
 const state={
- level:"SD",klass:"Kelas 1",subject:"Bahasa Indonesia",difficulty:"Sedang",
+ level:"SD",klass:"Kelas 1",subject:"Bahasa Indonesia",difficulty:"Sedang",teacher:"Umum",startToken:0,
  seconds:Number(CFG.secondsPerQuestion),questions:[],current:0,answers:[],
  remaining:Number(CFG.secondsPerQuestion),phase:"home",paused:false,
  stream:null,camera:null,cameraMode:"wide",sound:true,
@@ -905,12 +907,41 @@ function saveBank(qs){
   const normalized=qs.map(normalizeQ);
   QUESTION_BANKS[key()]=normalized;
   dbWrite(key(),normalized);
+  if(window.SPENDADB){
+    const m=sharedTFMeta();
+    SPENDADB.putBank(m,normalized,"manual").catch(()=>{});
+  }
+}
+
+
+function sharedTFMeta(){
+  return {
+    game:"benar-salah",
+    teacher:($("teacher")?.value.trim()||"Umum"),
+    level:state.level,
+    className:state.klass,
+    subject:state.subject,
+    difficulty:state.difficulty
+  };
+}
+async function loadTeacherBankTF(timeoutMs=5000){
+  if(!window.SPENDADB)return [];
+  const m=sharedTFMeta();
+  try{
+    return await Promise.race([
+      SPENDADB.getQuestions(m),
+      new Promise(resolve=>setTimeout(()=>resolve([]),timeoutMs))
+    ]);
+  }catch(e){
+    console.warn("Database pusat tidak tersedia; gunakan bank lokal.",e);
+    return [];
+  }
 }
 
 function databaseLabel(){
-  return QUESTION_DB_READY
-    ? "Database soal: IndexedDB"
-    : "Penyimpanan soal: lokal";
+  return window.SPENDADB?.cloudConfigured?.()
+    ? "Database soal: Database Sekolah"
+    : "Database sekolah belum dikonfigurasi";
 }
 function populateLevel(select){
   select.innerHTML="";
@@ -935,12 +966,20 @@ function populateSubject(select,level){
   select.innerHTML="";(SUBJECTS[level]||[]).forEach(s=>{const o=document.createElement("option");o.value=s;o.textContent=s;select.appendChild(o)})
 }
 function refreshHome(){
-  populateLevel($("level"));populateClass($("klass"),state.level);populateSubject($("subject"),state.level);
-  $("level").value=state.level;$("klass").value=state.klass;$("subject").value=state.subject;$("difficulty").value=state.difficulty;$("timeBox").textContent=state.seconds;
+  const levelEl=$("level"), klassEl=$("klass"), subjectEl=$("subject"), diffEl=$("difficulty"), teacherEl=$("teacher"), timeEl=$("timeBox"), countEl=$("count"), metaEl=$("homeMeta"), noticeEl=$("notice");
+  if(!levelEl||!klassEl||!subjectEl||!diffEl||!countEl){
+    console.warn("refreshHome: elemen konfigurasi belum lengkap");
+    return;
+  }
+  populateLevel(levelEl);populateClass(klassEl,state.level);populateSubject(subjectEl,state.level);
+  levelEl.value=state.level;klassEl.value=state.klass;subjectEl.value=state.subject;diffEl.value=state.difficulty;
+  if(teacherEl)teacherEl.value=state.teacher||"Umum";
+  if(timeEl)timeEl.textContent=state.seconds;
   document.querySelectorAll(".chip").forEach(c=>c.classList.toggle("active",Number(c.dataset.time)===state.seconds));
-  const n=Math.min(30,Math.max(1,Number($("count").value)||20));$("count").value=n;
-  const bank=getBank();$("homeMeta").textContent=`${Math.min(n,bank.length)} soal • ${state.subject} • ${state.klass} • ${state.difficulty} • ${state.seconds} detik/soal`;
-  $("notice").textContent=`${databaseLabel()} • ${bank.length} soal pada bank aktif.`;
+  const n=Math.min(30,Math.max(1,Number(countEl.value)||20));countEl.value=n;
+  const bank=getBank();
+  if(metaEl)metaEl.textContent=`${Math.min(n,bank.length)} soal • ${state.subject} • ${state.klass} • ${state.difficulty} • ${state.seconds} detik/soal`;
+  if(noticeEl)noticeEl.textContent=`${databaseLabel()} • ${bank.length} soal pada bank aktif.`;
 }
 function openHome(){
   stopTimers();hide("editor");hide("game");hide("final");hide("pauseOverlay");hide("resultOverlay");hide("transitionOverlay");hide("readyOverlay");show("home");
@@ -948,6 +987,10 @@ function openHome(){
 }
 async function openEditor(){
   await initQuestionDatabase();
+  if(window.SPENDADB){
+    const shared=await loadTeacherBankTF();
+    if(shared.length) QUESTION_BANKS[key()]=shared.map(normalizeQ);
+  }
   stopTimers();hide("home");hide("game");hide("final");show("editor");
   state.phase="editor";
   syncEditor();
@@ -956,10 +999,10 @@ async function openEditor(){
 function syncEditor(){
   populateLevel($("eLevel"));populateClass($("eClass"),state.level);populateSubject($("eSubject"),state.level);
   $("eLevel").value=state.level;$("eClass").value=state.klass;$("eSubject").value=state.subject;$("eDiff").value=state.difficulty;
-  $("editorSubtitle").textContent=`${state.subject} • ${state.klass} • ${state.level} • ${state.difficulty} • Database IndexedDB`;
+  $("editorSubtitle").textContent=`${state.subject} • ${state.klass} • ${state.level} • ${state.difficulty} • Database Sekolah`;
 }
 function renderEditor(){
-  syncEditor();const qs=getBank();$("editorInfo").textContent=`${qs.length} soal • tersimpan otomatis ke Database IndexedDB.`;
+  syncEditor();const qs=getBank();$("editorInfo").textContent=`${qs.length} soal • tersimpan otomatis ke Database Sekolah.`;
   const list=$("qList");list.innerHTML="";
   qs.forEach((q,i)=>{
     const card=document.createElement("div");card.className="q-card";card.dataset.i=i;
@@ -1112,28 +1155,21 @@ async function beginGame(){
   state.klass=$("klass").value;
   state.subject=$("subject").value;
   state.difficulty=$("difficulty").value;
+  state.teacher=$("teacher")?.value.trim()||"Umum";
 
   await initQuestionDatabase();
 
-  state.questions=chooseQuestions();
+  // Bank lokal/default dipasang lebih dulu. Database sekolah dan kamera berjalan
+  // di belakang layar agar tombol MULAI tidak pernah tertahan oleh jaringan atau izin kamera.
+  state.questions=chooseQuestions().filter(q=>q && q.statement).slice(0,Math.min(30,Number($("count").value)||20));
   state.current=0;
   state.answers=[];
+  const startToken=Date.now()+Math.random();
+  state.startToken=startToken;
 
   if(!state.questions.length){
     alert("Bank soal kosong.");
     return;
-  }
-
-  // Kamera hanya sebagai latar. Tidak boleh menghambat awal permainan.
-  try{
-    if(location.protocol!=="file:"){
-      await initCamera();
-    }else{
-      $("status").textContent="Kamera: gunakan GitHub Pages/HTTPS";
-    }
-  }catch(e){
-    console.warn("Kamera tidak tersedia; game tetap berjalan tanpa kamera.",e);
-    $("status").textContent="Kamera: tidak tersedia • game tetap berjalan";
   }
 
   hide("home");
@@ -1154,6 +1190,30 @@ async function beginGame(){
     `${state.questions.length} soal • ${state.subject} • ${state.klass} • ${state.seconds} detik per soal.`;
 
   show("readyOverlay");
+
+  // Sinkronisasi bank pusat setelah layar SIAP BERMAIN? sudah tampil.
+  if(window.SPENDADB){
+    loadTeacherBankTF(5000).then(shared=>{
+      if(!shared.length || state.startToken!==startToken || state.phase!=="ready")return;
+      state.questions=shared.map(normalizeQ).filter(q=>q.statement).slice(0,Math.min(30,Number($("count").value)||20));
+      state.current=0;state.answers=[];
+      renderQuestion();
+      $("readyInfo").textContent=`${state.questions.length} soal • ${state.subject} • ${state.klass} • ${state.seconds} detik per soal.`;
+    }).catch(e=>console.warn("Database pusat tidak tersedia; bank lokal tetap digunakan.",e));
+  }
+
+  // Kamera hanya latar. Jalankan setelah UI terlihat.
+  if(location.protocol!=="file:"){
+    setTimeout(()=>{
+      if(state.startToken!==startToken || !document.getElementById("game") || state.phase!=="ready")return;
+      initCamera().catch(e=>{
+        console.warn("Kamera tidak tersedia; game tetap berjalan tanpa kamera.",e);
+        if($("status"))$("status").textContent="Kamera: tidak tersedia • game tetap berjalan";
+      });
+    },180);
+  }else if($("status")){
+    $("status").textContent="Kamera: gunakan GitHub Pages/HTTPS";
+  }
 }
 
 async function initCamera(){
@@ -1320,6 +1380,15 @@ function restart(){
   $("readyInfo").textContent=
     `${state.questions.length} soal • ${state.subject} • ${state.klass} • ${state.seconds} detik per soal.`;
   show("readyOverlay");
+  if(window.SPENDADB){
+    const token=Date.now()+Math.random(); state.startToken=token;
+    loadTeacherBankTF(5000).then(shared=>{
+      if(!shared.length || state.startToken!==token || state.phase!=="ready")return;
+      state.questions=shared.map(normalizeQ).filter(q=>q.statement).slice(0,Math.min(30,Number($("count").value)||20));
+      state.current=0;state.answers=[];renderQuestion();
+      $("readyInfo").textContent=`${state.questions.length} soal • ${state.subject} • ${state.klass} • Database Sekolah • siap dimainkan.`;
+    }).catch(()=>{});
+  }
 }
 function pause(){if(state.phase!=="question")return;state.paused=true;show("pauseOverlay")}
 function resume(){state.paused=false;hide("pauseOverlay")}
@@ -1351,7 +1420,7 @@ $("startNowBtn").addEventListener("click",()=>{
 
 /* HOME */
 $("level").onchange=()=>{state.level=$("level").value;populateClass($("klass"),state.level);populateSubject($("subject"),state.level);state.klass=$("klass").value;state.subject=$("subject").value;refreshHome()};
-$("klass").onchange=()=>{state.klass=$("klass").value;refreshHome()};$("subject").onchange=()=>{state.subject=$("subject").value;refreshHome()};$("difficulty").onchange=()=>{state.difficulty=$("difficulty").value;refreshHome()};
+$("klass").onchange=()=>{state.klass=$("klass").value;refreshHome()};$("subject").onchange=()=>{state.subject=$("subject").value;refreshHome()};$("teacher")?.addEventListener("input",()=>{state.teacher=$("teacher").value.trim()||"Umum";refreshHome()});if(window.SPENDADB)SPENDADB.listTeachers("benar-salah").then(ts=>{const d=$("teacherList");if(d)d.innerHTML=ts.map(t=>`<option value="${String(t).replace(/"/g,"&quot;")}"></option>`).join("")}).catch(()=>{});$("difficulty").onchange=()=>{state.difficulty=$("difficulty").value;refreshHome()};
 $("count").oninput=refreshHome;$("startBtn").onclick=beginGame;$("loadBtn").onclick=beginGame;$("loadEditBtn").onclick=async()=>{state.level=$("level").value;state.klass=$("klass").value;state.subject=$("subject").value;state.difficulty=$("difficulty").value;await openEditor()};
 $("editorBtn").onclick=async()=>{state.level=$("level").value;state.klass=$("klass").value;state.subject=$("subject").value;state.difficulty=$("difficulty").value;await openEditor()};
 $("cameraInfoBtn").onclick=()=>alert("Kamera hanya menjadi latar video. Kamera tidak membaca tubuh, tangan, wajah, atau posisi siswa. Game tetap dapat dimainkan tanpa kamera.");

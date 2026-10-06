@@ -427,7 +427,17 @@
       <p class="canva-text mt-2 text-sm font-bold uppercase tracking-[.17em] text-cyan-300">Cipher Vault Arena — Kuis Rebutan Bendera</p>
      </div>
      <form id="setup-form" class="mx-auto grid max-w-2xl gap-4" onsubmit="event.preventDefault(); startGame();">
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div class="mb-4 rounded-xl border border-cyan-300/20 bg-slate-900/40 p-3">
+      <p class="canva-text mb-2 text-xs font-bold uppercase tracking-[.14em] text-cyan-200">Bank Soal</p>
+      <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+        <div><label class="canva-text mb-1 block text-sm font-bold text-cyan-100" for="questionTeacher">Nama Guru</label><input id="questionTeacher" list="clashTeacherList" value="Umum" class="w-full rounded-xl border border-cyan-300/30 bg-slate-900 px-3 py-2.5 text-white"></div>
+        <div><label class="canva-text mb-1 block text-sm font-bold text-cyan-100" for="questionSubject">Mata Pelajaran</label><input id="questionSubject" value="Informatika" class="w-full rounded-xl border border-cyan-300/30 bg-slate-900 px-3 py-2.5 text-white"></div>
+        <div><label class="canva-text mb-1 block text-sm font-bold text-cyan-100" for="questionLevel">Jenjang</label><select id="questionLevel" class="w-full rounded-xl border border-cyan-300/30 bg-slate-900 px-3 py-2.5 text-white"><option>SD</option><option selected>SMP</option><option>SMA</option></select></div>
+        <div><label class="canva-text mb-1 block text-sm font-bold text-cyan-100" for="questionClass">Kelas</label><input id="questionClass" value="Kelas 7" class="w-full rounded-xl border border-cyan-300/30 bg-slate-900 px-3 py-2.5 text-white"></div>
+      </div><datalist id="clashTeacherList"></datalist>
+      <div style="font-size:10px;color:#8ea3b8;margin-top:7px">Bila guru belum memiliki bank soal, game tetap menggunakan bank bawaan.</div>
+    </div>
+<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
        <div><label class="canva-text mb-1 block text-sm font-bold text-cyan-100" for="team-count">Jumlah Tim</label> <select id="team-count" class="w-full rounded-xl border border-cyan-300/30 bg-slate-900 px-3 py-2.5 text-white" onchange="renderTeamInputs()"> <option value="2">2 Tim</option> <option value="3">3 Tim</option> <option value="4">4 Tim</option> <option value="5">5 Tim</option> <option value="6">6 Tim</option> </select>
        </div>
        <div><label class="canva-text mb-1 block text-sm font-bold text-cyan-100" for="duration">Durasi (menit)</label> <input id="duration" type="number" min="1" max="90" value="15" class="w-full rounded-xl border border-cyan-300/30 bg-slate-900 px-3 py-2.5 text-white">
@@ -437,7 +447,7 @@
        <h2 class="canva-text mb-2 text-sm font-bold text-cyan-100">Nama Tim</h2>
        <div id="team-inputs" class="grid grid-cols-2 gap-2 md:grid-cols-3"></div>
       </div>
-      <div class="flex flex-wrap gap-2"><button class="canva-button flex-1 rounded-xl bg-cyan-400 px-5 py-3 font-extrabold tracking-wide text-slate-950 shadow-[0_0_25px_rgba(0,242,254,.48)]" type="button" onclick="startGame()">MASUK ARENA PERTANDINGAN</button> <button class="canva-button rounded-xl bg-amber-400 px-4 py-3 font-extrabold text-slate-950" type="button" onclick="printWorksheet()">CETAK SEMUA SOAL</button>
+      <div class="flex flex-wrap gap-2"><button class="canva-button flex-1 rounded-xl bg-cyan-400 px-5 py-3 font-extrabold tracking-wide text-slate-950 shadow-[0_0_25px_rgba(0,242,254,.48)]" type="button" onclick="startGame()">MASUK ARENA PERTANDINGAN</button> <a href="bank-soal.html?game=clash-of-champions" class="canva-button rounded-xl bg-indigo-400 px-4 py-3 font-extrabold text-white" style="text-decoration:none">📥 Database / Import Word &amp; Excel</a> <button class="canva-button rounded-xl bg-amber-400 px-4 py-3 font-extrabold text-slate-950" type="button" onclick="printWorksheet()">CETAK SEMUA SOAL</button>
       </div>
      </form>
     </section>
@@ -571,7 +581,8 @@
   <button id="fullscreen-button" type="button" onclick="toggleFullscreen()" aria-label="Layar penuh" title="Layar Penuh" class="fixed right-3 top-3 z-[95] flex h-10 w-10 items-center justify-center rounded-lg border border-cyan-300/40 bg-slate-950/80 text-cyan-200 shadow-[0_0_16px_rgba(0,242,254,.25)] backdrop-blur"> <i id="fullscreen-icon" data-lucide="maximize" class="h-5 w-5"></i> </button>
   <div id="toast" class="pointer-events-none fixed bottom-4 left-1/2 z-[90] hidden -translate-x-1/2 rounded-xl border border-cyan-300/40 bg-slate-950 px-4 py-3 text-sm font-bold text-white shadow-xl"></div>
   <section id="print-worksheet" class="print-sheet"></section>
-  <script>
+  <script src="config.js"></script><script src="spenda-db.js"></script><script src="spenda-import.js"></script>
+<script>
     /* ============================================================================
        ✏️  SOAL BAWAAN (DEFAULT) — 60 SOAL: 20 MUDAH, 20 SEDANG, 20 SULIT
        ============================================================================
@@ -654,9 +665,8 @@
     /* ============ SELESAI BAGIAN SOAL BAWAAN — jangan ubah kode di bawah ini ============ */
 
     // ============================================================================
-    // SISTEM SIMPAN OTOMATIS (localStorage) — supaya soal hasil edit guru tetap
-    // ada walau game ditutup dan dibuka lagi, SELAMA di perangkat & browser yang
-    // sama. Tidak butuh internet/server, dan tidak perlu generate ulang lewat AI.
+    // Cache lokal/fallback — bank soal sekolah tetap menjadi sumber utama bila
+    // Database Sekolah telah dikonfigurasi.
     // ============================================================================
     const STORAGE_KEY = "cocVaultArena_customQuestions_v1";
     let storageAvailable = true;
@@ -679,6 +689,16 @@
     function saveQuestions() {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(activeQuestions));
+        if(window.SPENDADB){
+          SPENDADB.putBank({
+            game:"clash-of-champions",
+            teacher:document.getElementById("questionTeacher")?.value.trim()||"Umum",
+            subject:document.getElementById("questionSubject")?.value.trim()||"",
+            level:document.getElementById("questionLevel")?.value||"SMP",
+            className:document.getElementById("questionClass")?.value.trim()||"",
+            difficulty:"Semua"
+          },activeQuestions,"manual").catch(()=>{});
+        }
         return true;
       } catch (err) {
         storageAvailable = false;
@@ -795,9 +815,28 @@
       });
     }
 
-    function startGame() {
+    async function startGame() {
       const count = Number(document.getElementById("team-count").value);
       const duration = Math.max(1, Number(document.getElementById("duration").value) || 15);
+
+      if(window.SPENDADB){
+        try{
+          const filters={
+            game:"clash-of-champions",
+            teacher:document.getElementById("questionTeacher")?.value.trim()||"Umum",
+            subject:document.getElementById("questionSubject")?.value.trim()||"",
+            level:document.getElementById("questionLevel")?.value||"",
+            className:document.getElementById("questionClass")?.value.trim()||""
+          };
+          const central=await Promise.race([
+            SPENDADB.getQuestions(filters),
+            new Promise(resolve=>setTimeout(()=>resolve([]),5000))
+          ]);
+          if(central.length){
+            activeQuestions=central.map(q=>({level:q.level||"Sedang",q:q.q||q.question||"",a:q.a||q.answer||""})).filter(q=>q.q&&q.a);
+          }
+        }catch(e){console.warn("Database pusat tidak tersedia; gunakan bank lokal.",e);}
+      }
 
       teams = Array.from({ length: count }, (_, index) => ({
         id: index,
@@ -1456,7 +1495,9 @@
       osc.stop(now + .45);
     }
 
-    function openTeacherGate(action) {
+    if(window.SPENDADB)SPENDADB.listTeachers("clash-of-champions").then(ts=>{const d=document.getElementById("clashTeacherList");if(d)d.innerHTML=ts.map(t=>`<option value="${String(t).replace(/"/g,"&quot;")}"></option>`).join("")}).catch(()=>{});
+
+function openTeacherGate(action) {
       teacherAction = action;
       document.getElementById("teacher-code").value = "";
       document.getElementById("teacher-error").classList.add("hidden");
@@ -1557,7 +1598,7 @@
       bar.innerHTML = `
         <p class="text-xs font-semibold text-amber-100 max-w-xl">
           Ubah teks soal / kunci jawaban di bawah, lalu tekan <strong>Simpan Semua Perubahan</strong>.
-          Perubahan otomatis tersimpan di perangkat &amp; browser ini (localStorage) dan akan
+          Perubahan otomatis disimpan ke Database Sekolah dan akan
           tetap dipakai walau game ditutup, mulai permainan (Mulai Arena) berikutnya.
           Jumlah soal per level tidak bisa diubah dari sini, hanya isi teksnya.
         </p>
@@ -1587,7 +1628,7 @@
       if (!storageAvailable) {
         const warn = document.createElement("p");
         warn.className = "mb-3 rounded-lg border border-rose-400/40 bg-rose-950/40 p-2 text-xs font-bold text-rose-200";
-        warn.textContent = "⚠️ Penyimpanan lokal (localStorage) tidak tersedia di browser/perangkat ini, sehingga perubahan TIDAK akan tersimpan otomatis saat game dibuka lagi.";
+        warn.textContent = "⚠️ Database Sekolah belum tersedia. Pastikan koneksi database aktif agar perubahan tersimpan terpusat.";
         content.appendChild(warn);
       }
 

@@ -1,0 +1,45 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Database Soal Guru</title><style>
+body{margin:0;background:#050b13;color:#eef6fb;font:14px Arial,sans-serif}.wrap{width:min(1050px,calc(100% - 24px));margin:auto;padding:20px}.panel{background:#0d1723;border:1px solid #293c50;border-radius:14px;padding:14px;margin-top:12px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}label{display:block;font-size:10px;color:#9ab0c3;margin-bottom:4px}input,select{width:100%;box-sizing:border-box;background:#08111c;border:1px solid #364a5e;color:#fff;border-radius:8px;padding:9px}.btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:9px;padding:10px 12px;background:#273847;color:#fff;font-weight:800;font-size:11px;text-decoration:none}.primary{background:#2d8cff}.green{background:#148b4a}.red{background:#a92f46}.note{font-size:10px;line-height:1.5;color:#9bb0c3;background:#0a131e;border:1px solid #26384a;border-radius:8px;padding:9px;margin-top:8px}.status{font-size:10px;margin-top:8px;padding:8px;border-radius:8px;background:#0a131e;border:1px solid #26384a}.ok{color:#8ff3b4;border-color:#2a7650}.err{color:#ff9baa;border-color:#6e3342}.tablewrap{overflow:auto;border:1px solid #26384a;border-radius:8px;margin-top:8px}table{border-collapse:collapse;width:100%;font-size:9px}th,td{padding:7px;border-bottom:1px solid #253544;text-align:left}th{background:#142231;position:sticky;top:0}.preview{margin-top:8px;font:10px monospace;white-space:pre-wrap;background:#07101a;border:1px solid #26384a;padding:8px;border-radius:8px;max-height:260px;overflow:auto}@media(max-width:800px){.grid{grid-template-columns:1fr 1fr}}@media(max-width:520px){.grid{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<div style="text-align:center"><img src="logo-sekolah.png" style="width:74px;height:74px;object-fit:contain;border-radius:18px"><h1 style="margin:8px 0 3px">Database Soal Guru</h1><div style="color:#90a4b7;font-size:11px">SPENDA Game Center • database terpusat sekolah untuk seluruh game</div></div>
+<section class="panel"><div class="grid">
+<div><label>Game</label><select id="game"><option value="benar-salah">BENAR / SALAH</option><option value="gesture-battle">GESTURE BATTLE EDU</option><option value="family-100">SPENDA FAMILY 100</option><option value="clash-of-champions">CLASH OF CHAMPIONS</option></select></div>
+<div><label>Nama Guru</label><input id="teacher" list="teacherList" placeholder="Nama guru"><datalist id="teacherList"></datalist></div>
+<div><label>Jenjang</label><select id="level"><option>SD</option><option selected>SMP</option><option>SMA</option></select></div>
+<div><label>Kelas</label><input id="className" placeholder="Kelas 7 / VII"></div>
+<div><label>Mapel</label><input id="subject" placeholder="Matematika"></div>
+<div><label>Kesulitan</label><select id="difficulty"><option>Mudah</option><option selected>Sedang</option><option>Sulit</option><option>Semua</option></select></div>
+<div style="grid-column:span 2"><label>File Word/Excel/JSON</label><input id="file" type="file" accept=".docx,.xlsx,.xls,.csv,.json"></div>
+</div>
+<div class="note"><b>Alur:</b> Guru mengisi template Word/Excel di laptop → Import ke Database Soal Guru → data masuk ke database sekolah → PID/IFP memanggil soal berdasarkan Nama Guru, Mapel, Kelas, dan Jenjang.</div>
+<div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:9px"><button id="import" class="btn primary">⬆ Import Word / Excel / JSON</button><button id="load" class="btn green">Muat Bank</button><button id="export" class="btn">⬇ Export JSON</button><button id="delete" class="btn red">Hapus Bank</button><a href="index.html" class="btn">← Game Center</a></div><div id="status" class="status">Memeriksa koneksi database sekolah...</div></section>
+<section class="panel"><b>Template Soal</b><div class="note">Gunakan template sesuai game agar kolom import langsung terbaca sistem.</div><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:8px"><a class="btn" href="templates/Template_Soal_BENAR_SALAH.docx" download>Word • BENAR/SALAH</a><a class="btn" href="templates/Template_Soal_BENAR_SALAH.xlsx" download>Excel • BENAR/SALAH</a><a class="btn" href="templates/Template_Soal_GESTURE_BATTLE.docx" download>Word • GESTURE</a><a class="btn" href="templates/Template_Soal_GESTURE_BATTLE.xlsx" download>Excel • GESTURE</a><a class="btn" href="templates/Template_Soal_FAMILY_100.docx" download>Word • FAMILY 100</a><a class="btn" href="templates/Template_Soal_FAMILY_100.xlsx" download>Excel • FAMILY 100</a><a class="btn" href="templates/Template_Soal_CLASH_OF_CHAMPIONS.docx" download>Word • CLASH</a><a class="btn" href="templates/Template_Soal_CLASH_OF_CHAMPIONS.xlsx" download>Excel • CLASH</a></div></section>
+<section class="panel"><b>Bank aktif</b><div id="active" class="note">Belum dimuat.</div><div id="preview" class="preview"></div></section>
+<section class="panel"><b>Database tersimpan</b><div class="tablewrap"><table><thead><tr><th>Game</th><th>Guru</th><th>Mapel</th><th>Jenjang</th><th>Kelas</th><th>Kesulitan</th><th>Soal</th></tr></thead><tbody id="rows"></tbody></table></div></section>
+</div>
+<script src="config.js"></script><script src="spenda-db.js"></script><script src="spenda-import.js"></script><script>
+const $=id=>document.getElementById(id);
+const query=new URLSearchParams(location.search);
+const requestedGame=query.get("game");
+if(requestedGame && $("game")?.querySelector(`option[value="${requestedGame}"]`)) $("game").value=requestedGame;
+const names={"benar-salah":"BENAR / SALAH","gesture-battle":"GESTURE BATTLE EDU","family-100":"SPENDA FAMILY 100","clash-of-champions":"CLASH OF CHAMPIONS"};const meta=()=>({game:$("game").value,teacher:$("teacher").value.trim()||"Umum",level:$("level").value,className:$("className").value.trim(),subject:$("subject").value.trim(),difficulty:$("difficulty").value});
+function st(t,ok){$("status").textContent=t;$("status").className="status "+(ok?"ok":"err")}
+async function refreshTeachers(){
+  try{const ts=await SPENDADB.listTeachers($("game").value);const d=$("teacherList");if(d)d.innerHTML=ts.map(x=>`<option value="${esc(x)}"></option>`).join("")}catch{}
+}
+function esc(x){return String(x??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+async function refresh(){const bs=await SPENDADB.listBanks({});$("rows").innerHTML=bs.map(r=>`<tr><td>${names[r.game]||esc(r.game)}</td><td>${esc(r.teacher)}</td><td>${esc(r.subject)}</td><td>${esc(r.level)}</td><td>${esc(r.className)}</td><td>${esc(r.difficulty)}</td><td>${(r.questions||[]).length}</td></tr>`).join("")||"<tr><td colspan=7>Belum ada bank.</td></tr>"}
+async function loadActive(){
+  let r=await SPENDADB.getBank(meta());
+  if(!r){
+    const banks=await SPENDADB.listBanks({game:$("game").value});
+    const m=meta();
+    const match=banks.find(x=>SPENDADB.norm(x.teacher)===SPENDADB.norm(m.teacher)&&SPENDADB.sameLevel(x.level,m.level)&&SPENDADB.classMatch(x.className,m.className)&&SPENDADB.sameSubject(x.subject,m.subject));
+    if(match) r=match;
+  }
+  if(!r){$("active").textContent="Bank aktif belum ada.";$("preview").textContent="";return;}
+  $("active").textContent=`${names[r.game]} • ${r.teacher} • ${r.subject||"-"} • ${r.level||"-"} • ${r.className||"-"} • ${r.difficulty} • ${(r.questions||[]).length} soal`;
+  $("preview").textContent=(r.questions||[]).slice(0,30).map((q,i)=>`${i+1}. ${q.statement||q.q||q.pertanyaan||""}${q.answer?" → "+q.answer:""}${q.c?" → "+q.c:""}`).join("\n");
+}
+initPage();
+</script></body></html>

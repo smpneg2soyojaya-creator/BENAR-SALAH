@@ -87,12 +87,12 @@ body.game-active .screen{border:0;border-radius:0;padding:0;box-shadow:none;back
 <header class="top"><div class="brand"><div class="logo">S2</div><div><h1>SPENDA Gesture Battle Edu</h1><small>SMP Negeri 2 Soyo Jaya • Berilmu • Berkarakter • Berprestasi</small></div></div><div class="pill" id="modePill">Mode: Siap</div></header>
 
 <section id="home" class="screen">
- <div class="hero"><div class="pill">🎮 Kuis Edukasi Interaktif</div><h2>GESTURE BATTLE</h2><p>Dua siswa berlomba menjawab soal. Gunakan posisi tangan di depan kamera untuk menyentuh balon jawaban. Semua data soal tersimpan di perangkat ini.</p></div>
+ <div class="hero"><div class="pill">🎮 Kuis Edukasi Interaktif</div><h2>GESTURE BATTLE</h2><p>Dua siswa berlomba menjawab soal. Gunakan posisi tangan di depan kamera untuk menyentuh balon jawaban. Bank soal dikelola melalui Database Sekolah. Penyimpanan perangkat hanya digunakan sebagai cadangan.</p></div>
  <div class="grid">
   <div class="card"><h3>👥 Pemain</h3><div class="field"><label>Nama Siswa Kiri</label><input id="leftName" value="Siswa Kiri"></div><div class="field"><label>Nama Siswa Kanan</label><input id="rightName" value="Siswa Kanan"></div></div>
-  <div class="card"><h3>📚 Pengaturan Soal</h3><div class="field"><label>Jenjang</label><select id="level"><option>SMP</option><option>SD</option><option>SMA</option></select></div><div class="field"><label>Kelas</label><select id="grade"><option>VII</option><option>VIII</option><option>IX</option></select></div><div class="field"><label>Mata Pelajaran</label><select id="subject"><option>Informatika</option><option>Matematika</option><option>Bahasa Indonesia</option><option>Bahasa Inggris</option><option>IPA</option><option>IPS</option><option>PKN</option><option>PJOK</option><option>PAI</option></select></div><div class="field"><label>Jumlah Soal</label><input id="amount" type="number" min="1" max="30" value="10"></div></div>
+  <div class="card"><h3>📚 Pengaturan Soal</h3><div class="field"><label>Jenjang</label><select id="level"><option>SMP</option><option>SD</option><option>SMA</option></select></div><div class="field"><label>Kelas</label><select id="grade"><option>VII</option><option>VIII</option><option>IX</option></select></div><div class="field"><label>Nama Guru</label><input id="teacherName" list="teacherListGesture" placeholder="Nama guru" value="Umum"><datalist id="teacherListGesture"></datalist></div><div class="field"><label>Mata Pelajaran</label><select id="subject"><option>Informatika</option><option>Matematika</option><option>Bahasa Indonesia</option><option>Bahasa Inggris</option><option>IPA</option><option>IPS</option><option>PKN</option><option>PJOK</option><option>PAI</option></select></div><div class="field"><label>Jumlah Soal</label><input id="amount" type="number" min="1" max="30" value="10"></div></div>
  </div>
- <div class="card" style="margin-top:14px"><h3>✋ Kontrol Gesture Posisi</h3><div class="grid"><div><div class="notice"><b>Bukan gerakan ✊☝️✌️.</b> Kamera membaca <b>posisi tangan</b>. Ketika soal muncul, empat pilihan jawaban akan turun seperti balon. Siswa cukup mengangkat dan mengarahkan tangan ke balon jawaban yang dipilih.</div></div><div><div class="notice">📷 Kamera harus tetap menyala selama permainan. Saat tangan menyentuh balon jawaban, pilihan langsung terkunci.</div><div class="actions"><button class="btn" id="cameraBtn">📷 Tes Kamera</button><button class="btn" id="editBtn">🛠️ Kelola Bank Soal</button><button class="btn" id="exportBtn">⬇️ Ekspor JSON</button><label class="btn" style="display:inline-flex;align-items:center">⬆️ Impor JSON<input id="importFile" type="file" accept="application/json" hidden></label></div></div></div></div>
+ <div class="card" style="margin-top:14px"><h3>✋ Kontrol Gesture Posisi</h3><div class="grid"><div><div class="notice"><b>Bukan gerakan ✊☝️✌️.</b> Kamera membaca <b>posisi tangan</b>. Ketika soal muncul, empat pilihan jawaban akan turun seperti balon. Siswa cukup mengangkat dan mengarahkan tangan ke balon jawaban yang dipilih.</div></div><div><div class="notice">📷 Kamera harus tetap menyala selama permainan. Saat tangan menyentuh balon jawaban, pilihan langsung terkunci.</div><div class="actions"><button class="btn" id="cameraBtn">📷 Tes Kamera</button><button class="btn" id="editBtn">🛠️ Kelola Bank Soal</button><a class="btn" href="bank-soal.html?game=gesture-battle" style="text-decoration:none">Database / Import Word &amp; Excel</a><button class="btn" id="exportBtn">⬇️ Ekspor JSON</button><label class="btn" style="display:inline-flex;align-items:center">⬆️ Impor JSON<input id="importFile" type="file" accept="application/json" hidden></label></div></div></div></div>
  <div class="actions" style="justify-content:center"><button class="btn primary" id="startBtn">🚀 Gunakan Soal & Mulai Main</button></div>
 </section>
 
@@ -124,11 +124,12 @@ body.game-active .screen{border:0;border-radius:0;padding:0;box-shadow:none;back
 
 <section id="result" class="screen hidden"><div class="result"><div class="pill">🏁 Permainan Selesai</div><h2>HASIL PERTANDINGAN</h2><div class="winner" id="winnerText">SERI!</div><div class="grid"><div class="card"><h3 id="rLeftName">Siswa Kiri</h3><div class="score" id="rLeftScore">0</div></div><div class="card"><h3 id="rRightName">Siswa Kanan</h3><div class="score" id="rRightScore">0</div></div></div><div class="actions" style="justify-content:center"><button class="btn primary" id="againBtn">🔄 Main Lagi</button><button class="btn" id="homeBtn">🏠 Kembali ke Beranda</button></div></div></section>
 
-<div id="modal" class="modal hidden"><div class="modalbox"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><div><h2 style="margin:0">🛠️ Bank Soal</h2><small style="color:var(--muted)">Tidak ada kode guru. Anda dapat menambah, mengubah, menghapus, menyimpan, dan memuat soal.</small></div><button class="btn" id="closeModal">✕</button></div><div class="notice">Format jawaban harus A, B, C, atau D. Bank soal tersimpan di browser perangkat ini.</div><div id="questionEditor"></div><div class="actions"><button class="btn green" id="addQuestion">＋ Tambah Soal</button><button class="btn" id="saveQuestions">💾 Simpan Bank</button><button class="btn" id="modalExport">⬇️ Ekspor JSON</button><label class="btn">⬆️ Impor JSON<input id="modalImport" type="file" accept="application/json" hidden></label><button class="btn danger" id="resetQuestions">↺ Reset Contoh Soal</button></div></div></div>
+<div id="modal" class="modal hidden"><div class="modalbox"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><div><h2 style="margin:0">🛠️ Bank Soal</h2><small style="color:var(--muted)">Tidak ada kode guru. Anda dapat menambah, mengubah, menghapus, menyimpan, dan memuat soal.</small></div><button class="btn" id="closeModal">✕</button></div><div class="notice">Format jawaban harus A, B, C, atau D. Bank soal utama tersimpan di Database Sekolah. Penyimpanan lokal hanya menjadi cadangan saat database tidak tersedia.</div><div id="questionEditor"></div><div class="actions"><button class="btn green" id="addQuestion">＋ Tambah Soal</button><button class="btn" id="saveQuestions">💾 Simpan Bank</button><button class="btn" id="modalExport">⬇️ Ekspor JSON</button><label class="btn">⬆️ Impor JSON<input id="modalImport" type="file" accept="application/json" hidden></label><button class="btn danger" id="resetQuestions">↺ Reset Contoh Soal</button></div></div></div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+<script src="config.js"></script><script src="spenda-db.js"></script><script src="spenda-import.js"></script>
 <script>
 const DEFAULT_QUESTIONS=[
  {q:'Perangkat yang digunakan untuk memasukkan teks ke komputer adalah …',a:['Keyboard','Monitor','Printer','Speaker'],c:'A',s:'Informatika'},
@@ -153,18 +154,38 @@ const DEFAULT_QUESTIONS=[
  {q:'Apa fungsi tombol Ctrl+V?',a:['Menyalin','Menempel','Mencetak','Mengunci layar'],c:'B',s:'Informatika'}
 ];
 let questions=JSON.parse(localStorage.getItem('spenda_gesture_questions')||'null')||DEFAULT_QUESTIONS.map(x=>({...x,a:[...x.a]}));
-let game={questions:[],index:0,left:0,right:0,leftName:'Siswa Kiri',rightName:'Siswa Kanan',locked:false,answered:false,stream:null,model:null,lastGesture:{left:null,right:null}};
+let game={questions:[],index:0,left:0,right:0,leftName:'Siswa Kiri',rightName:'Siswa Kanan',locked:false,answered:false,stream:null,model:null,lastGesture:{left:null,right:null},starting:false};
 const $=id=>document.getElementById(id);const show=id=>$(id).classList.remove('hidden');const hide=id=>$(id).classList.add('hidden');
-function saveBank(){localStorage.setItem('spenda_gesture_questions',JSON.stringify(questions));}
+
+async function loadGestureCentralQuestions(timeoutMs=5000){
+  if(!window.SPENDADB)return [];
+  const subject=$("subject")?.value||"";
+  const level=$("level")?.value||"";
+  const className=$("grade")?.value||"";
+  const teacher=$("teacherName")?.value.trim()||"Umum";
+  try{
+    // Database terpusat tidak boleh membuat tombol MULAI terlihat hang.
+    return await Promise.race([
+      SPENDADB.getQuestions({game:"gesture-battle",teacher,subject,level,className}),
+      new Promise(resolve=>setTimeout(()=>resolve([]),timeoutMs))
+    ]);
+  }catch(e){
+    console.warn("Database pusat tidak tersedia; gunakan bank lokal.",e);
+    return [];
+  }
+}
+
+function saveBank(){localStorage.setItem('spenda_gesture_questions',JSON.stringify(questions));if(window.SPENDADB){SPENDADB.putBank({game:'gesture-battle',teacher:$('teacherName')?.value.trim()||'Umum',level:$('level')?.value||'',className:$('grade')?.value||'',subject:$('subject')?.value||'',difficulty:'Semua'},questions,'manual').catch(()=>{});}}
 function downloadJSON(data,name='spenda-gesture-bank.json'){const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
 function importJSON(file){const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d))throw Error('Format harus array soal');questions=d.map(x=>({q:String(x.q||x.question||''),a:(x.a||x.answers||[]).map(String).slice(0,4),c:String(x.c||x.correct||'A').toUpperCase(),s:String(x.s||x.subject||$('subject').value)})).filter(x=>x.q&&x.a.length===4&&'ABCD'.includes(x.c));saveBank();alert('Bank soal berhasil dimuat: '+questions.length+' soal.');renderEditor()}catch(e){alert('JSON tidak valid: '+e.message)}};r.readAsText(file)}
-function renderEditor(){const box=$('questionEditor');box.innerHTML='';questions.forEach((x,i)=>{const row=document.createElement('div');row.className='qrow';row.innerHTML=`<input value="${esc(x.q)}" aria-label="Pertanyaan"><select><option ${x.c==='A'?'selected':''}>A</option><option ${x.c==='B'?'selected':''}>B</option><option ${x.c==='C'?'selected':''}>C</option><option ${x.c==='D'?'selected':''}>D</option></select><input value="${esc(x.s||'Informatika')}" aria-label="Mapel"><button class="btn danger">Hapus</button>`;const q=row.children[0],c=row.children[1],s=row.children[2];q.oninput=()=>x.q=q.value;c.onchange=()=>x.c=c.value;s.oninput=()=>x.s=s.value;row.querySelector('button').onclick=()=>{questions.splice(i,1);renderEditor()};box.appendChild(row);x.a.forEach((ans,j)=>{const ar=document.createElement('div');ar.className='qrow';ar.style.margin='-3px 0 8px 18px';ar.innerHTML=`<span style="color:#8eb2d4;font-size:12px">Jawaban ${String.fromCharCode(65+j)}</span><input style="grid-column:2/-1" value="${esc(ans)}">`;ar.querySelector('input').oninput=e=>x.a[j]=e.target.value;box.appendChild(ar)})})}
+function renderEditor(){const box=$('questionEditor');box.innerHTML='';questions.forEach((x,i)=>{const row=document.createElement('div');row.className='qrow';row.innerHTML=`<input value="${esc(x.q)}" aria-label="Pertanyaan"><select><option ${x.c==='A'?'selected':''}>A</option><option ${x.c==='B'?'selected':''}>B</option><option ${x.c==='C'?'selected':''}>C</option><option ${x.c==='D'?'selected':''}>D</option></select><input value="${esc(x.s||'Informatika')}" aria-label="Mapel"><button class="btn danger">Hapus</button>`;const q=row.children[0],c=row.children[1],s=row.children[2];q.oninput=()=>{x.q=q.value;saveBank()};c.onchange=()=>{x.c=c.value;saveBank()};s.oninput=()=>{x.s=s.value;saveBank()};row.querySelector('button').onclick=()=>{questions.splice(i,1);renderEditor()};box.appendChild(row);x.a.forEach((ans,j)=>{const ar=document.createElement('div');ar.className='qrow';ar.style.margin='-3px 0 8px 18px';ar.innerHTML=`<span style="color:#8eb2d4;font-size:12px">Jawaban ${String.fromCharCode(65+j)}</span><input style="grid-column:2/-1" value="${esc(ans)}">`;ar.querySelector('input').oninput=e=>{x.a[j]=e.target.value;saveBank()};box.appendChild(ar)})})}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;')}
 function selectedQuestions(){let pool=questions.filter(x=>!$('subject').value||x.s===$('subject').value);if(pool.length<1)pool=questions.slice();pool=[...pool].sort(()=>Math.random()-.5);return pool.slice(0,Math.max(1,Math.min(30,+$('amount').value||10)))}
 // Real-time positional hand gesture detection: the hand/fingertip position selects falling answer balloons.
-let handsDetector=null, mpCamera=null, gestureRAF=null;
+let handsDetector=null, mpCamera=null, gestureRAF=null, gestureLoopTimer=null;
 let handPositions={left:null,right:null};
 let roundToken=0, balloonTimer=null;
+let cameraStartPromise=null, gestureRunId=0, gestureBusy=false;
 function stopBalloonRound(){
   if(balloonTimer){clearTimeout(balloonTimer);balloonTimer=null;}
   ['fallingAnswersLeft','fallingAnswersRight'].forEach(id=>{const box=$(id);if(box)box.innerHTML='';});
@@ -330,17 +351,29 @@ async function startGestureDetection(){
   if(handsDetector)return true;
   try{
     handsDetector=new Hands({locateFile:file=>`https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`});
-    handsDetector.setOptions({maxNumHands:2,modelComplexity:1,minDetectionConfidence:.55,minTrackingConfidence:.55});
+    // Kurangi beban CPU agar kamera tidak membuat halaman freeze pada laptop/IFP.
+    handsDetector.setOptions({maxNumHands:2,modelComplexity:0,minDetectionConfidence:.55,minTrackingConfidence:.55});
     handsDetector.onResults(onHandsResults);
+    const myRun=++gestureRunId;
     const loop=async()=>{
-      if(!game.stream||!handsDetector)return;
-      if($('video').readyState>=2){
-        try{await handsDetector.send({image:$('video')});}
+      if(myRun!==gestureRunId||!game.stream||!handsDetector)return;
+      const video=$('video');
+      if(video && video.readyState>=2 && !gestureBusy){
+        gestureBusy=true;
+        try{await handsDetector.send({image:video});}
         catch(e){console.warn('Gesture frame error',e);}
+        finally{gestureBusy=false;}
       }
-      gestureRAF=requestAnimationFrame(loop);
+      if(myRun===gestureRunId&&game.stream&&handsDetector){
+        gestureLoopTimer=setTimeout(loop,80);
+      }
     };
-    loop();
+    // Beri browser kesempatan menggambar arena dan menampilkan video sebelum
+    // inference pertama MediaPipe yang relatif berat dijalankan.
+    setTimeout(()=>{
+      if(myRun!==gestureRunId||!game.stream||!handsDetector)return;
+      loop();
+    },220);
     setCameraState('live');
     return true;
   }catch(e){
@@ -365,29 +398,42 @@ function setCameraState(state,msg=''){
 }
 async function startCamera(){
   if(game.stream)return true;
-  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
-    const msg='Browser tidak menyediakan akses kamera. Gunakan Chrome/Edge melalui HTTPS atau localhost.';
-    setCameraState('off',msg);alert(msg);return false;
-  }
-  setCameraState('wait');
-  try{
-    game.stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:1920},height:{ideal:1080}},audio:false});
-    const video=$('video');video.srcObject=game.stream;await video.play();
-    const ok=await startGestureDetection();
-    if(!ok){stopCamera();return false;}
-    setCameraState('live');return true;
-  }catch(e){
-    game.stream=null;console.error(e);
-    let msg='Kamera gagal diaktifkan.';
-    if(e.name==='NotAllowedError'||e.name==='PermissionDeniedError')msg='Akses kamera ditolak. Izinkan kamera pada ikon kamera di address bar lalu muat ulang.';
-    else if(e.name==='NotFoundError')msg='Kamera tidak ditemukan. Pastikan webcam terpasang.';
-    else if(e.name==='NotReadableError')msg='Kamera sedang digunakan aplikasi lain. Tutup aplikasi tersebut.';
-    else if(location.protocol==='file:')msg='Jika file HTML dibuka langsung dan kamera diblokir, jalankan melalui localhost atau HTTPS.';
-    setCameraState('off',msg);alert(msg);return false;
-  }
+  if(cameraStartPromise)return cameraStartPromise;
+  cameraStartPromise=(async()=>{
+    if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+      const msg='Browser tidak menyediakan akses kamera. Gunakan Chrome/Edge melalui HTTPS atau localhost.';
+      setCameraState('off',msg);alert(msg);return false;
+    }
+    setCameraState('wait');
+    try{
+      // 1280x720 cukup untuk deteksi dua tangan dan jauh lebih ringan daripada 1920x1080.
+      game.stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:1280,max:1280},height:{ideal:720,max:720},frameRate:{ideal:20,max:24}},audio:false});
+      const video=$('video');
+      video.srcObject=game.stream;
+      video.muted=true;
+      video.playsInline=true;
+      await video.play();
+      const ok=await startGestureDetection();
+      if(!ok){stopCamera();return false;}
+      setCameraState('live');return true;
+    }catch(e){
+      game.stream=null;console.error(e);
+      let msg='Kamera gagal diaktifkan.';
+      if(e.name==='NotAllowedError'||e.name==='PermissionDeniedError')msg='Akses kamera ditolak. Izinkan kamera pada ikon kamera di address bar lalu muat ulang.';
+      else if(e.name==='NotFoundError')msg='Kamera tidak ditemukan. Pastikan webcam terpasang.';
+      else if(e.name==='NotReadableError')msg='Kamera sedang digunakan aplikasi lain. Tutup aplikasi tersebut.';
+      else if(e.name==='OverconstrainedError')msg='Resolusi kamera terlalu berat. Coba webcam lain atau gunakan Chrome/Edge terbaru.';
+      else if(location.protocol==='file:')msg='Jika file HTML dibuka langsung dan kamera diblokir, jalankan melalui localhost atau HTTPS.';
+      setCameraState('off',msg);alert(msg);return false;
+    }
+  })();
+  try{return await cameraStartPromise;}finally{cameraStartPromise=null;}
 }
 function stopCamera(){
+  gestureRunId++;
   if(gestureRAF)cancelAnimationFrame(gestureRAF);gestureRAF=null;
+  if(gestureLoopTimer){clearTimeout(gestureLoopTimer);gestureLoopTimer=null;}
+  gestureBusy=false;
   if(mpCamera){try{mpCamera.stop()}catch(e){}mpCamera=null}
   if(game.stream){game.stream.getTracks().forEach(t=>t.stop());game.stream=null}
   if($('video'))$('video').srcObject=null;
@@ -405,16 +451,51 @@ function finish(){
   hide('game');show('result');$('modePill').textContent='Mode: Selesai';
 }
 async function startGame(){
-  requestGameFullscreen();
-  if(!game.stream){const ok=await startCamera();if(!ok)return;}
-  game.left=0;game.right=0;game.index=0;
-  game.leftName=$('leftName').value.trim()||'Siswa Kiri';game.rightName=$('rightName').value.trim()||'Siswa Kanan';
-  game.questions=selectedQuestions();if(!game.questions.length)return alert('Belum ada soal.');
-  $('gLeftName').textContent=game.leftName;$('gRightName').textContent=game.rightName;
-  $('gSubject').textContent=$('subject').value.toUpperCase();
-  hide('home');hide('result');show('game');
-  document.body.classList.add('game-active');$('modePill').textContent='Mode: Gesture';
-  renderQuestion();
+  if(game.starting)return;
+  game.starting=true;
+  const btn=$('startBtn');
+  const oldText=btn?.textContent;
+  if(btn){btn.disabled=true;btn.textContent='⏳ MENYIAPKAN PERMAINAN…';}
+  try{
+    // Jangan menunggu kamera. Siapkan soal dan tampilkan arena terlebih dahulu.
+    game.left=0;game.right=0;game.index=0;game.locked=false;game.answered=false;
+    game.leftName=$('leftName').value.trim()||'Siswa Kiri';
+    game.rightName=$('rightName').value.trim()||'Siswa Kanan';
+    // Tentukan soal lokal terlebih dahulu. Tidak ada await jaringan di jalur klik MULAI.
+    game.questions=selectedQuestions();
+    if(!game.questions.length){alert('Belum ada soal.');return;}
+    const launchToken=Date.now()+Math.random();
+    game.launchToken=launchToken;
+    $('gLeftName').textContent=game.leftName;
+    $('gRightName').textContent=game.rightName;
+    $('gSubject').textContent=$('subject').value.toUpperCase();
+    hide('home');hide('result');show('game');
+    document.body.classList.add('game-active');
+    $('modePill').textContent='Mode: Gesture';
+    renderQuestion();
+    // Fullscreen dipanggil tanpa menunggu proses kamera/AI.
+    requestGameFullscreen();
+    // Database pusat disinkronkan di belakang layar. Bila berhasil sebelum soal pertama
+    // disentuh, bank pusat menggantikan bank lokal tanpa menghentikan arena.
+    if(window.SPENDADB){
+      loadGestureCentralQuestions(5000).then(central=>{
+        if(!central.length || game.launchToken!==launchToken || game.index!==0 || game.locked || game.answered)return;
+        game.questions=central.slice(0,Math.max(1,Math.min(30,+$('amount').value||10)));
+        renderQuestion();
+        $('status').textContent='BANK SOAL SEKOLAH AKTIF';
+      }).catch(e=>console.warn('Database pusat tidak tersedia; bank lokal tetap digunakan.',e));
+    }
+    // Kamera/MediaPipe berjalan di belakang layar setelah arena benar-benar terlihat.
+    setTimeout(()=>startCamera().then(ok=>{
+      if(!ok)$('status').textContent='Kamera belum aktif. Periksa izin kamera lalu tekan Tes Kamera.';
+    }).catch(e=>{
+      console.warn('Start camera:',e);
+      $('status').textContent='Kamera belum aktif. Game tidak dibekukan.';
+    }),180);
+  }finally{
+    game.starting=false;
+    if(btn){btn.disabled=false;btn.textContent=oldText||'🚀 MULAI GAME';}
+  }
 }
 async function requestGameFullscreen(){
   const el=$('game');
@@ -428,12 +509,15 @@ async function toggleFullscreen(){
 document.addEventListener('fullscreenchange',()=>{
   const b=$('fullscreenBtn');if(b)b.textContent=document.fullscreenElement?'⛶':'⛶';
 });
+
+SPENDADB.listTeachers("gesture-battle").then(ts=>{if($("teacherListGesture"))$("teacherListGesture").innerHTML=ts.map(t=>`<option value="${t.replace(/"/g,"&quot;")}"></option>`).join("")}).catch(()=>{});
+
 $('startBtn').onclick=startGame;
 $('quitBtn').onclick=async()=>{stopCamera();document.body.classList.remove('game-active');if(document.fullscreenElement)try{await document.exitFullscreen()}catch(e){}hide('game');show('home');$('modePill').textContent='Mode: Siap';};
 $('againBtn').onclick=startGame;
 $('homeBtn').onclick=async()=>{stopCamera();document.body.classList.remove('game-active');if(document.fullscreenElement)try{await document.exitFullscreen()}catch(e){}hide('result');show('home');$('modePill').textContent='Mode: Siap'};
 $('cameraBtn').onclick=startCamera;$('fullscreenBtn').onclick=toggleFullscreen;
-$('editBtn').onclick=()=>{renderEditor();show('modal')};$('closeModal').onclick=()=>hide('modal');$('addQuestion').onclick=()=>{questions.push({q:'Pertanyaan baru?',a:['Pilihan A','Pilihan B','Pilihan C','Pilihan D'],c:'A',s:$('subject').value});renderEditor()};$('saveQuestions').onclick=()=>{saveBank();alert('Bank soal tersimpan di perangkat ini.');};$('resetQuestions').onclick=()=>{if(confirm('Reset ke soal contoh?')){questions=DEFAULT_QUESTIONS.map(x=>({...x,a:[...x.a]}));saveBank();renderEditor()}};$('exportBtn').onclick=()=>downloadJSON(questions);$('modalExport').onclick=()=>downloadJSON(questions);$('importFile').onchange=e=>e.target.files[0]&&importJSON(e.target.files[0]);$('modalImport').onchange=e=>e.target.files[0]&&importJSON(e.target.files[0]);
+$('editBtn').onclick=()=>{renderEditor();show('modal')};$('closeModal').onclick=()=>hide('modal');$('addQuestion').onclick=()=>{questions.push({q:'Pertanyaan baru?',a:['Pilihan A','Pilihan B','Pilihan C','Pilihan D'],c:'A',s:$('subject').value});renderEditor()};$('saveQuestions').onclick=()=>{saveBank();alert('Bank soal tersimpan dan disinkronkan dengan Database Sekolah jika koneksi tersedia.');};$('resetQuestions').onclick=()=>{if(confirm('Reset ke soal contoh?')){questions=DEFAULT_QUESTIONS.map(x=>({...x,a:[...x.a]}));saveBank();renderEditor()}};$('exportBtn').onclick=()=>downloadJSON(questions);$('modalExport').onclick=()=>downloadJSON(questions);$('importFile').onchange=e=>e.target.files[0]&&importJSON(e.target.files[0]);$('modalImport').onchange=e=>e.target.files[0]&&importJSON(e.target.files[0]);
 $('modal').addEventListener('click',e=>{if(e.target.id==='modal')hide('modal')});
 window.addEventListener('beforeunload',stopCamera);
 </script>
