@@ -213,6 +213,17 @@
     return localGet(meta);
   }
 
+  async function getQuestionsStrict(filters={}){
+    if(!cloudConfigured()) throw new Error("Database sekolah belum dikonfigurasi.");
+    let r=await cloudRequest("getQuestions",{game:filters.game||"",teacher:filters.teacher||"",level:filters.level||"",className:filters.className||"",subject:filters.subject||"",difficulty:filters.difficulty||""},"GET");
+    let questions=Array.isArray(r.questions)?r.questions:[];
+    if(!questions.length && filters.difficulty && norm(filters.difficulty)!=="semua"){
+      r=await cloudRequest("getQuestions",{game:filters.game||"",teacher:filters.teacher||"",level:filters.level||"",className:filters.className||"",subject:filters.subject||"",difficulty:""},"GET");
+      questions=Array.isArray(r.questions)?r.questions:[];
+    }
+    return questions;
+  }
+
   async function getQuestions(filters={}){
     if(cloudConfigured()){
       try{
@@ -245,9 +256,9 @@
   async function listTeachers(game=""){
     if(cloudConfigured()){
       try{const r=await cloudRequest("listTeachers",{game:game||""},"GET");return Array.isArray(r.teachers)?r.teachers:[]}
-      catch(e){const rows=await localList(game?{game}:{});return [...new Set(rows.map(r=>r.teacher||"Umum"))].sort((a,b)=>a.localeCompare(b,"id"))}
+      catch(e){const rows=await localList(game?{game}:{});return [...new Set(rows.filter(r=>(r.questions||[]).length).map(r=>r.teacher||"Umum"))].sort((a,b)=>a.localeCompare(b,"id"))}
     }
-    const rows=await localList(game?{game}:{});return [...new Set(rows.map(r=>r.teacher||"Umum"))].sort((a,b)=>a.localeCompare(b,"id"));
+    const rows=await localList(game?{game}:{});return [...new Set(rows.filter(r=>(r.questions||[]).length).map(r=>r.teacher||"Umum"))].sort((a,b)=>a.localeCompare(b,"id"));
   }
 
   async function remove(meta){
@@ -259,7 +270,7 @@
 
   window.SPENDADB={
     DB_NAME:"SPENDA_CENTRAL_QUESTION_DATABASE",
-    init,putBank,getBank,getQuestions,listBanks,listTeachers,remove,
+    init,putBank,getBank,getQuestions,getQuestionsStrict,listBanks,listTeachers,remove,
     key,norm,clean,cloudConfigured,classMatch,sameSubject,sameLevel
   };
 })();

@@ -1,58 +1,42 @@
-# SPENDA Game Center V13 – Bug Fix
+# SPENDA Game Center V14
 
-## Database terpusat sekolah
-Tahap ini tidak menjadikan database browser sebagai sumber utama.
+SMP Negeri 2 Soyo Jaya • Database Soal Sekolah • 4 Game
 
-Alur penggunaan:
+## Sumber soal
+Game **tidak lagi memiliki soal bawaan**. Soal permainan hanya dapat berasal dari bank yang tersimpan di **Database Sekolah (Google Sheets + Google Apps Script)**. Cache browser hanya menyimpan salinan bank yang pernah dimuat dari database untuk membantu editor; cache tidak dipakai sebagai sumber soal ketika permainan dimulai.
 
-**Laptop Guru**
-→ Import Word/Excel
-→ **Database Sekolah (Google Sheets + Apps Script)**
-→ **PID/IFP**
-→ Game Center mengambil soal sesuai **Nama Guru + Mapel + Kelas + Jenjang**.
+## Identitas bank
+Setiap bank dipisahkan berdasarkan:
 
-Satu mata pelajaran dapat memiliki lebih dari satu guru. Karena Nama Guru menjadi bagian dari bank, soal guru A dan guru B tidak tercampur.
+**Game + Nama Guru + Jenjang + Kelas + Mapel + Kesulitan**
 
-## Empat game terhubung ke database yang sama
-- BENAR / SALAH
-- GESTURE BATTLE EDU
-- SPENDA FAMILY 100
-- CLASH OF CHAMPIONS
+Hal ini memungkinkan dua guru yang mengajar mapel yang sama memiliki bank soal yang berbeda tanpa tercampur.
 
-Mekanisme permainan yang sudah ada dipertahankan. Jalur MULAI tidak menunggu database/kamera.
+## Alur guru → PID/IFP
+1. Guru membuka **Database Soal Guru**.
+2. Pilih Game, Nama Guru, Jenjang, Kelas, Mapel, dan Kesulitan.
+3. Import Word `.docx`, Excel `.xlsx/.xls`, CSV, atau JSON.
+4. Soal disimpan ke Database Sekolah.
+5. PID/IFP membuka Game Center.
+6. Pilih Nama Guru, Jenjang, Kelas, dan Mapel.
+7. Game hanya mengambil soal dari bank yang sesuai.
 
-## Import soal
-Guru dapat menggunakan:
-- Word `.docx`
-- Excel `.xlsx` / `.xls`
-- CSV
-- JSON lama
-
-Template tersedia di folder `templates`.
-
-## Backend
-File backend berada di `backend/Code.gs`.
-Backend memakai Google Sheets sebagai penyimpanan terpusat dan Google Apps Script sebagai API.
-
-### Konfigurasi
-1. Buat Google Spreadsheet untuk database SPENDA Game Center.
+## Google Apps Script
+1. Buat Google Spreadsheet untuk database.
 2. Tempel `backend/Code.gs` ke Extensions → Apps Script.
 3. Jalankan `setupDatabase()` satu kali.
 4. Deploy sebagai Web App, Execute as **Me**, akses **Anyone**.
-5. Salin URL `/exec` ke `config.js` pada `API_URL`.
-6. Pastikan `API_TOKEN` pada `config.js` sama dengan `SPENDA_TOKEN` pada `Code.gs`.
+5. Masukkan URL `/exec` ke `config.js` pada `API_URL`.
+6. Pastikan token pada `config.js` sama dengan `SPENDA_TOKEN` pada `Code.gs`.
 
-Setelah konfigurasi, laptop guru dan PID/IFP dapat menggunakan database sekolah yang sama melalui internet.
+## Import
+Kolom utama per game:
+- BENAR/SALAH: `Pernyataan`, `Kunci`
+- GESTURE: `Pertanyaan`, `A`, `B`, `C`, `D`, `Kunci`
+- FAMILY 100: `Kategori`, `Pertanyaan`, `Jawaban1`, `Skor1`, `Kunci1`, dst.
+- CLASH: `Pertanyaan`, `Jawaban`, `Kesulitan`
 
-## Catatan implementasi
-Cache lokal hanya digunakan sebagai cadangan ketika koneksi database sekolah gagal. Sumber utama bank soal adalah database sekolah.
+Metadata identitas pada halaman **Database Soal Guru** adalah sumber utama untuk pengelompokan bank; metadata di file tidak menimpa pilihan identitas halaman.
 
-Seluruh file game tetap berada sejajar di root repository; tidak ada folder `games`.
-
-## Perbaikan V13
-- Pencarian bank soal lebih toleran terhadap variasi Jenjang, Kelas, dan penulisan Mapel.
-- Bila tingkat kesulitan yang dipilih belum memiliki bank, sistem mengambil soal dari bank Guru + Mapel + Jenjang + Kelas yang sama, sehingga soal tidak hilang.
-- Import Word/Excel mencari baris header secara otomatis, termasuk bila ada judul atau petunjuk sebelum tabel.
-- Semua game tetap memilih soal berdasarkan Game + Nama Guru + Mapel + Jenjang + Kelas.
-- Service Worker diperbarui ke V13 agar cache versi lama tidak terus dipakai.
-- Cache lokal hanya cadangan; sumber utama tetap Database Sekolah ketika API_URL sudah dikonfigurasi.
+## Catatan deployment
+Semua file aplikasi berada sejajar di root repository. Gunakan GitHub Pages/HTTPS untuk penggunaan di PID/IFP, terutama game yang memakai kamera seperti GESTURE BATTLE.

@@ -430,12 +430,12 @@
       <div class="mb-4 rounded-xl border border-cyan-300/20 bg-slate-900/40 p-3">
       <p class="canva-text mb-2 text-xs font-bold uppercase tracking-[.14em] text-cyan-200">Bank Soal</p>
       <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
-        <div><label class="canva-text mb-1 block text-sm font-bold text-cyan-100" for="questionTeacher">Nama Guru</label><input id="questionTeacher" list="clashTeacherList" value="Umum" class="w-full rounded-xl border border-cyan-300/30 bg-slate-900 px-3 py-2.5 text-white"></div>
-        <div><label class="canva-text mb-1 block text-sm font-bold text-cyan-100" for="questionSubject">Mata Pelajaran</label><input id="questionSubject" value="Informatika" class="w-full rounded-xl border border-cyan-300/30 bg-slate-900 px-3 py-2.5 text-white"></div>
+        <div><label class="canva-text mb-1 block text-sm font-bold text-cyan-100" for="questionTeacher">Nama Guru</label><select id="questionTeacher" class="w-full rounded-xl border border-cyan-300/30 bg-slate-900 px-3 py-2.5 text-white"><option value="">Memuat guru...</option></select></div>
+        <div><label class="canva-text mb-1 block text-sm font-bold text-cyan-100" for="questionSubject">Mata Pelajaran</label><select id="questionSubject" class="w-full rounded-xl border border-cyan-300/30 bg-slate-900 px-3 py-2.5 text-white"><option value="">Memuat mapel...</option></select></div>
         <div><label class="canva-text mb-1 block text-sm font-bold text-cyan-100" for="questionLevel">Jenjang</label><select id="questionLevel" class="w-full rounded-xl border border-cyan-300/30 bg-slate-900 px-3 py-2.5 text-white"><option>SD</option><option selected>SMP</option><option>SMA</option></select></div>
-        <div><label class="canva-text mb-1 block text-sm font-bold text-cyan-100" for="questionClass">Kelas</label><input id="questionClass" value="Kelas 7" class="w-full rounded-xl border border-cyan-300/30 bg-slate-900 px-3 py-2.5 text-white"></div>
-      </div><datalist id="clashTeacherList"></datalist>
-      <div style="font-size:10px;color:#8ea3b8;margin-top:7px">Bila guru belum memiliki bank soal, game tetap menggunakan bank bawaan.</div>
+        <div><label class="canva-text mb-1 block text-sm font-bold text-cyan-100" for="questionClass">Kelas</label><select id="questionClass" class="w-full rounded-xl border border-cyan-300/30 bg-slate-900 px-3 py-2.5 text-white"><option value="">Memuat kelas...</option></select></div>
+      </div>
+      <div style="font-size:10px;color:#8ea3b8;margin-top:7px">Game hanya menggunakan soal yang benar-benar tersimpan di Database Sekolah.</div>
     </div>
 <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
        <div><label class="canva-text mb-1 block text-sm font-bold text-cyan-100" for="team-count">Jumlah Tim</label> <select id="team-count" class="w-full rounded-xl border border-cyan-300/30 bg-slate-900 px-3 py-2.5 text-white" onchange="renderTeamInputs()"> <option value="2">2 Tim</option> <option value="3">3 Tim</option> <option value="4">4 Tim</option> <option value="5">5 Tim</option> <option value="6">6 Tim</option> </select>
@@ -594,81 +594,19 @@
        yang sama, soal hasil editan tetap dipakai — tidak perlu prompt ulang.
 
        Daftar di bawah ini HANYA dipakai sebagai "soal bawaan" pertama kali /
-       saat guru menekan tombol "Kembalikan ke Soal Bawaan" di editor. Kalau
+       saat guru menekan tombol "Kosongkan Bank Soal" di editor. Kalau
        tetap ingin mengedit lewat kode langsung, boleh, dengan syarat jumlah
        barisnya WAJIB tetap PERSIS 20 Mudah + 20 Sedang + 20 Sulit (total 60).
        ============================================================================ */
-    const defaultQuestions = [
-      { level:"Mudah", q:"Perangkat keras yang digunakan untuk memasukkan data ke komputer disebut perangkat ...", a:"input" },
-      { level:"Mudah", q:"Keyboard termasuk perangkat keras jenis ...", a:"input" },
-      { level:"Mudah", q:"Monitor digunakan untuk menampilkan hasil proses komputer, sehingga termasuk perangkat ...", a:"output" },
-      { level:"Mudah", q:"Mouse digunakan untuk menggerakkan pointer pada layar dan termasuk perangkat ...", a:"input" },
-      { level:"Mudah", q:"Printer digunakan untuk mencetak dokumen, sehingga termasuk perangkat ...", a:"output" },
-      { level:"Mudah", q:"Bagian komputer yang sering disebut sebagai otak komputer adalah ...", a:"cpu" },
-      { level:"Mudah", q:"RAM merupakan singkatan dari Random Access ...", a:"memory" },
-      { level:"Mudah", q:"Hard disk dan SSD termasuk perangkat penyimpanan atau ...", a:"storage" },
-      { level:"Mudah", q:"Speaker menghasilkan suara dari komputer, sehingga termasuk perangkat ...", a:"output" },
-      { level:"Mudah", q:"Webcam digunakan untuk memasukkan gambar atau video ke komputer dan termasuk perangkat ...", a:"input" },
-      { level:"Mudah", q:"Joystick biasa digunakan untuk bermain game dan termasuk perangkat ...", a:"input" },
-      { level:"Mudah", q:"Headphone atau headset digunakan untuk mendengarkan suara dari komputer, sehingga termasuk perangkat ...", a:"output" },
-      { level:"Mudah", q:"Proyektor menampilkan gambar dari komputer ke layar besar, sehingga termasuk perangkat ...", a:"output" },
-      { level:"Mudah", q:"Flashdisk digunakan untuk menyimpan dan memindahkan data, sehingga termasuk perangkat ...", a:"storage" },
-      { level:"Mudah", q:"Mikrofon digunakan untuk merekam suara ke dalam komputer, sehingga termasuk perangkat ...", a:"input" },
-      { level:"Mudah", q:"Touchpad pada laptop berfungsi menggantikan mouse dan termasuk perangkat ...", a:"input" },
-      { level:"Mudah", q:"CPU biasanya diletakkan di dalam sebuah kotak pelindung yang disebut ...", a:"casing" },
-      { level:"Mudah", q:"Bagian yang menyuplai daya listrik ke seluruh komponen komputer disebut ...", a:"power supply" },
-      { level:"Mudah", q:"Kabel yang menghubungkan komputer dengan monitor sehingga gambar bisa ditampilkan disebut kabel ...", a:"vga" },
-      { level:"Mudah", q:"Layar sentuh pada smartphone atau tablet berfungsi sebagai perangkat input sekaligus ...", a:"output" },
+    const defaultQuestions = [];
 
-      { level:"Sedang", q:"CPU memiliki tiga bagian utama: ALU, Control Unit, dan register. ALU bertugas melakukan operasi ... dan logika.", a:"aritmatika" },
-      { level:"Sedang", q:"Perangkat penyimpanan yang menggunakan piringan magnetik untuk menyimpan data adalah ...", a:"hard disk" },
-      { level:"Sedang", q:"SSD lebih cepat daripada HDD karena SSD tidak memiliki komponen yang ...", a:"bergerak" },
-      { level:"Sedang", q:"Memori yang digunakan sementara saat program sedang dijalankan adalah ...", a:"ram" },
-      { level:"Sedang", q:"ROM menyimpan instruksi permanen yang dibutuhkan komputer saat pertama kali ...", a:"menyala" },
-      { level:"Sedang", q:"Motherboard adalah papan utama yang menghubungkan seluruh komponen ...", a:"komputer" },
-      { level:"Sedang", q:"Perangkat yang mengubah sinyal digital menjadi tampilan visual adalah kartu ...", a:"grafis" },
-      { level:"Sedang", q:"Scanner digunakan untuk mengubah dokumen fisik menjadi data ...", a:"digital" },
-      { level:"Sedang", q:"Flash drive menggunakan jenis memori nonvolatile yang disebut memori ...", a:"flash" },
-      { level:"Sedang", q:"Port USB biasanya digunakan untuk menghubungkan perangkat ...", a:"periferal" },
-      { level:"Sedang", q:"Control Unit pada CPU bertugas mengatur jalannya instruksi dan mengendalikan seluruh ... di dalam komputer.", a:"operasi" },
-      { level:"Sedang", q:"Prosesor dengan lebih dari satu inti pemroses disebut prosesor ...", a:"multicore" },
-      { level:"Sedang", q:"Kecepatan prosesor komputer biasanya diukur dalam satuan ...", a:"ghz" },
-      { level:"Sedang", q:"Perangkat yang berfungsi mendinginkan suhu prosesor agar tidak overheat adalah ...", a:"kipas" },
-      { level:"Sedang", q:"Slot ekspansi pada motherboard yang digunakan untuk memasang kartu grafis tambahan disebut slot ...", a:"pci" },
-      { level:"Sedang", q:"Baterai kecil di motherboard yang menjaga pengaturan waktu dan BIOS tetap tersimpan disebut baterai ...", a:"cmos" },
-      { level:"Sedang", q:"Jenis konektor penyimpanan modern yang jauh lebih cepat daripada SATA disebut ...", a:"nvme" },
-      { level:"Sedang", q:"Bluetooth digunakan untuk menghubungkan perangkat tanpa kabel dalam jarak ...", a:"dekat" },
-      { level:"Sedang", q:"Alat yang mengubah arus listrik AC menjadi DC untuk mengisi daya laptop disebut ...", a:"adaptor" },
-      { level:"Sedang", q:"Perangkat penyimpanan yang dihubungkan lewat kabel USB dan biasanya berkapasitas besar disebut hard disk ...", a:"eksternal" },
-
-      { level:"Sulit", q:"Sistem komputer terdiri atas tiga komponen utama: hardware, software, dan ...", a:"brainware" },
-      { level:"Sulit", q:"Proses booting adalah proses yang terjadi ketika komputer mulai memuat sistem ...", a:"operasi" },
-      { level:"Sulit", q:"Satuan terkecil data digital yang hanya memiliki nilai 0 atau 1 disebut ...", a:"bit" },
-      { level:"Sulit", q:"Delapan bit setara dengan satu ...", a:"byte" },
-      { level:"Sulit", q:"Cache adalah memori berkecepatan tinggi yang membantu CPU mengakses data lebih ...", a:"cepat" },
-      { level:"Sulit", q:"Perangkat UPS berfungsi menyediakan listrik cadangan ketika terjadi mati ...", a:"listrik" },
-      { level:"Sulit", q:"Sistem operasi bertugas menjadi penghubung antara pengguna, perangkat keras, dan ...", a:"aplikasi" },
-      { level:"Sulit", q:"GPU adalah komponen yang dirancang khusus untuk memproses tampilan dan ...", a:"grafis" },
-      { level:"Sulit", q:"Perangkat input-output yang dapat menerima sekaligus mengirim data melalui jaringan adalah kartu ...", a:"jaringan" },
-      { level:"Sulit", q:"Backup data penting dilakukan untuk mencegah kehilangan data akibat kerusakan perangkat atau serangan ...", a:"malware" },
-      { level:"Sulit", q:"Proses mematikan komputer secara benar melalui sistem operasi disebut ...", a:"shutdown" },
-      { level:"Sulit", q:"Satuan kecepatan transfer data pada jaringan komputer biasanya diukur dalam ...", a:"mbps" },
-      { level:"Sulit", q:"Firmware yang pertama kali dijalankan saat komputer dinyalakan sebelum sistem operasi disebut ...", a:"bios" },
-      { level:"Sulit", q:"Teknologi yang memungkinkan satu komputer fisik menjalankan beberapa sistem operasi sekaligus disebut ...", a:"virtualisasi" },
-      { level:"Sulit", q:"Alamat unik yang dimiliki setiap perangkat di dalam jaringan komputer disebut alamat ...", a:"ip" },
-      { level:"Sulit", q:"Perangkat lunak berbahaya yang dapat merusak atau mencuri data disebut ...", a:"virus" },
-      { level:"Sulit", q:"Proses mengembalikan data dari cadangan ke kondisi semula disebut ...", a:"restore" },
-      { level:"Sulit", q:"Sistem bilangan yang menggunakan angka 0-9 dan huruf A-F disebut sistem ...", a:"heksadesimal" },
-      { level:"Sulit", q:"Kapasitas penyimpanan yang setara dengan 1024 megabyte disebut satu ...", a:"gigabyte" },
-      { level:"Sulit", q:"Perangkat jaringan yang menghubungkan beberapa komputer dalam satu jaringan lokal disebut ...", a:"switch" }
-    ];
     /* ============ SELESAI BAGIAN SOAL BAWAAN — jangan ubah kode di bawah ini ============ */
 
     // ============================================================================
     // Cache lokal/fallback — bank soal sekolah tetap menjadi sumber utama bila
     // Database Sekolah telah dikonfigurasi.
     // ============================================================================
-    const STORAGE_KEY = "cocVaultArena_customQuestions_v1";
+    const STORAGE_KEY = "cocVaultArena_customQuestions_v14";
     let storageAvailable = true;
 
     function loadQuestions() {
@@ -676,14 +614,10 @@
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved) {
           const parsed = JSON.parse(saved);
-          if (Array.isArray(parsed) && parsed.length === defaultQuestions.length) {
-            return parsed;
-          }
+          if (Array.isArray(parsed)) return parsed;
         }
-      } catch (err) {
-        storageAvailable = false;
-      }
-      return JSON.parse(JSON.stringify(defaultQuestions));
+      } catch (err) { storageAvailable = false; }
+      return [];
     }
 
     function saveQuestions() {
@@ -815,28 +749,26 @@
       });
     }
 
+    let availableClashBanks=[];
+    function clashUnique(v){return [...new Set(v.map(x=>String(x??"").trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"id"));}
+    function clashFill(el,vals,pref,empty="Belum ada data"){if(!el)return"";const a=clashUnique(vals);el.innerHTML="";if(!a.length){const o=document.createElement("option");o.value="";o.textContent=empty;el.appendChild(o);el.disabled=true;return"";}el.disabled=false;a.forEach(v=>{const o=document.createElement("option");o.value=v;o.textContent=v;el.appendChild(o)});const x=pref&&a.includes(pref)?pref:a[0];el.value=x;return x;}
+    async function refreshClashDatabaseFilters(){if(!window.SPENDADB?.cloudConfigured?.())return;try{availableClashBanks=(await SPENDADB.listBanks({game:"clash-of-champions"})).filter(b=>Array.isArray(b.questions)&&b.questions.length);const te=document.getElementById("questionTeacher"),su=document.getElementById("questionSubject"),cl=document.getElementById("questionClass");const prev={t:te.value,s:su.value,c:cl.value};const tv=clashFill(te,availableClashBanks.map(b=>b.teacher),prev.t,"Belum ada guru");const tb=availableClashBanks.filter(b=>SPENDADB.norm(b.teacher)===SPENDADB.norm(tv));const sv=clashFill(su,tb.map(b=>b.subject),prev.s,"Belum ada mapel");const sb=tb.filter(b=>SPENDADB.sameSubject(b.subject,sv));clashFill(cl,sb.map(b=>b.className),prev.c,"Belum ada kelas");}catch(e){console.warn("Filter database Clash:",e);}}
+
     async function startGame() {
       const count = Number(document.getElementById("team-count").value);
       const duration = Math.max(1, Number(document.getElementById("duration").value) || 15);
 
-      if(window.SPENDADB){
-        try{
-          const filters={
-            game:"clash-of-champions",
-            teacher:document.getElementById("questionTeacher")?.value.trim()||"Umum",
-            subject:document.getElementById("questionSubject")?.value.trim()||"",
-            level:document.getElementById("questionLevel")?.value||"",
-            className:document.getElementById("questionClass")?.value.trim()||""
-          };
-          const central=await Promise.race([
-            SPENDADB.getQuestions(filters),
-            new Promise(resolve=>setTimeout(()=>resolve([]),5000))
-          ]);
-          if(central.length){
-            activeQuestions=central.map(q=>({level:q.level||"Sedang",q:q.q||q.question||"",a:q.a||q.answer||""})).filter(q=>q.q&&q.a);
-          }
-        }catch(e){console.warn("Database pusat tidak tersedia; gunakan bank lokal.",e);}
-      }
+      const teacher=document.getElementById("questionTeacher")?.value.trim()||"";
+      const subject=document.getElementById("questionSubject")?.value.trim()||"";
+      const level=document.getElementById("questionLevel")?.value||"";
+      const className=document.getElementById("questionClass")?.value.trim()||"";
+      if(!teacher||!subject||!level||!className){showToast("Pilih Nama Guru, Mata Pelajaran, Jenjang, dan Kelas terlebih dahulu.");return;}
+      if(!window.SPENDADB?.cloudConfigured?.()){showToast("Database Sekolah belum terhubung.");return;}
+      let central=[];
+      try{central=await Promise.race([SPENDADB.getQuestionsStrict({game:"clash-of-champions",teacher,subject,level,className}),new Promise((_,reject)=>setTimeout(()=>reject(new Error("Waktu koneksi habis")),7000))]);}
+      catch(e){showToast("Gagal memuat soal dari Database Sekolah. "+(e.message||""));return;}
+      activeQuestions=central.map(q=>({level:q.level||"Sedang",q:q.q||q.question||"",a:q.a||q.answer||""})).filter(q=>q.q&&q.a);
+      if(!activeQuestions.length){showToast(`Belum ada soal untuk ${teacher} • ${subject} • ${className}. Import soal guru terlebih dahulu.`);return;}
 
       teams = Array.from({ length: count }, (_, index) => ({
         id: index,
@@ -1604,7 +1536,7 @@ function openTeacherGate(action) {
         </p>
         <div class="flex shrink-0 gap-2">
           <button type="button" onclick="saveEditedQuestions()" class="canva-button rounded-lg bg-emerald-400 px-4 py-2 text-xs font-extrabold text-slate-950">💾 Simpan Semua Perubahan</button>
-          <button type="button" onclick="resetToDefaultQuestions()" class="canva-button rounded-lg bg-rose-500 px-4 py-2 text-xs font-extrabold text-white">↩️ Kembalikan ke Soal Bawaan</button>
+          <button type="button" onclick="resetToDefaultQuestions()" class="canva-button rounded-lg bg-rose-500 px-4 py-2 text-xs font-extrabold text-white">↩️ Kosongkan Bank Soal</button>
         </div>
       `;
       content.appendChild(bar);
@@ -1682,11 +1614,11 @@ function openTeacherGate(action) {
     }
 
     function resetToDefaultQuestions() {
-      if (!confirm("Kembalikan seluruh soal ke versi bawaan? Perubahan yang belum disimpan akan hilang.")) return;
-      activeQuestions = JSON.parse(JSON.stringify(defaultQuestions));
-      try { localStorage.removeItem(STORAGE_KEY); } catch (err) { storageAvailable = false; }
+      if (!confirm("Kosongkan bank soal aktif? Semua soal bank ini akan dihapus.")) return;
+      activeQuestions = [];
+      saveQuestions();
       renderTeacherContent();
-      showToast("Dikembalikan ke soal bawaan.");
+      showToast("Bank soal dikosongkan.");
     }
 
 
@@ -1991,6 +1923,11 @@ function openTeacherGate(action) {
     document.addEventListener("MSFullscreenChange", syncFullscreenFromBrowser);
 
     renderTeamInputs();
+    refreshClashDatabaseFilters();
+    document.getElementById("questionTeacher")?.addEventListener("change",refreshClashDatabaseFilters);
+    document.getElementById("questionLevel")?.addEventListener("change",refreshClashDatabaseFilters);
+    document.getElementById("questionClass")?.addEventListener("change",refreshClashDatabaseFilters);
+    document.getElementById("questionSubject")?.addEventListener("change",refreshClashDatabaseFilters);
     lucide.createIcons();
   </script>
  </body>

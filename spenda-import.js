@@ -76,6 +76,15 @@ async function parseWord(file,game){
 }
 async function parseJSON(file){const o=JSON.parse((await file.text()).replace(/^\uFEFF/,""));return Array.isArray(o)?o:(o.questions||o.data||o.soal||o.items||[])}
 async function parse(file,game){const n=file.name.toLowerCase();if(n.endsWith(".docx"))return parseWord(file,game);if(n.endsWith(".xlsx")||n.endsWith(".xls"))return parseExcel(file,game);if(n.endsWith(".csv"))return parseExcel(file,game);if(n.endsWith(".json"))return parseJSON(file);throw new Error("Gunakan .docx, .xlsx/.xls, atau .json")}
-async function importFile(file,game,d={}){const rows=await parse(file);const cv=rows.map(r=>convert(r,game,d)).filter(x=>{const q=x.question;if(game==="benar-salah")return q.statement;if(game==="gesture-battle")return q.q&&q.a.every(Boolean);if(game==="family-100")return q.pertanyaan&&q.jawaban.length;if(game==="clash-of-champions")return q.q&&q.a;return true});if(!cv.length)throw new Error("Kolom soal tidak dikenali atau kosong.");const groups=new Map();cv.forEach(x=>{const m={game,teacher:x.meta.teacher||d.teacher||"Umum",level:x.meta.level||d.level||"",className:x.meta.className||d.className||"",subject:x.meta.subject||d.subject||"",difficulty:x.meta.difficulty||d.difficulty||"Sedang"};const id=SPENDADB.key(m);if(!groups.has(id))groups.set(id,{meta:m,questions:[]});groups.get(id).questions.push(x.question)});const saved=[];for(const g of groups.values())saved.push(await SPENDADB.putBank(g.meta,g.questions,"import"));return{rows:cv.length,banks:saved.length,saved}}
+async function importFile(file,game,d={}){
+  const rows=await parse(file);
+  const base={game,teacher:String(d.teacher||"").trim(),level:String(d.level||"").trim(),className:String(d.className||"").trim(),subject:String(d.subject||"").trim(),difficulty:String(d.difficulty||"Semua").trim()||"Semua"};
+  if(!base.teacher||!base.level||!base.className||!base.subject) throw new Error("Nama Guru, Jenjang, Kelas, dan Mapel wajib diisi.");
+  const cv=rows.map(r=>convert(r,game,base)).filter(x=>{const q=x.question;if(game==="benar-salah")return q.statement;if(game==="gesture-battle")return q.q&&q.a.every(Boolean);if(game==="family-100")return q.pertanyaan&&q.jawaban.length;if(game==="clash-of-champions")return q.q&&q.a;return true});
+  if(!cv.length)throw new Error("Kolom soal tidak dikenali atau kosong.");
+  const questions=cv.map(x=>x.question);
+  const saved=[await SPENDADB.putBank(base,questions,"import")];
+  return{rows:questions.length,banks:1,saved};
+}
 window.SPENDAIMPORT={parse,importFile};
 })();

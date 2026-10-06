@@ -550,11 +550,11 @@
         <h2>🏫 Identitas Permainan</h2>
         <div class="config-grid">
           <label>Nama Sekolah<input id="cfgSchool" type="text" value="SMP Negeri 2 Soyo Jaya"></label>
-          <label>Mata Pelajaran<input id="cfgSubject" type="text" value="Informatika"></label>
-          <label>Kelas<input id="cfgClass" type="text" value="VII / VIII / IX"></label>
-          <label>Nama Guru<input id="cfgTeacher" list="familyTeacherList" type="text" value="Umum"></label><label>Tahun Pelajaran<input id="cfgYear" type="text" value="2026/2027"></label>
+          <label>Mata Pelajaran<select id="cfgSubject"><option value="">Memuat mapel...</option></select></label>
+          <label>Kelas<select id="cfgClass"><option value="">Memuat kelas...</option></select></label>
+          <label>Nama Guru<select id="cfgTeacher"><option value="">Memuat guru...</option></select></label><label>Tahun Pelajaran<input id="cfgYear" type="text" value="2026/2027"></label>
         </div>
-        <datalist id="familyTeacherList"></datalist><div class="config-note">Identitas permainan digunakan untuk memilih bank soal dari Database Sekolah.</div>
+        <div class="config-note">Identitas permainan digunakan untuk memilih bank soal dari Database Sekolah.</div>
       </div>
 
       <div class="panel-card">
@@ -606,7 +606,7 @@
       </div>
       <div class="editsoal-toolbar">
         <button class="ghost-btn" id="btnAddSoal">➕ Tambah Soal Baru</button>
-        <button class="ghost-btn" id="btnResetSoalBawaan">↺ Kembalikan ke Soal Bawaan</button>
+        <button class="ghost-btn" id="btnResetSoalBawaan">🗑️ Kosongkan Bank Soal</button>
         <button class="ghost-btn" id="btnExportSoal">📤 Export Soal (.json)</button>
         <button class="ghost-btn" id="btnImportSoal">📥 Import Soal (.json)</button>
         <input type="file" id="fileImportSoal" accept=".json,application/json" style="display:none;">
@@ -697,202 +697,9 @@
                   - skor  : poin jawaban (total per soal idealnya = 100)
                   - kunci : daftar kata kunci alternatif untuk pengecekan
    ========================================================================= */
-let questionBank = [
-  { kategori:"Perangkat Keras Komputer",
-    pertanyaan:"Sebutkan contoh perangkat keras (hardware) komputer!",
-    jawaban:[
-      {teks:"Monitor", skor:25, kunci:["monitor","layar"]},
-      {teks:"Keyboard", skor:20, kunci:["keyboard","papan ketik"]},
-      {teks:"Mouse", skor:15, kunci:["mouse","tetikus"]},
-      {teks:"CPU / Processor", skor:15, kunci:["cpu","processor","prosesor"]},
-      {teks:"Printer", skor:10, kunci:["printer","pencetak"]},
-      {teks:"Speaker", skor:10, kunci:["speaker","pengeras suara"]},
-      {teks:"Harddisk", skor:5, kunci:["harddisk","hard disk","hdd"]},
-    ]},
-  { kategori:"Perangkat Input",
-    pertanyaan:"Sebutkan perangkat input (masukan) pada komputer!",
-    jawaban:[
-      {teks:"Keyboard", skor:30, kunci:["keyboard","papan ketik"]},
-      {teks:"Mouse", skor:25, kunci:["mouse","tetikus"]},
-      {teks:"Scanner", skor:15, kunci:["scanner","pemindai"]},
-      {teks:"Microphone", skor:10, kunci:["microphone","mikrofon","mic"]},
-      {teks:"Webcam", skor:10, kunci:["webcam","kamera"]},
-      {teks:"Joystick", skor:5, kunci:["joystick","stik game"]},
-      {teks:"Touchpad", skor:5, kunci:["touchpad","panel sentuh"]},
-    ]},
-  { kategori:"Perangkat Output",
-    pertanyaan:"Sebutkan perangkat output (keluaran) pada komputer!",
-    jawaban:[
-      {teks:"Monitor", skor:35, kunci:["monitor","layar"]},
-      {teks:"Printer", skor:25, kunci:["printer","pencetak"]},
-      {teks:"Speaker", skor:20, kunci:["speaker","pengeras suara"]},
-      {teks:"Proyektor", skor:10, kunci:["proyektor","projector"]},
-      {teks:"Headphone", skor:5, kunci:["headphone","earphone"]},
-      {teks:"Plotter", skor:5, kunci:["plotter"]},
-    ]},
-  { kategori:"Perangkat Storage",
-    pertanyaan:"Sebutkan perangkat penyimpanan (storage) pada komputer!",
-    jawaban:[
-      {teks:"Harddisk", skor:30, kunci:["harddisk","hard disk","hdd"]},
-      {teks:"Flashdisk", skor:25, kunci:["flashdisk","flash disk","usb"]},
-      {teks:"SSD", skor:15, kunci:["ssd","solid state drive"]},
-      {teks:"CD / DVD", skor:10, kunci:["cd","dvd","compact disc"]},
-      {teks:"Memory Card", skor:10, kunci:["memory card","kartu memori","microsd","sd card"]},
-      {teks:"Cloud Storage", skor:10, kunci:["cloud storage","cloud","penyimpanan awan","google drive"]},
-    ]},
-  { kategori:"Perangkat Processing",
-    pertanyaan:"Sebutkan komponen perangkat pemroses (processing) pada komputer!",
-    jawaban:[
-      {teks:"Processor / CPU", skor:35, kunci:["processor","cpu","prosesor"]},
-      {teks:"RAM", skor:30, kunci:["ram","memori"]},
-      {teks:"Motherboard", skor:15, kunci:["motherboard","mainboard","papan induk"]},
-      {teks:"VGA Card", skor:10, kunci:["vga","kartu grafis","graphics card","gpu"]},
-      {teks:"Power Supply", skor:10, kunci:["power supply","psu","catu daya"]},
-    ]},
-  { kategori:"Perangkat Lunak",
-    pertanyaan:"Sebutkan contoh perangkat lunak (software) komputer!",
-    jawaban:[
-      {teks:"Sistem Operasi", skor:30, kunci:["sistem operasi","os","operating system"]},
-      {teks:"Aplikasi Office (Word/Excel)", skor:20, kunci:["office","word","excel","ms office"]},
-      {teks:"Browser", skor:20, kunci:["browser","peramban"]},
-      {teks:"Antivirus", skor:15, kunci:["antivirus","anti virus"]},
-      {teks:"Aplikasi Games", skor:10, kunci:["games","game","permainan"]},
-      {teks:"Media Player", skor:5, kunci:["media player","pemutar media"]},
-    ]},
-  { kategori:"Aplikasi Media Sosial",
-    pertanyaan:"Sebutkan contoh aplikasi media sosial yang kamu ketahui!",
-    jawaban:[
-      {teks:"WhatsApp", skor:25, kunci:["whatsapp","wa"]},
-      {teks:"Instagram", skor:20, kunci:["instagram","ig"]},
-      {teks:"TikTok", skor:20, kunci:["tiktok","tik tok"]},
-      {teks:"Facebook", skor:15, kunci:["facebook","fb"]},
-      {teks:"YouTube", skor:10, kunci:["youtube","yt"]},
-      {teks:"Twitter / X", skor:5, kunci:["twitter","x"]},
-      {teks:"Telegram", skor:5, kunci:["telegram"]},
-    ]},
-  { kategori:"Sistem Operasi Komputer",
-    pertanyaan:"Sebutkan contoh sistem operasi komputer!",
-    jawaban:[
-      {teks:"Windows", skor:35, kunci:["windows"]},
-      {teks:"Linux", skor:25, kunci:["linux"]},
-      {teks:"MacOS", skor:20, kunci:["macos","mac os","apple mac"]},
-      {teks:"Chrome OS", skor:10, kunci:["chrome os","chromeos"]},
-      {teks:"Ubuntu", skor:10, kunci:["ubuntu"]},
-    ]},
-  { kategori:"Sistem Operasi HP",
-    pertanyaan:"Sebutkan contoh sistem operasi pada HP (smartphone)!",
-    jawaban:[
-      {teks:"Android", skor:45, kunci:["android"]},
-      {teks:"iOS", skor:35, kunci:["ios","iphone os"]},
-      {teks:"HarmonyOS", skor:10, kunci:["harmonyos","harmony os"]},
-      {teks:"Symbian", skor:5, kunci:["symbian"]},
-      {teks:"KaiOS", skor:5, kunci:["kaios","kai os"]},
-    ]},
-  { kategori:"Perangkat Keras - Keyboard",
-    pertanyaan:"Sebutkan bagian-bagian dari keyboard yang kamu ketahui!",
-    jawaban:[
-      {teks:"Tombol Huruf", skor:25, kunci:["tombol huruf","huruf"]},
-      {teks:"Tombol Angka", skor:20, kunci:["tombol angka","angka"]},
-      {teks:"Tombol Enter", skor:15, kunci:["enter"]},
-      {teks:"Tombol Spasi", skor:15, kunci:["spasi","space"]},
-      {teks:"Tombol Shift", skor:10, kunci:["shift"]},
-      {teks:"Tombol Ctrl", skor:10, kunci:["ctrl","control"]},
-      {teks:"Tombol Fungsi (F1-F12)", skor:5, kunci:["fungsi","f1","f12","function"]},
-    ]},
-  { kategori:"Perangkat Keras - Mouse",
-    pertanyaan:"Sebutkan jenis-jenis mouse komputer!",
-    jawaban:[
-      {teks:"Mouse Optik", skor:30, kunci:["optik","optic"]},
-      {teks:"Mouse Wireless", skor:25, kunci:["wireless","nirkabel"]},
-      {teks:"Mouse Mekanik / Bola", skor:20, kunci:["mekanik","bola","ball"]},
-      {teks:"Mouse Gaming", skor:15, kunci:["gaming"]},
-      {teks:"Trackball", skor:10, kunci:["trackball"]},
-    ]},
-  { kategori:"Perangkat Keras",
-    pertanyaan:"Sebutkan merk laptop / komputer yang kamu ketahui!",
-    jawaban:[
-      {teks:"Asus", skor:25, kunci:["asus"]},
-      {teks:"Lenovo", skor:20, kunci:["lenovo"]},
-      {teks:"HP", skor:20, kunci:["hp","hewlett packard"]},
-      {teks:"Acer", skor:15, kunci:["acer"]},
-      {teks:"Dell", skor:10, kunci:["dell"]},
-      {teks:"Apple / MacBook", skor:10, kunci:["apple","macbook"]},
-    ]},
-  { kategori:"Perangkat Processing",
-    pertanyaan:"Sebutkan bagian dalam unit sistem (CPU/casing) komputer!",
-    jawaban:[
-      {teks:"Processor", skor:30, kunci:["processor","prosesor","cpu"]},
-      {teks:"RAM", skor:25, kunci:["ram","memori"]},
-      {teks:"Motherboard", skor:20, kunci:["motherboard","mainboard"]},
-      {teks:"Harddisk", skor:15, kunci:["harddisk","hard disk"]},
-      {teks:"Power Supply", skor:10, kunci:["power supply","psu"]},
-    ]},
-  { kategori:"Perangkat Output - Printer",
-    pertanyaan:"Sebutkan jenis-jenis printer yang kamu ketahui!",
-    jawaban:[
-      {teks:"Printer Inkjet", skor:35, kunci:["inkjet"]},
-      {teks:"Printer Laser", skor:30, kunci:["laser"]},
-      {teks:"Printer Dot Matrix", skor:20, kunci:["dot matrix"]},
-      {teks:"Printer 3D", skor:15, kunci:["3d","tiga dimensi"]},
-    ]},
-  { kategori:"Perangkat Storage",
-    pertanyaan:"Sebutkan satuan kapasitas penyimpanan data yang kamu ketahui!",
-    jawaban:[
-      {teks:"Byte", skor:10, kunci:["byte"]},
-      {teks:"Kilobyte (KB)", skor:20, kunci:["kilobyte","kb"]},
-      {teks:"Megabyte (MB)", skor:25, kunci:["megabyte","mb"]},
-      {teks:"Gigabyte (GB)", skor:30, kunci:["gigabyte","gb"]},
-      {teks:"Terabyte (TB)", skor:15, kunci:["terabyte","tb"]},
-    ]},
-  { kategori:"Perangkat Lunak - Office",
-    pertanyaan:"Sebutkan aplikasi office / perkantoran yang sering digunakan!",
-    jawaban:[
-      {teks:"Microsoft Word", skor:30, kunci:["word","microsoft word"]},
-      {teks:"Microsoft Excel", skor:25, kunci:["excel","microsoft excel"]},
-      {teks:"Microsoft PowerPoint", skor:20, kunci:["powerpoint","ppt"]},
-      {teks:"Google Docs", skor:15, kunci:["google docs","gdocs"]},
-      {teks:"Google Sheets", skor:10, kunci:["google sheets","gsheet"]},
-    ]},
-  { kategori:"Perangkat Lunak - Browser",
-    pertanyaan:"Sebutkan aplikasi browser (peramban internet) yang kamu ketahui!",
-    jawaban:[
-      {teks:"Google Chrome", skor:40, kunci:["chrome","google chrome"]},
-      {teks:"Mozilla Firefox", skor:20, kunci:["firefox","mozilla"]},
-      {teks:"Microsoft Edge", skor:20, kunci:["edge","microsoft edge"]},
-      {teks:"Safari", skor:10, kunci:["safari"]},
-      {teks:"Opera", skor:10, kunci:["opera"]},
-    ]},
-  { kategori:"Aplikasi Streaming",
-    pertanyaan:"Sebutkan aplikasi untuk menonton video / streaming!",
-    jawaban:[
-      {teks:"YouTube", skor:35, kunci:["youtube","yt"]},
-      {teks:"Netflix", skor:25, kunci:["netflix"]},
-      {teks:"TikTok", skor:20, kunci:["tiktok","tik tok"]},
-      {teks:"Disney+ / Viu", skor:10, kunci:["disney","viu"]},
-      {teks:"Vidio", skor:10, kunci:["vidio"]},
-    ]},
-  { kategori:"Perangkat Output - Monitor",
-    pertanyaan:"Sebutkan jenis-jenis layar (monitor) yang kamu ketahui!",
-    jawaban:[
-      {teks:"LCD", skor:35, kunci:["lcd"]},
-      {teks:"LED", skor:30, kunci:["led"]},
-      {teks:"OLED", skor:20, kunci:["oled"]},
-      {teks:"Plasma", skor:10, kunci:["plasma"]},
-      {teks:"CRT (Tabung)", skor:5, kunci:["crt","tabung"]},
-    ]},
-  { kategori:"Aplikasi Komunikasi",
-    pertanyaan:"Sebutkan contoh aplikasi chatting / komunikasi yang kamu ketahui!",
-    jawaban:[
-      {teks:"WhatsApp", skor:30, kunci:["whatsapp","wa"]},
-      {teks:"Telegram", skor:20, kunci:["telegram"]},
-      {teks:"Line", skor:15, kunci:["line"]},
-      {teks:"Messenger", skor:15, kunci:["messenger","fb messenger"]},
-      {teks:"Zoom", skor:10, kunci:["zoom"]},
-      {teks:"Google Meet", skor:10, kunci:["google meet","gmeet"]},
-    ]},
-];
-/* Salinan asli disimpan untuk tombol "Kembalikan ke Soal Bawaan" */
-const ORIGINAL_QUESTION_BANK = JSON.parse(JSON.stringify(questionBank));
+let questionBank = [];
+
+const ORIGINAL_QUESTION_BANK = [];
 
 /* =========================================================================
    DATABASE BANK SOAL SEKOLAH
@@ -901,7 +708,7 @@ const ORIGINAL_QUESTION_BANK = JSON.parse(JSON.stringify(questionBank));
    Penyimpanan lokal tetap dipakai sebagai cadangan agar fitur lama tidak
    terganggu ketika koneksi database sementara tidak tersedia.
    ========================================================================= */
-const QBANK_STORAGE_KEY = "kuisFamily100_questionBank_v1";
+const QBANK_STORAGE_KEY = "kuisFamily100_questionBank_v14";
 
 function saveQuestionBankToStorage(){
   try{
@@ -921,20 +728,7 @@ function saveQuestionBankToStorage(){
     SPENDADB.putBank(m,questionBank,"manual").catch(()=>{});
   }
 }
-function loadQuestionBankFromStorage(){
-  try{
-    const raw = localStorage.getItem(QBANK_STORAGE_KEY);
-    if(raw){
-      const parsed = JSON.parse(raw);
-      if(Array.isArray(parsed) && parsed.length){
-        questionBank = parsed;
-      }
-    }
-  }catch(e){
-    console.warn("Gagal memuat bank soal tersimpan, memakai bank soal bawaan:", e);
-  }
-}
-loadQuestionBankFromStorage(); // muat bank soal tersimpan (jika ada) saat aplikasi dibuka
+function loadQuestionBankFromStorage(){ questionBank=[]; }
 
 /* Warna kotak jawaban berselang-seling (pelangi) */
 const answerColors = ["#ff4d5e","#ff9f43","#ffd93d","#2ecc71","#17c3b2","#3a86ff","#a366ff","#ff5da2"];
@@ -958,9 +752,9 @@ let audioCtx = null;
 const SPENDA_CONFIG_KEY = "spendaFamily100_config_v1";
 const SPENDA_DEFAULT_CONFIG = {
   school:"SMP Negeri 2 Soyo Jaya",
-  subject:"Informatika",
-  className:"VII / VIII / IX",
-  teacher:"Umum",
+  subject:"",
+  className:"",
+  teacher:"",
   year:"2026/2027"
 };
 let spendaConfig = {...SPENDA_DEFAULT_CONFIG};
@@ -1072,11 +866,8 @@ function showScreen(id){
   document.getElementById(id).classList.add("active");
 }
 
-document.getElementById("btnMulai").addEventListener("click", ()=>{
-  ensureAudio();
-  renderSurveyList();
-  renderTeamInputs();
-  showScreen("screen-setup");
+document.getElementById("btnMulai").addEventListener("click", async ()=>{
+  ensureAudio();showScreen("screen-setup");renderTeamInputs();await refreshFamilyDatabaseFilters();
 });
 
 /* =========================================================================
@@ -1192,68 +983,31 @@ document.getElementById("btnRandomPick").addEventListener("click", ()=>{
 });
 
 
-async function loadCentralFamilyQuestions(timeoutMs=5000){
-  if(!window.SPENDADB)return [];
-  const teacher=document.getElementById("cfgTeacher")?.value.trim()||"Umum";
-  const subject=document.getElementById("cfgSubject")?.value.trim()||"";
-  const className=document.getElementById("cfgClass")?.value.trim()||"";
-  try{
-    return await Promise.race([
-      SPENDADB.getQuestions({game:"family-100",teacher,subject,className}),
-      new Promise(resolve=>setTimeout(()=>resolve([]),timeoutMs))
-    ]);
-  }catch(e){
-    console.warn("Database pusat tidak tersedia; gunakan bank lokal.",e);
-    return [];
-  }
-}
+let availableFamilyBanks=[];
+function famUnique(v){return [...new Set(v.map(x=>String(x??"").trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"id"));}
+function famFill(el,vals,pref,empty="Belum ada data"){if(!el)return"";const a=famUnique(vals);el.innerHTML="";if(!a.length){const o=document.createElement("option");o.value="";o.textContent=empty;el.appendChild(o);el.disabled=true;return"";}el.disabled=false;a.forEach(v=>{const o=document.createElement("option");o.value=v;o.textContent=v;el.appendChild(o)});const x=pref&&a.includes(pref)?pref:a[0];el.value=x;return x;}
+async function refreshFamilyDatabaseFilters(){if(!window.SPENDADB?.cloudConfigured?.())return;try{availableFamilyBanks=(await SPENDADB.listBanks({game:"family-100"})).filter(b=>Array.isArray(b.questions)&&b.questions.length);const teacher=document.getElementById("cfgTeacher"),subject=document.getElementById("cfgSubject"),klass=document.getElementById("cfgClass");const prev={t:spendaConfig.teacher,s:spendaConfig.subject,k:spendaConfig.className};const tv=famFill(teacher,availableFamilyBanks.map(b=>b.teacher),prev.t,"Belum ada guru");const tb=availableFamilyBanks.filter(b=>SPENDADB.norm(b.teacher)===SPENDADB.norm(tv));const sv=famFill(subject,tb.map(b=>b.subject),prev.s,"Belum ada mapel");const sb=tb.filter(b=>SPENDADB.sameSubject(b.subject,sv));const kv=famFill(klass,sb.map(b=>b.className),prev.k,"Belum ada kelas");const kb=sb.filter(b=>SPENDADB.classMatch(b.className,kv));questionBank=[];spendaConfig.teacher=tv;spendaConfig.subject=sv;spendaConfig.className=kv;applySpendaConfig();await loadCentralFamilyQuestions();renderSurveyList();}catch(e){console.warn("Filter database Family 100:",e);}}
+async function loadCentralFamilyQuestions(timeoutMs=7000){if(!window.SPENDADB?.cloudConfigured?.())return[];const teacher=document.getElementById("cfgTeacher")?.value.trim()||"",subject=document.getElementById("cfgSubject")?.value.trim()||"",className=document.getElementById("cfgClass")?.value.trim()||"";if(!teacher||!subject||!className)return[];try{return await Promise.race([SPENDADB.getQuestionsStrict({game:"family-100",teacher,subject,level:"SMP",className}),new Promise((_,reject)=>setTimeout(()=>reject(new Error("Database timeout")),timeoutMs))]);}catch(e){console.warn("Gagal memuat bank Family 100:",e);return[];}}
+
+document.getElementById("cfgTeacher")?.addEventListener("change",refreshFamilyDatabaseFilters);
+document.getElementById("cfgSubject")?.addEventListener("change",refreshFamilyDatabaseFilters);
+document.getElementById("cfgClass")?.addEventListener("change",refreshFamilyDatabaseFilters);
 
 document.getElementById("btnStartGame").addEventListener("click", async ()=>{
   syncSpendaConfig();
-  const centralPromise=loadCentralFamilyQuestions(5000).catch(e=>{console.warn("Database pusat tidak tersedia; gunakan bank lokal.",e);return [];});
-  const count = parseInt(document.getElementById("teamCountSelect").value,10) || 2;
-  activeTeams = TEAM_LETTERS_ALL.slice(0, count);
-
-  teamNames = {};
-  scores = {};
-  lives = {};
-  earnedThisQuestion = {};
-  activeTeams.forEach(letter=>{
-    const val = document.getElementById("inputTeam"+letter).value.trim();
-    teamNames[letter] = val || `Tim ${letter}`;
-    scores[letter] = 0;
-    lives[letter] = 3;
-    earnedThisQuestion[letter] = 0;
-  });
-
+  const teacher=spendaConfig.teacher,subject=spendaConfig.subject,className=spendaConfig.className;
+  if(!teacher||!subject||!className){alert("Pilih Nama Guru, Mata Pelajaran, dan Kelas terlebih dahulu.");return;}
+  if(!window.SPENDADB?.cloudConfigured?.()){alert("Database Sekolah belum terhubung.");return;}
+  let central=[];try{central=await loadCentralFamilyQuestions(7000);}catch(e){alert("Gagal memuat soal dari Database Sekolah. "+(e.message||""));return;}
+  questionBank=Array.isArray(central)?central:[];
+  if(!questionBank.length){alert(`Belum ada soal untuk ${teacher} • ${subject} • ${className}. Import soal guru terlebih dahulu.`);return;}
+  renderSurveyList();
+  const count=parseInt(document.getElementById("teamCountSelect").value,10)||2;activeTeams=TEAM_LETTERS_ALL.slice(0,count);teamNames={};scores={};lives={};earnedThisQuestion={};
+  activeTeams.forEach(letter=>{const val=document.getElementById("inputTeam"+letter).value.trim();teamNames[letter]=val||`Tim ${letter}`;scores[letter]=0;lives[letter]=3;earnedThisQuestion[letter]=0;});
   buildTeamPanels();
-
-  playOrder = Array.from(document.querySelectorAll(".survey-chk:checked")).map(c=>parseInt(c.dataset.idx,10));
-  if(playOrder.length === 0){
-    alert("Pilih minimal satu survei/babak terlebih dahulu.");
-    return;
-  }
-
-  currentIndex = 0;
-  activeTeam = null;
-  document.getElementById("turnIndicator").textContent = "Tim yang Menjawab: -";
-  document.getElementById("schoolInfoTag").textContent = `${spendaConfig.school} • ${spendaConfig.subject} • ${spendaConfig.className}`;
-  activeTeams.forEach(t=> document.getElementById(`scoreCard${t}`).classList.remove("active-team"));
-  loadQuestion(currentIndex);
-  updateScoreboard();
-  showScreen("screen-game");
-  document.getElementById("answerInput").focus();
-  const startToken=Date.now()+Math.random();
-  window.__familyStartToken=startToken;
-  centralPromise.then(centralQuestions=>{
-    if(!centralQuestions.length || window.__familyStartToken!==startToken)return;
-    questionBank=centralQuestions;
-    renderSurveyList();
-    if(typeof playOrder!=="undefined" && playOrder.length){
-      const keep=playOrder.map(i=>questionBank[i]).filter(Boolean);
-      if(keep.length) { playOrder=questionBank.map((_,i)=>i); loadQuestion(currentIndex); }
-    }
-  }).catch(()=>{});
+  playOrder=Array.from(document.querySelectorAll(".survey-chk:checked")).map(c=>parseInt(c.dataset.idx,10));
+  if(!playOrder.length){alert("Pilih minimal satu survei/babak terlebih dahulu.");return;}
+  currentIndex=0;activeTeam=null;document.getElementById("turnIndicator").textContent="Tim yang Menjawab: -";document.getElementById("schoolInfoTag").textContent=`${spendaConfig.school} • ${spendaConfig.teacher} • ${spendaConfig.subject} • ${spendaConfig.className}`;activeTeams.forEach(t=>document.getElementById(`scoreCard${t}`).classList.remove("active-team"));loadQuestion(currentIndex);updateScoreboard();showScreen("screen-game");document.getElementById("answerInput").focus();
 });
 
 document.getElementById("btnPlayAgain").addEventListener("click", ()=>{
@@ -1558,14 +1312,14 @@ function launchConfetti(count){
    kategori, pertanyaan, teks jawaban, skor, dan kata kunci -- semua lewat
    form, tanpa perlu menyunting kode.
    ========================================================================= */
-document.getElementById("btnEditSoal").addEventListener("click", ()=>{
+document.getElementById("btnEditSoal").addEventListener("click", async ()=>{
   const kode = prompt("🔐 Masukkan Kode Guru untuk membuka Bank Soal:");
-  if(kode !== "SPENDA2026"){
-    if(kode !== null) alert("Kode Guru salah.");
-    return;
-  }
-  renderEditSoal();
-  showScreen("screen-editsoal");
+  if(kode !== "SPENDA2026"){if(kode !== null) alert("Kode Guru salah.");return;}
+  syncSpendaConfig();
+  const central=await loadCentralFamilyQuestions(7000);
+  questionBank=Array.isArray(central)?central:[];
+  if(!questionBank.length){alert("Bank soal untuk guru/mapel/kelas ini belum ada di Database Sekolah.");return;}
+  renderEditSoal();showScreen("screen-editsoal");
 });
 document.getElementById("btnCancelEditSoal").addEventListener("click", ()=>{
   if(confirm("Batalkan perubahan yang belum disimpan?")){
@@ -1581,7 +1335,7 @@ document.getElementById("btnAddSoal").addEventListener("click", ()=>{
 });
 document.getElementById("btnResetSoalBawaan").addEventListener("click", ()=>{
   if(confirm("Kembalikan seluruh bank soal ke versi bawaan? Semua perubahan akan hilang.")){
-    questionBank = JSON.parse(JSON.stringify(ORIGINAL_QUESTION_BANK));
+    questionBank = [];
     saveQuestionBankToStorage();
     renderEditSoal();
   }

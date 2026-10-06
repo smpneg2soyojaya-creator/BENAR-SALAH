@@ -12,7 +12,7 @@
   // Isi API_URL setelah Google Apps Script Web App selesai dideploy.
   window.SPENDA_CONFIG = Object.assign({
     SCHOOL_ID: "SMPN2SOYOJAYA",
-    API_URL: "https://script.google.com/macros/s/AKfycbwq2IZhFveyZpfq9Y8CICR4JpgfJM3Fr3ShK1KaBa0HrFyzllN2Wu1EV03KtmWCDGwg7w/exec",
+    API_URL: "https://script.google.com/macros/s/AKfycbyOqiv4tHBNRslooEkwxTAKGcX2x9B1vKZ_Z12guu8OhrzWZJhd2WXUUTqborxj8DWJDA/exec",
     API_TOKEN: "SPENDA2026",
     REQUEST_TIMEOUT_MS: 7000
   }, window.SPENDA_CONFIG || {});

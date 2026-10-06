@@ -603,7 +603,7 @@ button{cursor:pointer}
         <div class="grid">
           <div class="field"><label>Jenjang</label><select id="level"></select></div>
           <div class="field"><label>Kelas</label><select id="klass"></select></div>
-          <div class="field"><label>Nama Guru</label><input id="teacher" list="teacherList" value="Umum" placeholder="Nama guru"></div>
+          <div class="field"><label>Nama Guru</label><select id="teacher"><option value="">Memuat guru...</option></select></div>
           <div class="field"><label>Mapel</label><select id="subject"></select></div>
           <div class="field"><label>Tingkat kesulitan</label><select id="difficulty"><option>Mudah</option><option selected>Sedang</option><option>Sulit</option></select></div>
           <div class="field"><label>Jumlah soal (maks. 30)</label><input id="count" type="number" min="1" max="30" value="20"></div>
@@ -616,7 +616,7 @@ button{cursor:pointer}
       </div>
 
       <div class="home-bottom"><button class="btn" id="editorBtn">Edit soal</button><a class="btn" href="bank-soal.html?game=benar-salah" style="text-decoration:none">Database / Import Word &amp; Excel</a><button class="btn" id="cameraInfoBtn">Kamera sebagai latar</button></div>
-      <div class="home-bottom"><button class="link" id="importBtn">Impor soal (.json)</button><button class="link" id="exportBtn">Ekspor soal (.json)</button><datalist id="teacherList"></datalist><input id="file" type="file" accept=".json,application/json,text/json" aria-label="Pilih file JSON" style="position:fixed;left:-9999px;width:2px;height:2px;opacity:0"></div>
+      <div class="home-bottom"><button class="link" id="importBtn">Impor soal (.json)</button><button class="link" id="exportBtn">Ekspor soal (.json)</button><input id="file" type="file" accept=".json,application/json,text/json" aria-label="Pilih file JSON" style="position:fixed;left:-9999px;width:2px;height:2px;opacity:0"></div>
     </div>
   </div>
 </section>
@@ -625,7 +625,7 @@ button{cursor:pointer}
   <div class="editor-bar">
     <div class="editor-head"><button class="back" id="backHome">← Kembali</button><div><div class="editor-title">Edit soal BENAR / SALAH</div><div class="editor-title"><small id="editorSubtitle"></small></div></div></div>
     <div class="editor-actions">
-      <button class="btn primary" id="addQ">Tambah soal</button><button class="btn" id="jsonBtn">Impor JSON</button><button class="btn" id="exportEditorBtn">Ekspor JSON</button><button class="btn" id="restoreBtn" style="color:#ff8296;border-color:#7a3748">Kembalikan soal awal</button><button class="topbtn icon" id="editFs">⛶</button>
+      <button class="btn primary" id="addQ">Tambah soal</button><button class="btn" id="jsonBtn">Impor JSON</button><button class="btn" id="exportEditorBtn">Ekspor JSON</button><button class="btn" id="restoreBtn" style="color:#ff8296;border-color:#7a3748">Kosongkan bank soal</button><button class="topbtn icon" id="editFs">⛶</button>
     </div>
   </div>
   <div class="editor-body">
@@ -705,28 +705,7 @@ const SUBJECTS={
  SMP:["Bahasa Indonesia","Matematika","IPA","IPS","PPKn","Pendidikan Agama","PJOK","Bahasa Inggris","Informatika"],
  SMA:["Bahasa Indonesia","Matematika","Biologi","Fisika","Kimia","Ekonomi","Geografi","Sejarah","PPKn","Bahasa Inggris","Informatika"]
 };
-const BANK_SEEDS={
- "SD|Kelas 1|Bahasa Indonesia|Sedang":[
-  ["Huruf pertama pada nama orang ditulis dengan huruf kapital.","BENAR"],
-  ["Kalimat tanya biasanya diakhiri tanda seru.","SALAH"],
-  ["Antonim adalah kata yang mempunyai arti berlawanan.","BENAR"],
-  ["Judul tidak perlu sesuai dengan isi bacaan.","SALAH"],
-  ["Tanda titik dapat digunakan untuk mengakhiri kalimat berita.","BENAR"],
-  ["Kata 'makan' termasuk kata kerja.","BENAR"]
- ],
- "SD|Kelas 1|Matematika|Sedang":[
-  ["5 + 3 = 8.","BENAR"],["10 - 4 = 7.","SALAH"],["Bilangan setelah 19 adalah 20.","BENAR"],["1 lusin sama dengan 10.","SALAH"],["2 + 7 = 9.","BENAR"],["6 lebih besar daripada 9.","SALAH"]
- ],
- "SMP|Kelas 7|Matematika|Sedang":[
-  ["125 ÷ 5 = 25.","BENAR"],["3 × 8 + 4 = 36.","SALAH"],["50% sama dengan 1/2.","BENAR"],["√81 = 8.","SALAH"],["Luas persegi sisi 6 cm adalah 36 cm².","BENAR"],["Bilangan prima terkecil adalah 1.","SALAH"]
- ],
- "SMP|Kelas 7|IPA|Sedang":[
-  ["Organ utama pernapasan manusia adalah paru-paru.","BENAR"],["Air membeku pada suhu 100°C.","SALAH"],["Mars dikenal sebagai Planet Merah.","BENAR"],["Daun merupakan tempat utama fotosintesis.","BENAR"],["Satuan SI untuk massa adalah meter.","SALAH"],["Matahari merupakan sumber energi utama bagi bumi.","BENAR"]
- ],
- "SMP|Kelas 7|Bahasa Indonesia|Sedang":[
-  ["Latar cerita meliputi tempat, waktu, dan suasana.","BENAR"],["Ide pokok biasanya berupa kalimat penjelas.","SALAH"],["Kalimat efektif seharusnya ringkas dan jelas.","BENAR"],["Teks prosedur berisi langkah-langkah melakukan sesuatu.","BENAR"],["Sinonim kata indah adalah buruk.","SALAH"],["Kalimat langsung menggunakan tanda petik.","BENAR"]
- ]
-};
+const BANK_SEEDS = {};
 
 const state={
  level:"SD",klass:"Kelas 1",subject:"Bahasa Indonesia",difficulty:"Sedang",teacher:"Umum",startToken:0,
@@ -737,7 +716,7 @@ const state={
 };
 
 const $=id=>document.getElementById(id);
-const key=()=>[state.level,state.klass,state.subject,state.difficulty].join("|");
+const key=()=>[state.level,state.klass,state.teacher,state.subject,state.difficulty].join("|");
 
 function normalizeQ(q){
   const statement=String(
@@ -764,18 +743,7 @@ function normalizeQ(q){
   return {statement,answer};
 }
 
-function seedForKey(){
-  const arr=BANK_SEEDS[key()] || [
-    [`Pernyataan untuk materi ${state.subject}.`,"BENAR"]
-  ];
-  const source=Array.isArray(arr)&&arr.length?arr:[[`Pernyataan baru.`,"BENAR"]];
-  const result=[];
-  for(let i=0;i<25;i++){
-    const row=source[i%source.length];
-    result.push({statement:String(row[0]),answer:String(row[1]).toUpperCase()==="SALAH"?"SALAH":"BENAR"});
-  }
-  return result;
-}
+function seedForKey(){ return []; }
 const escapeHtml=s=>String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 const escapeAttr=s=>escapeHtml(s).replace(/\n/g,"&#10;");
 const clone=o=>JSON.parse(JSON.stringify(o));
@@ -786,7 +754,7 @@ let QUESTION_DB_READY = false;
 let QUESTION_DB_PROMISE = null;
 const FALLBACK_KEY = "true_false_banks_v14";
 
-const DB_NAME = "KuisInteraktifDB";
+const DB_NAME = "KuisInteraktifDB_V14";
 const DB_VERSION = 1;
 const STORE_NAME = "banks";
 
@@ -846,62 +814,14 @@ function dbWrite(id,questions){
 async function initQuestionDatabase(){
   if(QUESTION_DB_PROMISE)return QUESTION_DB_PROMISE;
   QUESTION_DB_PROMISE=(async()=>{
-    try{
-      QUESTION_DB=await openQuestionDB();
-      const records=await dbReadAll();
-
-      if(records.length){
-        QUESTION_BANKS={};
-        records.forEach(r=>{
-          if(r?.id&&Array.isArray(r.questions))QUESTION_BANKS[r.id]=r.questions.map(normalizeQ);
-        });
-      }else{
-        const seedLocal=localBanks();
-        const legacy=legacyBanks();
-        QUESTION_BANKS=Object.keys(seedLocal).length?seedLocal:legacy;
-        Object.entries(QUESTION_BANKS).forEach(([id,qs])=>{
-          if(Array.isArray(qs))dbWrite(id,qs);
-        });
-      }
-      QUESTION_DB_READY=true;
-    }catch(e){
-      console.warn("IndexedDB tidak tersedia, gunakan localStorage:",e);
-      QUESTION_DB_READY=false;
-      const fb=localBanks();
-      const legacy=legacyBanks();
-      QUESTION_BANKS=Object.keys(fb).length?fb:legacy;
-    }
-
-    // starter banks
-    for(const id of Object.keys(BANK_SEEDS)){
-      if(!Array.isArray(QUESTION_BANKS[id])||!QUESTION_BANKS[id].length){
-        const old={level:state.level,klass:state.klass,subject:state.subject,difficulty:state.difficulty};
-        const [level,klass,subject,difficulty]=id.split("|");
-        state.level=level;state.klass=klass;state.subject=subject;state.difficulty=difficulty;
-        QUESTION_BANKS[id]=seedForKey();
-        dbWrite(id,QUESTION_BANKS[id]);
-        Object.assign(state,old);
-      }
-    }
-
-    if(!Array.isArray(QUESTION_BANKS[key()])||!QUESTION_BANKS[key()].length){
-      const qs=seedForKey();
-      QUESTION_BANKS[key()]=qs;
-      dbWrite(key(),qs);
-    }
+    try{QUESTION_DB=await openQuestionDB();const records=await dbReadAll();QUESTION_BANKS={};if(records.length){records.forEach(r=>{if(r?.id&&Array.isArray(r.questions))QUESTION_BANKS[r.id]=r.questions.map(normalizeQ);});}else{QUESTION_BANKS=localBanks();}QUESTION_DB_READY=true;}
+    catch(e){console.warn("IndexedDB tidak tersedia, gunakan localStorage:",e);QUESTION_DB_READY=false;QUESTION_BANKS=localBanks();}
     return true;
   })();
   return QUESTION_DB_PROMISE;
 }
 
-function getBank(){
-  const k=key();
-  if(!Array.isArray(QUESTION_BANKS[k])||!QUESTION_BANKS[k].length){
-    QUESTION_BANKS[k]=seedForKey();
-    dbWrite(k,QUESTION_BANKS[k]);
-  }
-  return QUESTION_BANKS[k].map(normalizeQ);
-}
+function getBank(){const k=key();return Array.isArray(QUESTION_BANKS[k])?QUESTION_BANKS[k].map(normalizeQ):[];}
 
 function saveBank(qs){
   const normalized=qs.map(normalizeQ);
@@ -924,19 +844,12 @@ function sharedTFMeta(){
     difficulty:state.difficulty
   };
 }
-async function loadTeacherBankTF(timeoutMs=5000){
-  if(!window.SPENDADB)return [];
-  const m=sharedTFMeta();
-  try{
-    return await Promise.race([
-      SPENDADB.getQuestions(m),
-      new Promise(resolve=>setTimeout(()=>resolve([]),timeoutMs))
-    ]);
-  }catch(e){
-    console.warn("Database pusat tidak tersedia; gunakan bank lokal.",e);
-    return [];
-  }
-}
+let availableTFBanks=[];
+function tfUnique(vals){return [...new Set(vals.map(v=>String(v??"").trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"id"));}
+function tfFill(el,vals,pref,empty="Belum ada data"){if(!el)return"";const a=tfUnique(vals);el.innerHTML="";if(!a.length){const o=document.createElement("option");o.value="";o.textContent=empty;el.appendChild(o);el.disabled=true;return"";}el.disabled=false;a.forEach(v=>{const o=document.createElement("option");o.value=v;o.textContent=v;el.appendChild(o)});const p=pref&&a.includes(pref)?pref:a[0];el.value=p;return p;}
+async function loadTeacherBankTF(timeoutMs=5000){if(!window.SPENDADB?.cloudConfigured?.())return[];const m=sharedTFMeta();if(!m.teacher||!m.level||!m.className||!m.subject)return[];try{const qs=await Promise.race([SPENDADB.getQuestionsStrict(m),new Promise((_,reject)=>setTimeout(()=>reject(new Error("Database timeout")),timeoutMs))]);QUESTION_BANKS[key()]=qs.map(normalizeQ);return QUESTION_BANKS[key()];}catch(e){console.warn("Gagal memuat bank pusat:",e);return[];}}
+async function refreshTFDatabaseFilters(){try{if(!window.SPENDADB?.cloudConfigured?.()){renderTFNoDatabase("Database sekolah belum terhubung.");return;}availableTFBanks=(await SPENDADB.listBanks({game:"benar-salah"})).filter(b=>Array.isArray(b.questions)&&b.questions.length);const prev={teacher:state.teacher,level:state.level,klass:state.klass,subject:state.subject};state.teacher=tfFill($("teacher"),availableTFBanks.map(b=>b.teacher),prev.teacher,"Belum ada guru");const tb=availableTFBanks.filter(b=>SPENDADB.norm(b.teacher)===SPENDADB.norm(state.teacher));state.level=tfFill($("level"),tb.map(b=>b.level),prev.level,"Belum ada jenjang");const lb=tb.filter(b=>SPENDADB.sameLevel(b.level,state.level));state.klass=tfFill($("klass"),lb.map(b=>b.className),prev.klass,"Belum ada kelas");const cb=lb.filter(b=>SPENDADB.classMatch(b.className,state.klass));state.subject=tfFill($("subject"),cb.map(b=>b.subject),prev.subject,"Belum ada mapel");await loadTeacherBankTF();refreshHome();}catch(e){console.warn("Database sekolah belum dapat dibaca:",e);renderTFNoDatabase("Database sekolah tidak dapat dibaca.");}}
+function renderTFNoDatabase(msg){const n=$("notice");if(n)n.textContent=msg;const t=$("teacher");if(t){t.innerHTML='<option value="">Belum ada guru</option>';t.disabled=true;}}
 
 function databaseLabel(){
   return window.SPENDADB?.cloudConfigured?.()
@@ -1037,7 +950,7 @@ async function addQuestion(){
     cards[cards.length-1]?.scrollIntoView({behavior:"smooth",block:"center"});
   },50);
 }
-function restore(){if(!confirm("Kembalikan bank soal ini ke contoh awal?"))return;saveBank(seedForKey());renderEditor();refreshHome()}
+function restore(){if(!confirm("Kosongkan seluruh bank soal ini? Soal akan dihapus dari bank aktif."))return;saveBank([]);renderEditor();refreshHome()}
 function exportBank(){download(`soal-${slug(state.subject)}-${slug(state.klass)}.json`,JSON.stringify({version:3,bank:{level:state.level,class:state.klass,subject:state.subject,difficulty:state.difficulty},questions:getBank()},null,2),"application/json")}
 function parseImportedQuestions(obj){
   if(Array.isArray(obj)) return obj;
@@ -1151,69 +1064,15 @@ function chooseQuestions(){
 }
 
 async function beginGame(){
-  state.level=$("level").value;
-  state.klass=$("klass").value;
-  state.subject=$("subject").value;
-  state.difficulty=$("difficulty").value;
-  state.teacher=$("teacher")?.value.trim()||"Umum";
-
-  await initQuestionDatabase();
-
-  // Bank lokal/default dipasang lebih dulu. Database sekolah dan kamera berjalan
-  // di belakang layar agar tombol MULAI tidak pernah tertahan oleh jaringan atau izin kamera.
-  state.questions=chooseQuestions().filter(q=>q && q.statement).slice(0,Math.min(30,Number($("count").value)||20));
-  state.current=0;
-  state.answers=[];
-  const startToken=Date.now()+Math.random();
-  state.startToken=startToken;
-
-  if(!state.questions.length){
-    alert("Bank soal kosong.");
-    return;
-  }
-
-  hide("home");
-  hide("final");
-  hide("pauseOverlay");
-  hide("resultOverlay");
-  hide("transitionOverlay");
-
-  show("game");
-
-  // Tahap persiapan: timer BELUM berjalan.
-  state.phase="ready";
-  state.paused=false;
-
-  renderQuestion();
-
-  $("readyInfo").textContent=
-    `${state.questions.length} soal • ${state.subject} • ${state.klass} • ${state.seconds} detik per soal.`;
-
-  show("readyOverlay");
-
-  // Sinkronisasi bank pusat setelah layar SIAP BERMAIN? sudah tampil.
-  if(window.SPENDADB){
-    loadTeacherBankTF(5000).then(shared=>{
-      if(!shared.length || state.startToken!==startToken || state.phase!=="ready")return;
-      state.questions=shared.map(normalizeQ).filter(q=>q.statement).slice(0,Math.min(30,Number($("count").value)||20));
-      state.current=0;state.answers=[];
-      renderQuestion();
-      $("readyInfo").textContent=`${state.questions.length} soal • ${state.subject} • ${state.klass} • ${state.seconds} detik per soal.`;
-    }).catch(e=>console.warn("Database pusat tidak tersedia; bank lokal tetap digunakan.",e));
-  }
-
-  // Kamera hanya latar. Jalankan setelah UI terlihat.
-  if(location.protocol!=="file:"){
-    setTimeout(()=>{
-      if(state.startToken!==startToken || !document.getElementById("game") || state.phase!=="ready")return;
-      initCamera().catch(e=>{
-        console.warn("Kamera tidak tersedia; game tetap berjalan tanpa kamera.",e);
-        if($("status"))$("status").textContent="Kamera: tidak tersedia • game tetap berjalan";
-      });
-    },180);
-  }else if($("status")){
-    $("status").textContent="Kamera: gunakan GitHub Pages/HTTPS";
-  }
+  state.teacher=$("teacher")?.value.trim()||"";state.level=$("level").value;state.klass=$("klass").value;state.subject=$("subject").value;state.difficulty=$("difficulty").value;
+  const amount=Math.max(1,Math.min(30,Number($("count").value)||20));
+  if(!state.teacher||!state.level||!state.klass||!state.subject){alert("Pilih Nama Guru, Jenjang, Kelas, dan Mapel terlebih dahulu.");return;}
+  if(!window.SPENDADB?.cloudConfigured?.()){alert("Database Sekolah belum terhubung.");return;}
+  let central=[];try{central=await Promise.race([SPENDADB.getQuestionsStrict(sharedTFMeta()),new Promise((_,reject)=>setTimeout(()=>reject(new Error("Waktu koneksi habis")),7000))]);}catch(e){alert("Gagal memuat soal dari Database Sekolah. "+(e.message||""));return;}
+  central=central.map(normalizeQ).filter(q=>q.statement).slice(0,amount);
+  if(!central.length){alert(`Belum ada soal untuk ${state.teacher} • ${state.subject} • ${state.klass}. Import soal guru terlebih dahulu.`);return;}
+  state.questions=central;state.current=0;state.answers=[];state.startToken=Date.now()+Math.random();hide("home");hide("final");hide("pauseOverlay");hide("resultOverlay");hide("transitionOverlay");show("game");state.phase="ready";state.paused=false;renderQuestion();$("readyInfo").textContent=`${state.questions.length} soal • ${state.teacher} • ${state.subject} • ${state.klass} • ${state.seconds} detik per soal.`;show("readyOverlay");
+  if(location.protocol!=="file:"){setTimeout(()=>initCamera().catch(e=>console.warn("Kamera tidak tersedia:",e)),180)}else if($("status"))$("status").textContent="Kamera: gunakan GitHub Pages/HTTPS";
 }
 
 async function initCamera(){
@@ -1445,6 +1304,12 @@ $("saveBank").onclick=()=>{saveBank(getBank());alert("Bank soal tersimpan.")};
 $("eLevel").onchange=()=>{state.level=$("eLevel").value;populateClass($("eClass"),state.level);populateSubject($("eSubject"),state.level);state.klass=$("eClass").value;state.subject=$("eSubject").value;renderEditor()};
 $("eClass").onchange=()=>{state.klass=$("eClass").value;renderEditor()};$("eSubject").onchange=()=>{state.subject=$("eSubject").value;renderEditor()};$("eDiff").onchange=()=>{state.difficulty=$("eDiff").value;renderEditor()};$("editFs").onclick=()=>document.documentElement.requestFullscreen?.();
 
+$("teacher")?.addEventListener("change",async()=>{state.teacher=$("teacher").value;await refreshTFDatabaseFilters();});
+$("level")?.addEventListener("change",async()=>{state.level=$("level").value;await refreshTFDatabaseFilters();});
+$("klass")?.addEventListener("change",async()=>{state.klass=$("klass").value;await loadTeacherBankTF();refreshHome();});
+$("subject")?.addEventListener("change",async()=>{state.subject=$("subject").value;await loadTeacherBankTF();refreshHome();});
+
+
 /* GAME */
 $("menuBtn").onclick=()=>$("menu").classList.toggle("hidden");$("pauseBtn").onclick=pause;$("pauseMenu").onclick=()=>{hide("menu");pause()};$("resumeBtn").onclick=resume;
 $("restartPause").onclick=()=>{hide("pauseOverlay");restart()};$("homePause").onclick=()=>{hide("pauseOverlay");openHome()};
@@ -1454,6 +1319,9 @@ $("camMode").onclick=()=>{state.cameraMode=state.cameraMode==="wide"?"zoom":"wid
 $("fsBtn").onclick=()=>document.documentElement.requestFullscreen?.();$("again").onclick=restart;$("finalHome").onclick=openHome;
 document.addEventListener("keydown",e=>{if(e.key===" "){e.preventDefault();state.paused?resume():pause()} if(e.key==="Escape"&&state.phase==="question")pause()});
 window.addEventListener("beforeunload",()=>{stopTimers();if(state.stream)state.stream.getTracks().forEach(t=>t.stop())});
+
+/* Database filter initial */
+refreshTFDatabaseFilters();
 
 /* Editor select initial */
 syncEditor();
