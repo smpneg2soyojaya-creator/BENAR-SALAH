@@ -50,7 +50,6 @@
       school_id:clean(meta.school_id||meta.schoolId||window.SPENDA_CONFIG?.SCHOOL_ID||"SMPN2SOYOJAYA"),
       game:clean(meta.game),
       teacher:clean(meta.teacher),
-      teacher_master_id:clean(meta.teacher_master_id||meta.teacherMasterId),
       teacher_user_id:clean(meta.teacher_user_id||meta.teacherUserId),
       level:levelCanonical(meta.level),
       class_name:clean(meta.className||meta.class_name),
@@ -61,7 +60,7 @@
 
   function key(meta){
     const m=canonicalMeta(meta);
-    return [m.school_id,m.game,m.teacher_master_id||m.teacher_user_id||m.teacher,m.level,m.class_name,m.subject,m.difficulty].join("||");
+    return [m.school_id,m.game,m.teacher_user_id||m.teacher,m.level,m.class_name,m.subject,m.difficulty].join("||");
   }
 
   function fromRow(row){
@@ -71,7 +70,6 @@
       school_id:clean(row.school_id),
       game:clean(row.game),
       teacher:clean(row.teacher),
-      teacher_master_id:clean(row.teacher_master_id),
       teacher_user_id:clean(row.teacher_user_id),
       level:clean(row.level),
       className:clean(row.class_name),
@@ -199,14 +197,33 @@
   const profileTable=()=>clean(window.SPENDA_CONFIG?.PROFILE_TABLE)||"teacher_profiles";
   const masterTable=()=>clean(window.SPENDA_CONFIG?.MASTER_TABLE)||"teacher_master";
   const assignmentTable=()=>clean(window.SPENDA_CONFIG?.ASSIGNMENT_TABLE)||"teacher_assignments";
-  const accountFunction=()=>clean(window.SPENDA_CONFIG?.TEACHER_ACCOUNT_FUNCTION)||"spenda-admin-teacher-account";
   const schoolId=()=>clean(window.SPENDA_CONFIG?.SCHOOL_ID)||"SMPN2SOYOJAYA";
 
   async function authGetSession(){const c=await getClient();const {data,error}=await withTimeout(c.auth.getSession());if(error)throw dbError(error);return data?.session||null;}
   async function authGetUser(){const c=await getClient();const {data,error}=await withTimeout(c.auth.getUser());if(error)throw dbError(error);return data?.user||null;}
   async function authSignIn(email,password){const c=await getClient();const {data,error}=await withTimeout(c.auth.signInWithPassword({email:clean(email),password:String(password||"")}));if(error)throw dbError(error);return data;}
+  async function authSignInByNip(nip,password){return authSignIn(teacherAuthEmailFromNip(nip),password);}
   async function authSignOut(){const c=await getClient();const {error}=await withTimeout(c.auth.signOut());if(error)throw dbError(error);}
   function authOnChange(cb){let sub=null;getClient().then(c=>{sub=c.auth.onAuthStateChange((ev,s)=>cb?.(ev,s))?.data?.subscription||null;}).catch(()=>{});return{unsubscribe:()=>sub?.unsubscribe?.()};}
+
+  // Login Guru memakai password langsung dari public.teacher_master.
+  // Password dikirim ke RPC untuk diverifikasi dan tidak pernah dikembalikan.
+  let teacherDbSession=null;
+
+  async function teacherLogin(teacherId,password){
+    const id=Number(teacherId);
+    const pass=String(password||"");
+    if(!id)return{ok:false,error:"Silakan pilih Nama Guru."};
+    if(!pass)return{ok:false,error:"Password wajib diisi."};
+    const c=await getClient();
+    const {data,error}=await withTimeout(c.rpc("verify_teacher_login",{p_teacher_id:id,p_password:pass}));
+    if(error)throw dbError(error);
+    const row=Array.isArray(data)?data[0]:data;
+    if(!row){teacherDbSession=null;return{ok:false,error:"Nama Guru atau password salah."};}
+    teacherDbSession={teacher_id:Number(row.teacher_id),full_name:clean(row.full_name),nip:clean(row.nip),school_id:clean(row.school_id||schoolId()),mata_pelajaran:clean(row.mata_pelajaran),jenjang:clean(row.jenjang),role:clean(row.role)||"teacher",active:row.active!==false,password:pass};
+    return{ok:true,profile:{teacher_id:teacherDbSession.teacher_id,teacher_master_id:teacherDbSession.teacher_id,full_name:teacherDbSession.full_name,teacher_nip:teacherDbSession.nip,school_id:teacherDbSession.school_id,role:teacherDbSession.role,active:teacherDbSession.active,mata_pelajaran:teacherDbSession.mata_pelajaran,jenjang:teacherDbSession.jenjang}};
+  }
+  async function teacherLogout(){teacherDbSession=null;}
 
   async function getTeacherLoginList(){
     const c=await getClient();
@@ -214,38 +231,13 @@
     if(error)throw dbError(error);
     return Array.isArray(data)?data:[];
   }
-
-  function readTeacherSession(){
-    try{return JSON.parse(sessionStorage.getItem("SPENDA_TEACHER_SESSION")||"null");}catch{return null;}
+  async function getTeacherProfile(){
+    return teacherDbSession?{teacher_id:teacherDbSession.teacher_id,teacher_master_id:teacherDbSession.teacher_id,full_name:teacherDbSession.full_name,teacher_nip:teacherDbSession.nip,school_id:teacherDbSession.school_id,role:teacherDbSession.role,active:teacherDbSession.active,mata_pelajaran:teacherDbSession.mata_pelajaran,jenjang:teacherDbSession.jenjang}:null;
   }
-  function writeTeacherSession(v){try{sessionStorage.setItem("SPENDA_TEACHER_SESSION",JSON.stringify(v));}catch{}}
-  function clearTeacherSession(){try{sessionStorage.removeItem("SPENDA_TEACHER_SESSION");}catch{}}
-
-  async function teacherLogin(teacherId,password){
-    const id=Number(teacherId);const pass=String(password||"");
-    if(!id)throw new Error("Silakan pilih Nama Guru.");
-    if(!pass)throw new Error("Password wajib diisi.");
-    const c=await getClient();
-    const {data,error}=await withTimeout(c.rpc("verify_teacher_login",{p_teacher_id:id,p_password:pass}));
-    if(error)throw dbError(error);
-    const profile=Array.isArray(data)?(data[0]||null):(data||null);
-    if(!profile)throw new Error("Nama Guru atau password salah.");
-    if(profile.active===false)throw new Error("Akun Guru sedang dinonaktifkan.");
-    const session={teacher_id:Number(profile.teacher_id),password:pass,user:{id:String(profile.teacher_id)},profile};
-    writeTeacherSession(session);return{session,profile};
-  }
-  async function teacherSignOut(){clearTeacherSession();}
-  async function getTeacherProfile(){const s=readTeacherSession();return s?.profile||null;}
   async function requireTeacherSession(){
-    const s=readTeacherSession();
-    if(!s?.teacher_id||!s?.password)throw new Error("Silakan login sebagai Guru terlebih dahulu.");
-    const c=await getClient();
-    const {data,error}=await withTimeout(c.rpc("verify_teacher_login",{p_teacher_id:Number(s.teacher_id),p_password:String(s.password)}));
-    if(error)throw dbError(error);
-    const profile=Array.isArray(data)?(data[0]||null):(data||null);
-    if(!profile) {clearTeacherSession();throw new Error("Sesi login Guru sudah tidak valid. Silakan login kembali.");}
-    s.profile=profile;s.user={id:String(profile.teacher_id)};writeTeacherSession(s);
-    return{session:s,profile};
+    if(!teacherDbSession)throw new Error("Silakan login sebagai Guru terlebih dahulu.");
+    if(teacherDbSession.active===false)throw new Error("Akun Guru sedang dinonaktifkan.");
+    return{session:{user:{id:String(teacherDbSession.teacher_id),teacher_master_id:teacherDbSession.teacher_id}},profile:await getTeacherProfile(),credentials:{teacher_id:teacherDbSession.teacher_id,password:teacherDbSession.password}};
   }
 
   async function requireAdminSession(){
@@ -260,48 +252,50 @@
     if(profile.role!=="admin")throw new Error("Akun ini bukan Admin.");
     return{session,profile};
   }
-
   async function getMyAssignments(){
-    const r=await requireTeacherSession();const c=await getClient();
-    const {data,error}=await withTimeout(c.rpc("get_teacher_assignments_for_login",{p_teacher_id:Number(r.session.teacher_id),p_password:String(r.session.password)}));
-    if(error)throw dbError(error);return data||[];
+    const r=await requireTeacherSession();
+    const c=await getClient();
+    const {data,error}=await withTimeout(c.rpc("get_teacher_assignments_login",{p_teacher_id:r.session.user.teacher_master_id,p_password:r.credentials.password}));
+    if(error)throw dbError(error);
+    return Array.isArray(data)?data:[];
   }
 
-  async function adminListTeachers(){
-    const c=await getClient();
-    const {data,error}=await withTimeout(c.from(masterTable()).select("id,school_id,user_id,full_name,nip,no_hp,mata_pelajaran,jenjang,active,created_at,updated_at").eq("school_id",schoolId()).order("full_name"));
-    if(error)throw dbError(error);return data||[];
-  }
+  async function adminListTeachers(){const c=await getClient();const {data,error}=await withTimeout(c.from(masterTable()).select("id,school_id,user_id,full_name,nip,no_hp,active,created_at,updated_at").eq("school_id",schoolId()).order("full_name"));if(error)throw dbError(error);return data||[];}
   async function adminSaveTeacherMaster(row){
     const c=await getClient();
-    const payload={school_id:schoolId(),full_name:clean(row.full_name),nip:clean(row.nip)||null,no_hp:clean(row.no_hp)||null,mata_pelajaran:clean(row.mata_pelajaran)||null,jenjang:clean(row.jenjang)||"SMP",active:row.active!==false};
+    const payload={school_id:schoolId(),full_name:clean(row.full_name),nip:clean(row.nip)||null,no_hp:clean(row.no_hp)||null,active:row.active!==false};
     if(row.id)payload.id=row.id;
     const {data,error}=await withTimeout(c.from(masterTable()).upsert(payload,{onConflict:"id"}).select("*").single());if(error)throw dbError(error);return data;
   }
   async function adminDeleteTeacherMaster(id){const c=await getClient();const {error}=await withTimeout(c.from(masterTable()).delete().eq("id",id).eq("school_id",schoolId()));if(error)throw dbError(error);return{ok:true};}
-
   async function adminListAssignments(masterId){
     const c=await getClient();
-    const {data,error}=await withTimeout(c.from(assignmentTable()).select("id,teacher_master_id,teacher_user_id,teacher_nip,subject,level,class_name,active,created_at,updated_at").eq("school_id",schoolId()).eq("teacher_master_id",masterId).order("level").order("subject").order("class_name"));
+    const {data,error}=await withTimeout(c.from(assignmentTable()).select("id,teacher_master_id,teacher_user_id,teacher_nip,subject,level,class_name,active,created_at,updated_at").eq("school_id",schoolId()).eq("teacher_master_id",Number(masterId)).order("level").order("subject").order("class_name"));
     if(error)throw dbError(error);return data||[];
   }
   async function adminSaveAssignment(row){
     const c=await getClient();
-    const masterId=Number(row.teacher_master_id);if(!masterId)throw new Error("Guru belum dipilih.");
-    const {data:t,error:te}=await withTimeout(c.from(masterTable()).select("id,nip,full_name").eq("id",masterId).eq("school_id",schoolId()).maybeSingle());if(te)throw dbError(te);if(!t)throw new Error("Guru tidak ditemukan.");
-    const payload={school_id:schoolId(),teacher_master_id:masterId,teacher_user_id:null,teacher_nip:clean(t.nip)||null,subject:clean(row.subject),level:levelCanonical(row.level),class_name:clean(row.class_name),active:row.active!==false};
+    const payload={school_id:schoolId(),teacher_master_id:Number(row.teacher_master_id),teacher_nip:clean(row.teacher_nip),subject:clean(row.subject),level:levelCanonical(row.level),class_name:clean(row.class_name),active:row.active!==false};
+    if(!payload.teacher_master_id||!payload.teacher_nip)throw new Error("Data Guru belum lengkap.");
     if(!payload.subject||!payload.class_name)throw new Error("Mapel dan Kelas wajib diisi.");
     if(row.id)payload.id=row.id;
-    const {data,error}=await withTimeout(c.from(assignmentTable()).upsert(payload,{onConflict:"id"}).select("*").single());
+    if(!row.id){
+      const {data:existing,error:findError}=await withTimeout(c.from(assignmentTable()).select("id").eq("school_id",schoolId()).eq("teacher_master_id",payload.teacher_master_id).eq("subject",payload.subject).eq("level",payload.level).eq("class_name",payload.class_name).maybeSingle());
+      if(findError)throw dbError(findError);
+      if(existing){
+        const {data,error}=await withTimeout(c.from(assignmentTable()).update({teacher_nip:payload.teacher_nip,active:true,updated_at:new Date().toISOString()}).eq("id",existing.id).select("*").single());
+        if(error)throw dbError(error);return data;
+      }
+    }
+    const {data,error}=await withTimeout(c.from(assignmentTable()).insert(payload).select("*").single());
     if(error)throw dbError(error);return data;
   }
   async function adminDeleteAssignment(id){const c=await getClient();const {error}=await withTimeout(c.from(assignmentTable()).delete().eq("id",id));if(error)throw dbError(error);return{ok:true};}
 
   async function queryBanks(filters={}){
-    const c=await getClient();let q=c.from(table()).select("id,school_id,game,teacher,teacher_user_id,teacher_master_id,level,class_name,subject,difficulty,questions,source,created_at,updated_at").eq("school_id",schoolId()).order("updated_at",{ascending:false});
+    const c=await getClient();let q=c.from(table()).select("id,school_id,game,teacher,teacher_user_id,level,class_name,subject,difficulty,questions,source,created_at,updated_at").eq("school_id",schoolId()).order("updated_at",{ascending:false});
     if(filters.game)q=q.eq("game",clean(filters.game));
     if(filters.teacher)q=q.eq("teacher",clean(filters.teacher));
-    if(filters.teacherMasterId)q=q.eq("teacher_master_id",Number(filters.teacherMasterId));
     if(filters.teacherUserId)q=q.eq("teacher_user_id",clean(filters.teacherUserId));
     if(filters.level)q=q.eq("level",levelCanonical(filters.level));
     if(filters.subject)q=q.eq("subject",clean(filters.subject));
@@ -310,58 +304,51 @@
     const {data,error}=await withTimeout(q);if(error)throw dbError(error);return(data||[]).map(fromRow);
   }
   async function cloudGetBank(meta){
-    const s=await requireTeacherSession();const m=canonicalMeta(meta);const c=await getClient();
-    const {data,error}=await withTimeout(c.rpc("teacher_list_banks",{p_teacher_id:Number(s.session.teacher_id),p_password:String(s.session.password),p_game:m.game||null,p_level:m.level||null,p_class_name:m.class_name||null,p_subject:m.subject||null,p_difficulty:m.difficulty&&norm(m.difficulty)!=="semua"?m.difficulty:null}));
-    if(error)throw dbError(error);
-    const rows=(data||[]).map(fromRow).filter(r=>!m.class_name||classMatch(r.className,m.class_name));
-    return rows.find(r=>sameTeacher(r.teacher,m.teacher)&&sameLevel(r.level,m.level)&&sameSubject(r.subject,m.subject))||rows[0]||null;
+    let rows=await queryBanks({game:meta.game,teacher:meta.teacher,teacherUserId:meta.teacher_user_id,level:meta.level,subject:meta.subject,difficulty:meta.difficulty});
+    rows=rows.filter(r=>!meta.className||classMatch(r.className,meta.className));
+    return rows[0]||null;
   }
   async function cloudQuestions(filters={}){
-    const c=await getClient();let rows=[];
-    const s=readTeacherSession();
-    if(s?.teacher_id&&s?.password){
-      const {data,error}=await withTimeout(c.rpc("teacher_list_banks",{p_teacher_id:Number(s.teacher_id),p_password:String(s.password),p_game:filters.game||null,p_level:filters.level?levelCanonical(filters.level):null,p_class_name:filters.className||null,p_subject:filters.subject||null,p_difficulty:filters.difficulty&&norm(filters.difficulty)!=="semua"?filters.difficulty:null}));
-      if(error)throw dbError(error);rows=(data||[]).map(fromRow);
-    }else{
-      rows=await queryBanks(filters);
-    }
-    if(filters.className&&!rows.length){rows=rows.filter(r=>classMatch(r.className,filters.className));}
+    let rows=await queryBanks({game:filters.game,teacher:filters.teacher,teacherUserId:filters.teacherUserId,level:filters.level,subject:filters.subject,className:filters.className,difficulty:filters.difficulty&&norm(filters.difficulty)!=="semua"?filters.difficulty:""});
+    if(filters.className&&!rows.length){rows=await queryBanks({game:filters.game,teacher:filters.teacher,teacherUserId:filters.teacherUserId,level:filters.level,subject:filters.subject,difficulty:filters.difficulty&&norm(filters.difficulty)!=="semua"?filters.difficulty:""});rows=rows.filter(r=>classMatch(r.className,filters.className));}
     const out=[],seen=new Set();rows.forEach(r=>(r.questions||[]).forEach(q=>{const s=JSON.stringify(q);if(!seen.has(s)){seen.add(s);out.push(clone(q));}}));return out;
   }
   async function putBank(meta,questions,source="manual"){
     if(!configured())throw new Error("Supabase belum dikonfigurasi di config.js.");
-    const access=await requireTeacherSession();const m=canonicalMeta(meta);const c=await getClient();
-    const {data,error}=await withTimeout(c.rpc("teacher_save_bank",{p_teacher_id:Number(access.session.teacher_id),p_password:String(access.session.password),p_game:m.game,p_level:m.level,p_class_name:m.class_name,p_subject:m.subject,p_difficulty:m.difficulty||"Semua",p_questions:clone(Array.isArray(questions)?questions:[]),p_source:source||"manual"}));
-    if(error)throw dbError(error);const saved=fromRow(data);await localPut(saved,saved.questions,"supabase-cache");return saved;
+    const access=await requireTeacherSession();
+    const m=canonicalMeta({...meta,teacher:access.profile.full_name,teacher_user_id:""});
+    const c=await getClient();
+    const {data,error}=await withTimeout(c.rpc("save_question_bank_for_teacher",{p_teacher_id:access.profile.teacher_master_id,p_password:access.credentials.password,p_game:m.game,p_level:m.level,p_class_name:m.class_name,p_subject:m.subject,p_difficulty:m.difficulty,p_questions:clone(Array.isArray(questions)?questions:[]),p_source:String(source||"manual")}));
+    if(error)throw dbError(error);
+    const saved=fromRow(Array.isArray(data)?data[0]:data);
+    if(!saved)throw new Error("Bank soal gagal disimpan.");
+    await localPut(saved,saved.questions,"supabase-cache");
+    return saved;
   }
   async function getBank(meta){if(!configured())return localGet(meta);try{const r=await cloudGetBank(meta);if(r){await localPut(r,r.questions||[],"supabase-cache");return r;}return null;}catch(e){const local=await localGet(meta);if(local)return local;throw e;}}
   async function getQuestionsStrict(filters={}){if(!configured())throw new Error("Supabase belum dikonfigurasi di config.js.");return cloudQuestions(filters);}
   async function getQuestions(filters={}){return configured()?cloudQuestions(filters):localQuestions(filters);}
-  async function listBanks(filters={}){
-    if(!configured())return localList(filters);
-    const s=readTeacherSession();
-    if(s?.teacher_id&&s?.password){
-      const c=await getClient();const {data,error}=await withTimeout(c.rpc("teacher_list_banks",{p_teacher_id:Number(s.teacher_id),p_password:String(s.password),p_game:filters.game||null,p_level:filters.level?levelCanonical(filters.level):null,p_class_name:filters.className||null,p_subject:filters.subject||null,p_difficulty:filters.difficulty&&norm(filters.difficulty)!=="semua"?filters.difficulty:null}));
-      if(error)throw dbError(error);return(data||[]).map(fromRow);
-    }
-    return queryBanks(filters);
-  }
+  async function listBanks(filters={}){return configured()?queryBanks(filters):localList(filters);}
   async function listTeachers(game=""){
     if(configured()){const rows=await queryBanks(game?{game}:{});return[...new Set(rows.filter(r=>(r.questions||[]).length).map(r=>r.teacher).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"id"));}
     const rows=await localList(game?{game}:{});return[...new Set(rows.filter(r=>(r.questions||[]).length).map(r=>r.teacher).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"id"));
   }
   async function remove(meta){
-    const access=await requireTeacherSession();const m=canonicalMeta(meta);const c=await getClient();
-    const {error}=await withTimeout(c.rpc("teacher_delete_bank",{p_teacher_id:Number(access.session.teacher_id),p_password:String(access.session.password),p_game:m.game,p_level:m.level,p_class_name:m.class_name,p_subject:m.subject,p_difficulty:m.difficulty||"Semua"}));if(error)throw dbError(error);
-    await localRemove({...m,teacher_master_id:access.session.teacher_id});return{ok:true};
+    const access=await requireTeacherSession();
+    const c=await getClient();
+    const m=canonicalMeta(meta);
+    const {data,error}=await withTimeout(c.rpc("delete_question_bank_for_teacher",{p_teacher_id:access.profile.teacher_master_id,p_password:access.credentials.password,p_game:m.game,p_level:m.level,p_class_name:m.class_name,p_subject:m.subject,p_difficulty:m.difficulty}));
+    if(error)throw dbError(error);
+    await localRemove({...m,teacher_user_id:""});
+    return{ok:true,deleted:Number(data||0)};
   }
   async function ping(){const c=await getClient();const {data,error}=await withTimeout(c.from(table()).select("id").eq("school_id",schoolId()).limit(1));if(error)throw dbError(error);return true;}
 
   window.SPENDADB={
     DB_NAME:"SPENDA_SUPABASE_QUESTION_DATABASE_V26",init:localInit,ping,putBank,getBank,getQuestions,getQuestionsStrict,listBanks,listTeachers,remove,
     classMatch,sameSubject,sameLevel,norm,clean,cloudConfigured:configured,
-    authGetSession,authGetUser,authSignIn,authSignOut,authOnChange,
-    getTeacherLoginList,teacherLogin,teacherSignOut,getTeacherProfile,requireTeacherSession,requireAdminSession,getMyAssignments,
+    authGetSession,authGetUser,authSignIn,authSignInByNip,teacherAuthEmailFromNip,authSignOut,authOnChange,
+    teacherLogin,teacherLogout,getTeacherLoginList,getTeacherProfile,requireTeacherSession,requireAdminSession,getMyAssignments,
     adminListTeachers,adminSaveTeacherMaster,adminDeleteTeacherMaster,adminListAssignments,adminSaveAssignment,adminDeleteAssignment
   };
 })();
