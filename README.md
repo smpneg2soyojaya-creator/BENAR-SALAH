@@ -1,50 +1,67 @@
-# SPENDA Game Center V15
+# SPENDA Game Center V18
 
-SMP Negeri 2 Soyo Jaya • Database Soal Sekolah • 4 Game
+Versi ini melanjutkan Game Center yang sudah ada dan mengganti database pusat menjadi **Supabase PostgreSQL**, sekaligus menambahkan **Supabase Auth + RLS** untuk pengelolaan bank soal oleh Guru.
 
-## Sumber soal
-Game **tidak lagi memiliki soal bawaan**. Soal permainan hanya dapat berasal dari bank yang tersimpan di **Database Sekolah (Google Sheets + Google Apps Script)**. Cache browser hanya menyimpan salinan bank yang pernah dimuat dari database untuk membantu editor; cache tidak dipakai sebagai sumber soal ketika permainan dimulai.
+## Arsitektur
+
+Laptop Guru → Login Supabase → Import Word/Excel → Supabase `question_banks` → PID/IFP → Game Center.
+
+PID/IFP tidak perlu login. Halaman game hanya membaca bank soal.
+
+Halaman `bank-soal.html` memerlukan login Guru untuk menyimpan, mengubah, dan menghapus bank.
 
 ## Identitas bank
-Setiap bank dipisahkan berdasarkan:
 
-**Game + Nama Guru + Jenjang + Kelas + Mapel + Kesulitan**
+Setiap bank dibedakan dengan:
 
-Hal ini memungkinkan dua guru yang mengajar mapel yang sama memiliki bank soal yang berbeda tanpa tercampur.
+`Game + Akun Guru + Jenjang + Kelas + Mapel + Tingkat Kesulitan`
 
-## Alur guru → PID/IFP
-1. Guru membuka **Database Soal Guru**.
-2. Pilih Game, Nama Guru, Jenjang, Kelas, Mapel, dan Kesulitan.
-3. Import Word `.docx`, Excel `.xlsx/.xls`, CSV, atau JSON.
-4. Soal disimpan ke Database Sekolah.
-5. PID/IFP membuka Game Center.
-6. Pilih Nama Guru, Jenjang, Kelas, dan Mapel.
-7. Game hanya mengambil soal dari bank yang sesuai.
+Dengan demikian dua Guru yang mengajar mapel sama tetap memiliki bank yang terpisah.
 
-## Google Apps Script
-1. Buat Google Spreadsheet untuk database.
-2. Tempel `backend/Code.gs` ke Extensions → Apps Script.
-3. Jalankan `setupDatabase()` satu kali.
-4. Deploy sebagai Web App, Execute as **Me**, akses **Anyone**.
-5. Masukkan URL `/exec` ke `config.js` pada `API_URL`.
-6. Pastikan token pada `config.js` sama dengan `SPENDA_TOKEN` pada `Code.gs`.
+## Empat game
+
+- BENAR / SALAH
+- GESTURE BATTLE EDU
+- SPENDA FAMILY 100
+- CLASH OF CHAMPIONS
+
+Mekanisme permainan dipertahankan. `spenda-db.js` menjaga nama fungsi database lama agar game yang sudah ada tidak perlu ditulis ulang total.
+
+## Soal bawaan
+
+Game tidak menggunakan soal contoh/bawaan sebagai sumber permainan. Game meminta soal dari Database Sekolah sesuai filter Guru, Game, Jenjang, Kelas, Mapel, dan Kesulitan.
 
 ## Import
-Kolom utama per game:
-- BENAR/SALAH: `Pernyataan`, `Kunci`
-- GESTURE: `Pertanyaan`, `A`, `B`, `C`, `D`, `Kunci`
-- FAMILY 100: `Kategori`, `Pertanyaan`, `Jawaban1`, `Skor1`, `Kunci1`, dst.
-- CLASH: `Pertanyaan`, `Jawaban`, `Kesulitan`
 
-Metadata identitas pada halaman **Database Soal Guru** adalah sumber utama untuk pengelompokan bank; metadata di file tidak menimpa pilihan identitas halaman.
+`spenda-import.js` menangani import dengan metadata halaman sebagai sumber utama. Jadi pilihan Game, Guru, Jenjang, Kelas, Mapel, dan Kesulitan pada halaman Database Soal Guru menjadi acuan penyimpanan; metadata lama yang tertulis di file tidak boleh memindahkan soal ke bank lain.
 
-## Catatan deployment
-Semua file aplikasi berada sejajar di root repository. Gunakan GitHub Pages/HTTPS untuk penggunaan di PID/IFP, terutama game yang memakai kamera seperti GESTURE BATTLE.
+`spenda-import.js` menangani:
+- Word `.docx`
+- Excel `.xlsx` / `.xls`
+- CSV
+- JSON lama
 
+Template ada di folder `templates`.
 
-## Perbaikan V15
-- Tampilan BENAR/SALAH menempatkan Nama Guru sebagai pilihan utama dan jelas sebelum Mapel/Jenjang/Kelas.
-- SPENDA FAMILY 100 tidak lagi meminta Kode Guru saat membuka Kelola Bank Soal.
-- SPENDA FAMILY 100 mengikuti bank soal Database Sekolah berdasarkan Nama Guru + Mata Pelajaran + Kelas.
-- Tombol GESTURE tidak lagi menggunakan istilah Reset Contoh Soal; bank soal bawaan tetap kosong.
-- Tidak ada bank soal contoh/default yang menjadi sumber permainan.
+## File penting
+
+- `config.js` — URL dan publishable key Supabase
+- `spenda-db.js` — adapter Supabase + cache lokal cadangan
+- `spenda-import.js` — importer soal
+- `bank-soal.html` — portal login dan import Guru
+- `supabase/schema.sql` — tabel, trigger, view, RLS
+- `SUPABASE_SETUP.md` — langkah instalasi
+
+## Catatan keamanan
+
+Frontend memakai `sb_publishable_*`. Jangan menaruh `sb_secret_*` atau `service_role` di aplikasi browser/GitHub. RLS membatasi operasi tulis pada akun Guru yang sedang login.
+
+## Deployment
+
+Upload seluruh isi folder ke GitHub Pages dan buka melalui HTTPS. Jangan menguji PWA/kamera dengan `file:///...`.
+
+## V18
+
+- Memperbaiki SQL migrasi agar aman untuk database `question_banks` yang sudah dibuat sebelumnya: kolom `teacher_user_id` ditambahkan dengan `ADD COLUMN IF NOT EXISTS` sebelum proses backfill.
+- Template Word dan Excel disederhanakan menjadi template isi soal; identitas bank berasal dari halaman Database Soal Guru dan akun Guru.
+- Import tidak lagi memprioritaskan Nama Guru/Mapel/Kelas/Jenjang dari file lama jika metadata dari halaman sudah tersedia.

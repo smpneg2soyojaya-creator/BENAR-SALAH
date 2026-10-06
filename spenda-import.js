@@ -7,14 +7,17 @@ const hn=x=>String(x??"").trim().toLowerCase().replace(/[^\p{L}\p{N}]+/gu,"");
 function val(row,names){const m={};Object.keys(row||{}).forEach(k=>m[hn(k)]=row[k]);for(const n of names){const v=m[hn(n)];if(v!==undefined&&String(v).trim()!=="")return v}return""}
 const split=x=>String(x??"").split(/\r?\n|\||;|\t/).map(s=>s.trim()).filter(Boolean);
 function meta(row,d){
-  let level=String(val(row,["jenjang","level sekolah","level"])||d.level||"").trim();
+  // Metadata dari halaman Database Soal Guru adalah sumber utama.
+  // Ini sengaja mengabaikan metadata lama di file agar soal selalu masuk ke
+  // Game + Guru + Jenjang + Kelas + Mapel yang sedang dipilih guru.
+  let level=String(d.level||val(row,["jenjang","level sekolah","level"])||"").trim();
   if(/^SMP\b/i.test(level)) level="SMP"; else if(/^SD\b/i.test(level)) level="SD"; else if(/^SMA\b/i.test(level)) level="SMA";
   return {
-    teacher:String(val(row,["nama guru","guru","teacher","pengajar"])||d.teacher||"Umum").trim(),
-    subject:String(val(row,["mata pelajaran","mapel","subject"])||d.subject||"").replace(/^(mata\s*pelajaran|mapel|subject)\s*[:\-]?\s*/i,"").trim(),
+    teacher:String(d.teacher||val(row,["nama guru","guru","teacher","pengajar"])||"Umum").trim(),
+    subject:String(d.subject||val(row,["mata pelajaran","mapel","subject"])||"").replace(/^(mata\s*pelajaran|mapel|subject)\s*[:\-]?\s*/i,"").trim(),
     level,
-    className:String(val(row,["kelas","class","grade"])||d.className||"").trim(),
-    difficulty:String(val(row,["tingkat kesulitan","kesulitan","difficulty","level soal"])||d.difficulty||"Sedang").trim()||"Semua"
+    className:String(d.className||val(row,["kelas","class","grade"])||"").trim(),
+    difficulty:String(d.difficulty||val(row,["tingkat kesulitan","kesulitan","difficulty","level soal"])||"Sedang").trim()||"Semua"
   }
 }
 function convert(row,game,d={}){const m=meta(row,d);

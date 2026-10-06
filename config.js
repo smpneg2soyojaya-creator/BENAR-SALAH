@@ -8,12 +8,21 @@
     selectionHoldMs: 260
   }, existing);
 
-  // Database terpusat SPENDA Game Center.
-  // Isi API_URL setelah Google Apps Script Web App selesai dideploy.
+  // ================================================================
+  // SPENDA GAME CENTER — SUPABASE DATABASE TERPUSAT
+  // ================================================================
+  // Publishable key aman untuk ditempatkan pada aplikasi browser.
+  // Keamanan data dikendalikan oleh Row Level Security (RLS) di Supabase.
+  // JANGAN menaruh sb_secret_* / service_role key di file ini.
+  // ================================================================
   window.SPENDA_CONFIG = Object.assign({
     SCHOOL_ID: "SMPN2SOYOJAYA",
-    API_URL: "https://script.google.com/macros/s/AKfycbyOqiv4tHBNRslooEkwxTAKGcX2x9B1vKZ_Z12guu8OhrzWZJhd2WXUUTqborxj8DWJDA/exec",
-    API_TOKEN: "SPENDA2026",
-    REQUEST_TIMEOUT_MS: 7000
+    SUPABASE_URL: "https://gygngkucqzjtgswwenuh.supabase.co",
+    SUPABASE_PUBLISHABLE_KEY: "sb_publishable_fRZZw6by12tqRXZQCudU7w_atHQj7Az",
+    TABLE: "question_banks",
+    PROFILE_TABLE: "teacher_profiles",
+    REQUEST_TIMEOUT_MS: 8000,
+    AUTH_PERSIST_SESSION: true,
+    AUTH_AUTO_REFRESH_TOKEN: true
   }, window.SPENDA_CONFIG || {});
 })();
