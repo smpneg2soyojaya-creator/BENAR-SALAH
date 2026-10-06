@@ -549,10 +549,11 @@
       <div class="panel-card school-config-card">
         <h2>🏫 Identitas Permainan</h2>
         <div class="config-grid">
-          <label>Nama Sekolah<input id="cfgSchool" type="text" value="SMP Negeri 2 Soyo Jaya"></label>
+          <label>Nama Guru<select id="cfgTeacher"><option value="">Memuat guru...</option></select></label>
           <label>Mata Pelajaran<select id="cfgSubject"><option value="">Memuat mapel...</option></select></label>
           <label>Kelas<select id="cfgClass"><option value="">Memuat kelas...</option></select></label>
-          <label>Nama Guru<select id="cfgTeacher"><option value="">Memuat guru...</option></select></label><label>Tahun Pelajaran<input id="cfgYear" type="text" value="2026/2027"></label>
+          <label>Nama Sekolah<input id="cfgSchool" type="text" value="SMP Negeri 2 Soyo Jaya"></label>
+          <label>Tahun Pelajaran<input id="cfgYear" type="text" value="2026/2027"></label>
         </div>
         <div class="config-note">Identitas permainan digunakan untuk memilih bank soal dari Database Sekolah.</div>
       </div>
@@ -576,7 +577,7 @@
         <button class="big-btn" id="btnStartGame">🚀 MULAI GAME</button>
       </div>
 
-      <div class="setup-divider">🔒 Pengaturan soal di bawah ini khusus untuk guru</div>
+      <div class="setup-divider">⚙️ Kelola Bank Soal</div>
 
       <div class="panel-card">
         <h2>🎯 Atur Babak &amp; Pilih Survei</h2>
@@ -602,7 +603,7 @@
     <div class="editsoal-wrap">
       <h2 style="color:var(--gold); margin:4px 0;">🛠️ Kelola Bank Soal (Survei)</h2>
       <div style="font-size:12px; opacity:.75; text-align:center; margin-bottom:2px;">
-        💾 Perubahan tersimpan otomatis di browser ini setelah menekan "Simpan &amp; Kembali". Gunakan Export/Import untuk memindahkan soal ke perangkat lain.
+        Bank soal yang diedit adalah bank milik <b>Nama Guru + Mata Pelajaran + Kelas</b> yang sedang dipilih dari Database Sekolah.
       </div>
       <div class="editsoal-toolbar">
         <button class="ghost-btn" id="btnAddSoal">➕ Tambah Soal Baru</button>
@@ -1313,12 +1314,12 @@ function launchConfetti(count){
    form, tanpa perlu menyunting kode.
    ========================================================================= */
 document.getElementById("btnEditSoal").addEventListener("click", async ()=>{
-  const kode = prompt("🔐 Masukkan Kode Guru untuk membuka Bank Soal:");
-  if(kode !== "SPENDA2026"){if(kode !== null) alert("Kode Guru salah.");return;}
   syncSpendaConfig();
+  const teacher=spendaConfig.teacher, subject=spendaConfig.subject, className=spendaConfig.className;
+  if(!teacher||!subject||!className){alert("Pilih Nama Guru, Mata Pelajaran, dan Kelas terlebih dahulu.");return;}
   const central=await loadCentralFamilyQuestions(7000);
   questionBank=Array.isArray(central)?central:[];
-  if(!questionBank.length){alert("Bank soal untuk guru/mapel/kelas ini belum ada di Database Sekolah.");return;}
+  if(!questionBank.length){alert(`Bank soal untuk ${teacher} • ${subject} • ${className} belum ada di Database Sekolah. Import soal guru terlebih dahulu.`);return;}
   renderEditSoal();showScreen("screen-editsoal");
 });
 document.getElementById("btnCancelEditSoal").addEventListener("click", ()=>{

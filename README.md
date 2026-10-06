@@ -1,4 +1,4 @@
-# SPENDA Game Center V14
+# SPENDA Game Center V15
 
 SMP Negeri 2 Soyo Jaya • Database Soal Sekolah • 4 Game
 
@@ -40,3 +40,11 @@ Metadata identitas pada halaman **Database Soal Guru** adalah sumber utama untuk
 
 ## Catatan deployment
 Semua file aplikasi berada sejajar di root repository. Gunakan GitHub Pages/HTTPS untuk penggunaan di PID/IFP, terutama game yang memakai kamera seperti GESTURE BATTLE.
+
+
+## Perbaikan V15
+- Tampilan BENAR/SALAH menempatkan Nama Guru sebagai pilihan utama dan jelas sebelum Mapel/Jenjang/Kelas.
+- SPENDA FAMILY 100 tidak lagi meminta Kode Guru saat membuka Kelola Bank Soal.
+- SPENDA FAMILY 100 mengikuti bank soal Database Sekolah berdasarkan Nama Guru + Mata Pelajaran + Kelas.
+- Tombol GESTURE tidak lagi menggunakan istilah Reset Contoh Soal; bank soal bawaan tetap kosong.
+- Tidak ada bank soal contoh/default yang menjadi sumber permainan.
