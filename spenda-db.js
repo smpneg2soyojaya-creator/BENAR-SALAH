@@ -13,6 +13,8 @@
   const SUPABASE_CDN = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
   const TABLE_DEFAULT = "question_banks";
   const PROFILE_TABLE_DEFAULT = "teacher_profiles";
+  const MASTER_TABLE_DEFAULT = "teacher_master";
+  const ASSIGNMENT_TABLE_DEFAULT = "teacher_assignments";
 
   let localDb = null;
   let localPromise = null;
@@ -298,6 +300,8 @@
 
   const TABLE=()=>clean(window.SPENDA_CONFIG?.TABLE)||TABLE_DEFAULT;
   const PROFILE_TABLE=()=>clean(window.SPENDA_CONFIG?.PROFILE_TABLE)||PROFILE_TABLE_DEFAULT;
+  const MASTER_TABLE=()=>clean(window.SPENDA_CONFIG?.MASTER_TABLE)||MASTER_TABLE_DEFAULT;
+  const ASSIGNMENT_TABLE=()=>clean(window.SPENDA_CONFIG?.ASSIGNMENT_TABLE)||ASSIGNMENT_TABLE_DEFAULT;
 
   // ---------------------------------------------------------------
   // AUTH GURU
@@ -343,11 +347,86 @@
     if(!session?.user) return null;
     const c=await getClient();
     const {data,error}=await withTimeout(
-      c.from(PROFILE_TABLE()).select("user_id,school_id,full_name,role,active,created_at,updated_at")
+      c.from(PROFILE_TABLE()).select("user_id,school_id,teacher_master_id,full_name,email,nip,no_hp,role,active,created_at,updated_at")
         .eq("user_id",session.user.id).eq("school_id",window.SPENDA_CONFIG?.SCHOOL_ID||"SMPN2SOYOJAYA").limit(1).maybeSingle()
     );
     if(error) throw dbError(error);
     return data||null;
+  }
+
+  async function getMyAssignments(){
+    const session=await authGetSession();
+    if(!session?.user) throw new Error("Silakan login sebagai Guru terlebih dahulu.");
+    const c=await getClient();
+    const {data,error}=await withTimeout(
+      c.from(ASSIGNMENT_TABLE()).select("id,teacher_user_id,subject,level,class_name,active,created_at,updated_at")
+        .eq("teacher_user_id",session.user.id).eq("active",true)
+        .order("level").order("subject").order("class_name")
+    );
+    if(error) throw dbError(error);
+    return data||[];
+  }
+
+  async function adminListTeachers(){
+    const c=await getClient();
+    const {data,error}=await withTimeout(c.from(MASTER_TABLE()).select("id,school_id,user_id,full_name,nip,email,no_hp,active,created_at,updated_at").order("full_name"));
+    if(error) throw dbError(error);
+    return data||[];
+  }
+
+  async function adminSaveTeacherMaster(row){
+    const c=await getClient();
+    const payload={school_id:clean(row.school_id||window.SPENDA_CONFIG?.SCHOOL_ID||"SMPN2SOYOJAYA"),full_name:clean(row.full_name),nip:clean(row.nip)||null,email:clean(row.email)||null,no_hp:clean(row.no_hp)||null,active:row.active!==false};
+    if(row.id) payload.id=row.id;
+    const {data,error}=await withTimeout(c.from(MASTER_TABLE()).upsert(payload,{onConflict:"id"}).select("*").single());
+    if(error) throw dbError(error);
+    return data;
+  }
+
+  async function adminDeleteTeacherMaster(id){
+    const c=await getClient();
+    const {error}=await withTimeout(c.from(MASTER_TABLE()).delete().eq("id",id));
+    if(error) throw dbError(error);
+    return {ok:true};
+  }
+
+  async function adminSyncTeacherAccount(masterId){
+    const c=await getClient();
+    const {data,error}=await withTimeout(c.rpc("sync_spenda_teacher_account",{p_teacher_master_id:masterId}));
+    if(error) throw dbError(error);
+    return data;
+  }
+
+  async function adminListAssignments(masterId){
+    const c=await getClient();
+    const {data:master,error:me}=await withTimeout(c.from(MASTER_TABLE()).select("user_id").eq("id",masterId).maybeSingle());
+    if(me) throw dbError(me);
+    if(!master?.user_id) return [];
+    const {data,error}=await withTimeout(c.from(ASSIGNMENT_TABLE()).select("id,teacher_user_id,subject,level,class_name,active,created_at,updated_at").eq("teacher_user_id",master.user_id).order("level").order("subject").order("class_name"));
+    if(error) throw dbError(error);
+    return data||[];
+  }
+
+  async function adminSaveAssignment(row){
+    const c=await getClient();
+    const payload={teacher_user_id:clean(row.teacher_user_id),subject:clean(row.subject),level:levelCanonical(row.level),class_name:clean(row.class_name),active:row.active!==false};
+    if(row.id) payload.id=row.id;
+    const {data,error}=await withTimeout(c.from(ASSIGNMENT_TABLE()).upsert(payload,{onConflict:"teacher_user_id,level,class_name,subject"}).select("*").single());
+    if(error) throw dbError(error);
+    return data;
+  }
+
+  async function adminDeleteAssignment(id){
+    const c=await getClient();
+    const {error}=await withTimeout(c.from(ASSIGNMENT_TABLE()).delete().eq("id",id));
+    if(error) throw dbError(error);
+    return {ok:true};
+  }
+
+  async function requireAdminSession(){
+    const result=await requireTeacherSession();
+    if(result.profile.role!=="admin") throw new Error("Akses hanya untuk Admin.");
+    return result;
   }
 
   async function requireTeacherSession(){
@@ -552,6 +631,6 @@
     putBank,getBank,getQuestions,getQuestionsStrict,listBanks,listTeachers,remove,
     classMatch,sameSubject,sameLevel,norm,clean,
     cloudConfigured:configured,
-    authGetSession,authGetUser,authSignIn,authSignOut,authOnChange,getTeacherProfile,requireTeacherSession
+    authGetSession,authGetUser,authSignIn,authSignOut,authOnChange,getTeacherProfile,requireTeacherSession,requireAdminSession,getMyAssignments,adminListTeachers,adminSaveTeacherMaster,adminDeleteTeacherMaster,adminSyncTeacherAccount,adminListAssignments,adminSaveAssignment,adminDeleteAssignment
   };
 })();

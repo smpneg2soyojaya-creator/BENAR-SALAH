@@ -21,6 +21,8 @@
     SUPABASE_PUBLISHABLE_KEY: "sb_publishable_fRZZw6by12tqRXZQCudU7w_atHQj7Az",
     TABLE: "question_banks",
     PROFILE_TABLE: "teacher_profiles",
+    MASTER_TABLE: "teacher_master",
+    ASSIGNMENT_TABLE: "teacher_assignments",
     REQUEST_TIMEOUT_MS: 8000,
     AUTH_PERSIST_SESSION: true,
     AUTH_AUTO_REFRESH_TOKEN: true

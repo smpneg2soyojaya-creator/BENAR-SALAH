@@ -1,0 +1,249 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#06111f"><title>Master Guru • SPENDA Game Center</title><style>:root{--bg:#050b13;--panel:#0d1723;--line:#293c50;--text:#eef6fb;--muted:#91a5b8;--blue:#2d8cff;--green:#16a34a;--red:#b9344f;--gold:#f4c64d}*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% -10%,#10243a 0,transparent 42%),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}.wrap{width:min(1180px,calc(100% - 24px));margin:auto;padding:22px 0 35px}.head{text-align:center}.head img{width:78px;height:78px;object-fit:contain;border-radius:18px}.head h1{margin:8px 0 3px;font-size:28px}.head small{color:var(--muted);font-size:11px}.panel{background:linear-gradient(165deg,#0d1723,#09111a);border:1px solid var(--line);border-radius:16px;padding:16px;margin-top:12px;box-shadow:0 16px 45px #0004}.login-wrap{width:min(440px,100%);margin:26px auto}.brandline{display:flex;align-items:center;gap:8px;margin-bottom:11px;font-weight:900}.branddot{width:11px;height:11px;border-radius:50%;background:var(--green);box-shadow:0 0 16px #20d46d66}.field{margin:9px 0}.field label{display:block;font-size:11px;color:#a6bacd;margin-bottom:5px}.field input,.field select{width:100%;background:#07101a;border:1px solid #364a5e;color:#fff;border-radius:9px;padding:10px 12px;outline:none}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:10px;padding:10px 13px;background:#273847;color:#fff;font-weight:850;font-size:11px;text-decoration:none;cursor:pointer}.btn.primary{background:var(--blue)}.btn.green{background:var(--green)}.btn.red{background:var(--red)}.btn.gold{background:#c89320;color:#17120a}.btn:disabled{opacity:.45;cursor:not-allowed}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.status{font-size:10px;line-height:1.5;color:#a7bbcd;background:#09121c;border:1px solid #26394c;border-radius:9px;padding:10px;margin-top:10px}.status.ok{color:#92f2b7;border-color:#2d7953}.status.err{color:#ff9eae;border-color:#6d3544}.note{font-size:10px;line-height:1.55;color:#9bb0c3;background:#08111b;border:1px solid #26384a;border-radius:9px;padding:10px;margin-top:9px}.account{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px;border-radius:10px;background:#0a1722;border:1px solid #263b50}.account strong{display:block;font-size:12px}.account span{display:block;color:#8399ac;font-size:10px;margin-top:2px}.tablewrap{overflow:auto;border:1px solid #26384a;border-radius:9px;margin-top:8px}table{border-collapse:collapse;width:100%;font-size:9px}th,td{padding:8px;border-bottom:1px solid #253544;text-align:left;white-space:nowrap}th{background:#142231;position:sticky;top:0}.hidden{display:none!important}.hint{font-size:10px;color:var(--muted);line-height:1.5}@media(max-width:850px){.grid{grid-template-columns:1fr 1fr}}@media(max-width:520px){.grid{grid-template-columns:1fr}.head h1{font-size:24px}}</style></head><body><div class="wrap"><div class="head"><img src="logo-sekolah.png" alt="Logo SMP Negeri 2 Soyo Jaya"><h1>Master Guru</h1><small>Guru • Mapel • Kelas • Akun Login</small></div><section id="loginPanel" class="panel login-wrap"><div class="brandline"><span class="branddot"></span>LOGIN ADMIN</div><div class="note">Gunakan akun Supabase yang ber-role <b>admin</b>. Akun Guru dibuat melalui Supabase Authentication.</div><div class="field"><label>Email Admin</label><input id="loginEmail" type="email" autocomplete="username"></div><div class="field"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password"></div><div class="actions"><button id="loginBtn" class="btn primary" style="flex:1">🔐 Masuk Admin</button></div><div id="loginStatus" class="status">Memeriksa Supabase…</div></section><main id="admin" class="hidden"><section class="panel"><div class="account"><div><strong id="adminName">-</strong><span id="adminEmail">-</span></div><div class="actions" style="margin-top:0"><button id="logoutBtn" class="btn red">Keluar</button><a href="bank-soal.html" class="btn">Database Soal</a></div></div></section><section class="panel"><b>Data Guru</b><div class="hint">Isi email guru. Buat akun Auth dengan email yang sama, kemudian klik Hubungkan Akun.</div><div class="grid"><div class="field"><label>Nama Lengkap</label><input id="full_name"></div><div class="field"><label>NIP</label><input id="nip"></div><div class="field"><label>Email</label><input id="email" type="email"></div><div class="field"><label>No. HP</label><input id="no_hp"></div></div><div class="actions"><button id="newTeacher" class="btn">＋ Guru Baru</button><button id="saveTeacher" class="btn primary">💾 Simpan Guru</button></div><div id="teacherStatus" class="status">-</div></section><section class="panel"><b>Daftar Guru</b><div class="tablewrap"><table><thead><tr><th>Nama</th><th>NIP</th><th>Email</th><th>Akun</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="teacherRows"></tbody></table></div></section><section class="panel"><b>Penugasan Mapel & Kelas</b><div class="grid"><div class="field"><label>Guru Terpilih</label><select id="teacherSelect"></select></div><div class="field"><label>Jenjang</label><select id="assignLevel"><option>SD</option><option selected>SMP</option><option>SMA</option></select></div><div class="field"><label>Mapel</label><input id="assignSubject" placeholder="Matematika"></div><div class="field"><label>Kelas</label><input id="assignClass" placeholder="VII / Kelas 7"></div></div><div class="actions"><button id="syncAccount" class="btn gold">🔗 Hubungkan Akun Login</button><button id="saveAssignment" class="btn primary">＋ Tambah Penugasan</button></div><div id="assignStatus" class="status">Pilih Guru.</div><div class="tablewrap"><table><thead><tr><th>Mapel</th><th>Jenjang</th><th>Kelas</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="assignmentRows"></tbody></table></div></section></main></div><script src="config.js"></script><script src="spenda-db.js"></script><script>
+(() => {
+  "use strict";
+  const $ = id => document.getElementById(id);
+  let teachers = [];
+  let editingId = null;
+
+  function setStatus(id, message, ok = false) {
+    const el = $(id);
+    if (!el) return;
+    el.textContent = message;
+    el.className = "status " + (ok ? "ok" : "err");
+  }
+
+  function esc(value) {
+    return String(value ?? "").replace(/[&<>"']/g, ch => ({
+      "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+    }[ch]));
+  }
+
+  function clearTeacherForm() {
+    editingId = null;
+    ["full_name","nip","email","no_hp"].forEach(id => { $(id).value = ""; });
+    $("saveTeacher").textContent = "💾 Simpan Guru";
+  }
+
+  async function login() {
+    const email = $("loginEmail").value.trim();
+    const password = $("loginPassword").value;
+    if (!email || !password) {
+      setStatus("loginStatus", "Email dan password wajib diisi.");
+      return;
+    }
+    $("loginBtn").disabled = true;
+    setStatus("loginStatus", "Memproses login…");
+    try {
+      await SPENDADB.authSignIn(email, password);
+      await openAdmin();
+    } catch (e) {
+      setStatus("loginStatus", "Login gagal: " + e.message);
+    } finally {
+      $("loginBtn").disabled = false;
+    }
+  }
+
+  async function openAdmin() {
+    try {
+      const r = await SPENDADB.requireAdminSession();
+      $("adminName").textContent = r.profile.full_name;
+      $("adminEmail").textContent = r.session.user.email || r.profile.email || "";
+      $("loginPanel").classList.add("hidden");
+      $("admin").classList.remove("hidden");
+      await loadTeachers();
+    } catch (e) {
+      $("admin").classList.add("hidden");
+      $("loginPanel").classList.remove("hidden");
+      setStatus("loginStatus", e.message, false);
+    }
+  }
+
+  async function loadTeachers() {
+    teachers = await SPENDADB.adminListTeachers();
+    const rows = $("teacherRows");
+    rows.innerHTML = teachers.map(t => `
+      <tr>
+        <td>${esc(t.full_name)}</td>
+        <td>${esc(t.nip || "")}</td>
+        <td>${esc(t.email || "")}</td>
+        <td>${t.user_id ? "✅ Terhubung" : "⏳ Belum"}</td>
+        <td>${t.active === false ? "Nonaktif" : "Aktif"}</td>
+        <td>
+          <button class="btn" data-edit="${t.id}">Edit</button>
+          <button class="btn gold" data-sync="${t.id}">Hubungkan</button>
+          <button class="btn red" data-del="${t.id}">Hapus</button>
+        </td>
+      </tr>`).join("") || '<tr><td colspan="6">Belum ada data guru.</td></tr>';
+
+    const sel = $("teacherSelect");
+    sel.innerHTML = "";
+    teachers.forEach(t => {
+      const opt = document.createElement("option");
+      opt.value = t.id;
+      opt.textContent = t.full_name + (t.user_id ? " ✓" : "");
+      sel.appendChild(opt);
+    });
+    await loadAssignments();
+  }
+
+  async function loadAssignments() {
+    const masterId = $("teacherSelect").value;
+    if (!masterId) {
+      $("assignmentRows").innerHTML = "";
+      return;
+    }
+    const rows = await SPENDADB.adminListAssignments(masterId);
+    $("assignmentRows").innerHTML = rows.map(r => `
+      <tr>
+        <td>${esc(r.subject)}</td>
+        <td>${esc(r.level)}</td>
+        <td>${esc(r.class_name)}</td>
+        <td>${r.active ? "Aktif" : "Nonaktif"}</td>
+        <td><button class="btn red" data-a-del="${r.id}">Hapus</button></td>
+      </tr>`).join("") || '<tr><td colspan="5">Belum ada penugasan.</td></tr>';
+  }
+
+  async function saveTeacher() {
+    const name = $("full_name").value.trim();
+    if (!name) {
+      setStatus("teacherStatus", "Nama guru wajib diisi.");
+      return;
+    }
+    try {
+      const row = await SPENDADB.adminSaveTeacherMaster({
+        id: editingId,
+        full_name: name,
+        nip: $("nip").value,
+        email: $("email").value,
+        no_hp: $("no_hp").value
+      });
+      editingId = row.id;
+      setStatus("teacherStatus", "Data guru tersimpan.", true);
+      await loadTeachers();
+    } catch (e) {
+      setStatus("teacherStatus", "Gagal menyimpan: " + e.message);
+    }
+  }
+
+  async function syncAccount(masterId) {
+    try {
+      await SPENDADB.adminSyncTeacherAccount(masterId);
+      setStatus("teacherStatus", "Akun Auth berhasil dihubungkan berdasarkan email.", true);
+      await loadTeachers();
+    } catch (e) {
+      setStatus("teacherStatus", "Belum terhubung: " + e.message);
+    }
+  }
+
+  async function deleteTeacher(masterId) {
+    if (!confirm("Hapus data guru ini?")) return;
+    try {
+      await SPENDADB.adminDeleteTeacherMaster(masterId);
+      setStatus("teacherStatus", "Guru dihapus.", true);
+      await loadTeachers();
+    } catch (e) {
+      setStatus("teacherStatus", "Gagal menghapus: " + e.message);
+    }
+  }
+
+  async function syncSelected() {
+    const id = $("teacherSelect").value;
+    if (!id) {
+      setStatus("assignStatus", "Pilih guru.");
+      return;
+    }
+    await syncAccount(id);
+    await loadTeachers();
+  }
+
+  async function saveAssignment() {
+    const t = teachers.find(x => String(x.id) === String($("teacherSelect").value));
+    if (!t?.user_id) {
+      setStatus("assignStatus", "Guru belum terhubung ke akun Auth. Hubungkan akun terlebih dahulu.");
+      return;
+    }
+    const subject = $("assignSubject").value.trim();
+    const className = $("assignClass").value.trim();
+    if (!subject || !className) {
+      setStatus("assignStatus", "Mapel dan Kelas wajib diisi.");
+      return;
+    }
+    try {
+      await SPENDADB.adminSaveAssignment({
+        teacher_user_id: t.user_id,
+        subject,
+        level: $("assignLevel").value,
+        class_name: className
+      });
+      setStatus("assignStatus", "Penugasan ditambahkan.", true);
+      $("assignSubject").value = "";
+      $("assignClass").value = "";
+      await loadAssignments();
+    } catch (e) {
+      setStatus("assignStatus", "Gagal menyimpan penugasan: " + e.message);
+    }
+  }
+
+  async function deleteAssignment(id) {
+    if (!confirm("Hapus penugasan ini?")) return;
+    try {
+      await SPENDADB.adminDeleteAssignment(id);
+      setStatus("assignStatus", "Penugasan dihapus.", true);
+      await loadAssignments();
+    } catch (e) {
+      setStatus("assignStatus", "Gagal menghapus: " + e.message);
+    }
+  }
+
+  $("loginBtn").onclick = login;
+  $("loginPassword").addEventListener("keydown", e => { if (e.key === "Enter") login(); });
+  $("logoutBtn").onclick = async () => { try { await SPENDADB.authSignOut(); } finally { location.reload(); } };
+  $("newTeacher").onclick = clearTeacherForm;
+  $("saveTeacher").onclick = saveTeacher;
+  $("teacherSelect").onchange = loadAssignments;
+  $("syncAccount").onclick = syncSelected;
+  $("saveAssignment").onclick = saveAssignment;
+
+  $("teacherRows").onclick = async e => {
+    const btn = e.target.closest("button");
+    if (!btn) return;
+    const id = btn.dataset.edit || btn.dataset.sync || btn.dataset.del;
+    if (!id) return;
+    const teacher = teachers.find(x => String(x.id) === String(id));
+    if (!teacher) return;
+    if (btn.dataset.edit) {
+      editingId = teacher.id;
+      $("full_name").value = teacher.full_name || "";
+      $("nip").value = teacher.nip || "";
+      $("email").value = teacher.email || "";
+      $("no_hp").value = teacher.no_hp || "";
+      $("saveTeacher").textContent = "💾 Update Guru";
+      return;
+    }
+    if (btn.dataset.sync) { await syncAccount(teacher.id); return; }
+    if (btn.dataset.del) await deleteTeacher(teacher.id);
+  };
+
+  $("assignmentRows").onclick = async e => {
+    const btn = e.target.closest("button[data-a-del]");
+    if (btn) await deleteAssignment(btn.dataset.aDel);
+  };
+
+  SPENDADB.authOnChange((event) => { if (event === "SIGNED_OUT") location.reload(); });
+
+  (async () => {
+    if (!SPENDADB.cloudConfigured?.()) {
+      setStatus("loginStatus", "Supabase belum dikonfigurasi di config.js.");
+      return;
+    }
+    try {
+      await SPENDADB.ping();
+      setStatus("loginStatus", "Supabase aktif. Silakan login Admin.", true);
+      const s = await SPENDADB.authGetSession();
+      if (s?.user) await openAdmin();
+    } catch (e) {
+      setStatus("loginStatus", "Belum siap: " + e.message);
+    }
+  })();
+})();
+</script></body></html>

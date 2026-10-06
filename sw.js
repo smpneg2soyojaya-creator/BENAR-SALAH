@@ -1,6 +1,6 @@
 const CACHE="spenda-game-center-v17";
 const CORE=[
-  "./","./index.html","./manifest.webmanifest","./config.js","./spenda-db.js","./spenda-import.js","./bank-soal.html",
+  "./","./index.html","./manifest.webmanifest","./config.js","./spenda-db.js","./spenda-import.js","./bank-soal.html","./master-guru.html",
   "./icon-192.png","./icon-512.png","./logo-sekolah.png",
   "./benar-salah.html","./spenda-family-100.html","./spenda-gesture-battle.html","./clash-of-champions.html"
 ];
