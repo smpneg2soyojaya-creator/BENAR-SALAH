@@ -1,0 +1,14 @@
+LANGKAH UPLOAD V27
+
+1. Extract ZIP V27.
+2. Buka folder hasil extract.
+3. Pilih SEMUA file dan folder di dalamnya.
+4. GitHub -> repository -> Add file -> Upload files.
+5. Tarik semua file/folder tersebut ke GitHub.
+6. Commit changes.
+7. Buka alamat GitHub Pages seperti biasa.
+
+JANGAN membuka file HTML dari folder Downloads untuk pengujian.
+JANGAN upload ZIP ke dalam repository.
+
+V27 memakai file database baru: spenda-db-v27.js. Ini mencegah browser memakai database JavaScript versi lama.

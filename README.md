@@ -1,7 +1,7 @@
-# SPENDA Game Center V26
+# SPENDA Game Center V27
 
 ## Fokus versi ini
-V26 melanjutkan aplikasi Game Center yang sama. Tidak membuat game baru.
+V27 melanjutkan aplikasi Game Center yang sama. Tidak membuat game baru.
 
 Perubahan inti:
 - NIP menjadi ID Guru aplikasi.
@@ -13,7 +13,7 @@ Perubahan inti:
 - Game membaca bank soal Supabase; soal bawaan bukan sumber permainan.
 
 ## Database Supabase
-Jalankan `SUPABASE_V26.sql` pada Supabase SQL Editor.
+Jalankan `SUPABASE_V27.sql` pada Supabase SQL Editor.
 
 Jika editor menampilkan peringatan RLS, pilih `Run and enable RLS`.
 
@@ -42,7 +42,7 @@ Untuk fungsi ini, platform menyediakan secret key server-side. Jangan menyalin s
 Edge Function menggunakan Supabase Auth Admin API di server untuk membuat atau mengubah password akun Guru. Supabase mendokumentasikan bahwa fungsi admin Auth yang memerlukan secret/service key harus dijalankan hanya di server. 
 
 ## Aplikasi GitHub Pages
-Upload seluruh isi folder V26 ke repository GitHub Pages.
+Upload seluruh isi folder V27 ke repository GitHub Pages.
 
 `config.js` sudah berisi Project URL dan Publishable Key yang digunakan pada project Anda.
 
@@ -72,9 +72,13 @@ NIP hanya menjadi identitas Guru aplikasi dan dasar untuk membentuk identifier l
 
 Publishable key aman berada di frontend jika RLS dikonfigurasi dengan benar; secret/service key hanya berada di Edge Function. RLS Supabase bekerja berdasarkan policy dan `auth.uid()`.
 
-## V26: akun Guru tanpa email
+## V27: akun Guru tanpa email
 - NIP menjadi ID Guru.
 - Password ditentukan Admin.
 - `teacher_master` tidak membutuhkan email Guru.
 - Admin membuat/mengubah password melalui Edge Function `spenda-admin-teacher-account`.
 - Halaman Bank Soal menampilkan dropdown Nama Guru dan mengambil nama dari `teacher_master`.
+
+
+## V27 – cache-proof deployment
+V27 menggunakan nama file database `spenda-db-v27.js` agar GitHub Pages tidak lagi memuat file database versi lama dari cache browser/service worker. Upload seluruh isi paket V27 ke repository GitHub Pages.
