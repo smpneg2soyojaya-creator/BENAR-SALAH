@@ -1,11 +1,31 @@
-SPENDA GAME CENTER V37 - PAKET GITHUB
+SPENDA GAME CENTER - PAKET FINAL BERSIH
 
-1. Upload SEMUA file yang ada di ZIP ini ke repository GitHub Pages.
-2. Jangan upload folder V21/V22/V23/V24/V25/V26/V27/V28/V29/V30/V31/V32/V33/V34/V35/V36.
-3. Jangan menggabungkan dengan paket lama.
-4. Folder templates harus tetap sebagai folder templates.
-5. Pastikan index.html berada di root repository GitHub Pages.
+GUNAKAN PAKET INI SAJA. Semua file aplikasi berada langsung di ROOT ZIP.
 
-Catatan:
-- Password Guru dikelola Admin melalui Supabase Edge Function.
-- Edge Function tidak dijalankan dari GitHub Pages.
+GITHUB
+1. Ekstrak ZIP.
+2. Upload semua file ke ROOT repository GitHub Pages.
+3. Folder templates tetap sebagai folder.
+
+SUPABASE - JALANKAN SEKALI
+Jalankan SUPABASE_SETUP_GURU_LOGIN.sql di Supabase SQL Editor. SQL ini hanya menyiapkan login Guru dan membuat teacher_user_id pada penugasan boleh kosong.
+
+DATA GURU
+Tambah/edit Guru langsung di public.teacher_master. Aplikasi tidak menyediakan form tambah/edit/hapus Guru.
+
+PASSWORD GURU
+Password TIDAK disimpan di teacher_master. Admin mengatur password langsung di Supabase Authentication > Users. Aplikasi tidak lagi memakai Edge Function spenda-admin-teacher-account. Jadi error CORS Edge Function tersebut tidak lagi diperlukan.
+
+LOGIN GURU
+Aplikasi menampilkan dropdown berisi NAMA saja. NIP/NIPPPK tidak ditampilkan. Untuk login, sistem memakai NIP di belakang layar sebagai identitas teknis.
+
+Saat membuat user Guru di Supabase Authentication, gunakan email internal berbasis NIP:
+NIP dinormalisasi menjadi huruf kecil dan hanya huruf/angka, lalu tambahkan @login.spenda.local
+Contoh: NIPPPK. 19990202 202421 2 008 -> nipppk199902022024212008@login.spenda.local
+Password ditetapkan saat membuat user tersebut.
+
+PENUGASAN MAPEL & KELAS
+Satu Guru boleh memiliki beberapa baris pada teacher_assignments, sehingga satu Guru dapat memegang 2 Mapel atau lebih.
+
+MASTER GURU
+Halaman Master Guru hanya dipakai untuk penugasan Mapel/Kelas dan tidak lagi berisi pembuatan password atau daftar manajemen akun Guru.
