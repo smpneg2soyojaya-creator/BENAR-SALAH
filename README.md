@@ -1,7 +1,7 @@
-# SPENDA Game Center V27
+# SPENDA Game Center V28
 
 ## Fokus versi ini
-V27 melanjutkan aplikasi Game Center yang sama. Tidak membuat game baru.
+V28 melanjutkan aplikasi Game Center yang sama. Tidak membuat game baru.
 
 Perubahan inti:
 - NIP menjadi ID Guru aplikasi.
@@ -13,7 +13,7 @@ Perubahan inti:
 - Game membaca bank soal Supabase; soal bawaan bukan sumber permainan.
 
 ## Database Supabase
-Jalankan `SUPABASE_V27.sql` pada Supabase SQL Editor.
+Jalankan `SUPABASE_V28.sql` pada Supabase SQL Editor.
 
 Jika editor menampilkan peringatan RLS, pilih `Run and enable RLS`.
 
@@ -42,7 +42,7 @@ Untuk fungsi ini, platform menyediakan secret key server-side. Jangan menyalin s
 Edge Function menggunakan Supabase Auth Admin API di server untuk membuat atau mengubah password akun Guru. Supabase mendokumentasikan bahwa fungsi admin Auth yang memerlukan secret/service key harus dijalankan hanya di server. 
 
 ## Aplikasi GitHub Pages
-Upload seluruh isi folder V27 ke repository GitHub Pages.
+Upload seluruh isi folder V28 ke repository GitHub Pages.
 
 `config.js` sudah berisi Project URL dan Publishable Key yang digunakan pada project Anda.
 
@@ -72,7 +72,7 @@ NIP hanya menjadi identitas Guru aplikasi dan dasar untuk membentuk identifier l
 
 Publishable key aman berada di frontend jika RLS dikonfigurasi dengan benar; secret/service key hanya berada di Edge Function. RLS Supabase bekerja berdasarkan policy dan `auth.uid()`.
 
-## V27: akun Guru tanpa email
+## V28: akun Guru tanpa email
 - NIP menjadi ID Guru.
 - Password ditentukan Admin.
 - `teacher_master` tidak membutuhkan email Guru.
@@ -80,5 +80,9 @@ Publishable key aman berada di frontend jika RLS dikonfigurasi dengan benar; sec
 - Halaman Bank Soal menampilkan dropdown Nama Guru dan mengambil nama dari `teacher_master`.
 
 
-## V27 – cache-proof deployment
-V27 menggunakan nama file database `spenda-db-v27.js` agar GitHub Pages tidak lagi memuat file database versi lama dari cache browser/service worker. Upload seluruh isi paket V27 ke repository GitHub Pages.
+## V28 – cache-proof deployment
+V28 menggunakan nama file database `spenda-db-v27.js` agar GitHub Pages tidak lagi memuat file database versi lama dari cache browser/service worker. Upload seluruh isi paket V28 ke repository GitHub Pages.
+
+
+## V28 - Perbaikan RLS
+Memperbaiki infinite recursion pada policy teacher_profiles dengan fungsi security-definer is_spenda_admin(). teacher_master_summary diperlakukan sebagai view ringkasan (read-only); data Guru diedit melalui teacher_master/halaman Master Guru.
