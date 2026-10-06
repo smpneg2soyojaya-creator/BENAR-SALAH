@@ -9,14 +9,14 @@
 :root{--bg:#050b13;--panel:#0d1723;--panel2:#09131f;--line:#2a3d50;--text:#eef6fb;--muted:#91a5b8;--blue:#2d8cff;--green:#16a34a;--red:#c73550;--gold:#c99218}
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% -10%,#10243a 0,transparent 42%),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
 .wrap{width:min(980px,calc(100% - 24px));margin:auto;padding:18px 0 40px}.topbar{display:flex;margin-bottom:8px}.back-btn{display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 12px;border-radius:10px;background:#182735;border:1px solid #31465a;color:#dbe8f3;font-size:11px;font-weight:900;text-decoration:none}.head{text-align:center;margin-bottom:16px}.head img{width:58px;height:58px;object-fit:contain;border-radius:14px}.head h1{margin:7px 0 3px;font-size:25px}.head small{font-size:10px;color:var(--muted)}
-.panel{background:linear-gradient(165deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:15px;padding:16px;margin-top:12px;box-shadow:0 14px 36px #0003}.brandline{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:900}.branddot{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 14px #20d46d66}.login-grid{width:min(720px,100%);margin:18px auto;display:grid;grid-template-columns:1fr 1fr;gap:12px}.login-panel{margin:0}.login-admin .branddot{background:var(--gold);box-shadow:0 0 14px #f4c64d66}.field{margin-top:11px}.field label{display:block;font-size:11px;color:#a6bacd;margin-bottom:5px}.field input,.field select{width:100%;background:#07101a;border:1px solid #364a5e;color:#fff;border-radius:9px;padding:11px 12px;outline:none;font:inherit}.field input:focus,.field select:focus{border-color:#4b8ac9;box-shadow:0 0 0 2px #2d8cff18}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}.btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:10px;padding:10px 14px;background:#273847;color:#fff;font-weight:850;font-size:11px;cursor:pointer}.btn.primary{background:var(--blue)}.btn.red{background:var(--red)}.btn.gold{background:var(--gold);color:#17120a}.btn:disabled{opacity:.5;cursor:not-allowed}.status{font-size:10px;line-height:1.5;color:#a7bbcd;background:#09121c;border:1px solid #26394c;border-radius:9px;padding:10px;margin-top:10px}.status.ok{color:#92f2b7;border-color:#2d7953}.status.err{color:#ff9eae;border-color:#6d3544}.note{font-size:10px;line-height:1.5;color:#9bb0c3;background:#08111b;border:1px solid #26384a;border-radius:9px;padding:10px;margin-top:9px}.hidden{display:none!important}
-.admin-panel{width:100%;margin:0 auto}.admin-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.admin-account{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:10px;background:#0a1722;border:1px solid #263b50}.admin-account strong{display:block;font-size:12px}.admin-account span{display:block;color:#8399ac;font-size:10px;margin-top:2px}.section-title{font-size:16px;font-weight:900;margin-bottom:4px}.section-sub{font-size:10px;line-height:1.5;color:var(--muted)}.account-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(160px,1fr) minmax(160px,1fr);gap:10px}.assign-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(110px,.75fr) minmax(0,1.3fr) minmax(0,1fr);gap:10px}.account-status{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:10px}.badge{display:inline-flex;align-items:center;padding:5px 8px;border-radius:999px;font-size:9px;font-weight:900;background:#29394a;color:#dbe8f3}.badge.ok{background:#12482e;color:#9df0bb}.badge.wait{background:#453511;color:#f8d77d}.tablewrap{overflow:auto;border:1px solid #26384a;border-radius:9px;margin-top:11px}table{border-collapse:collapse;width:100%;font-size:10px}th,td{padding:9px;border-bottom:1px solid #253544;text-align:left;white-space:nowrap}th{background:#142231;position:sticky;top:0}tbody tr:last-child td{border-bottom:0}
+.panel{background:linear-gradient(165deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:15px;padding:16px;margin-top:12px;box-shadow:0 14px 36px #0003}.brandline{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:900}.branddot{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 14px #20d46d66}.login-grid{width:min(460px,100%);margin:18px auto;display:grid;grid-template-columns:1fr;gap:12px}.login-panel{margin:0}.login-admin .branddot{background:var(--gold);box-shadow:0 0 14px #f4c64d66}.field{margin-top:11px}.field label{display:block;font-size:11px;color:#a6bacd;margin-bottom:5px}.field input,.field select{width:100%;background:#07101a;border:1px solid #364a5e;color:#fff;border-radius:9px;padding:11px 12px;outline:none;font:inherit}.field input:focus,.field select:focus{border-color:#4b8ac9;box-shadow:0 0 0 2px #2d8cff18}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}.btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:10px;padding:10px 14px;background:#273847;color:#fff;font-weight:850;font-size:11px;cursor:pointer}.btn.primary{background:var(--blue)}.btn.red{background:var(--red)}.btn.gold{background:var(--gold);color:#17120a}.btn:disabled{opacity:.5;cursor:not-allowed}.status{font-size:10px;line-height:1.5;color:#a7bbcd;background:#09121c;border:1px solid #26394c;border-radius:9px;padding:10px;margin-top:10px}.status.ok{color:#92f2b7;border-color:#2d7953}.status.err{color:#ff9eae;border-color:#6d3544}.note{font-size:10px;line-height:1.5;color:#9bb0c3;background:#08111b;border:1px solid #26384a;border-radius:9px;padding:10px;margin-top:9px}.hidden{display:none!important}
+.admin-panel{width:100%;margin:0 auto}.admin-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.admin-account{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:10px;background:#0a1722;border:1px solid #263b50}.admin-account strong{display:block;font-size:12px}.admin-account span{display:block;color:#8399ac;font-size:10px;margin-top:2px}.section-title{font-size:16px;font-weight:900;margin-bottom:4px}.section-sub{font-size:10px;line-height:1.5;color:var(--muted)}.account-grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(170px,1fr) minmax(170px,1fr);gap:10px}.assign-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(110px,.75fr) minmax(0,1.3fr) minmax(0,1fr);gap:10px}.account-status{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:10px}.badge{display:inline-flex;align-items:center;padding:5px 8px;border-radius:999px;font-size:9px;font-weight:900;background:#29394a;color:#dbe8f3}.badge.ok{background:#12482e;color:#9df0bb}.badge.wait{background:#453511;color:#f8d77d}.tablewrap{overflow:auto;border:1px solid #26384a;border-radius:9px;margin-top:11px}table{border-collapse:collapse;width:100%;font-size:10px}th,td{padding:9px;border-bottom:1px solid #253544;text-align:left;white-space:nowrap}th{background:#142231;position:sticky;top:0}tbody tr:last-child td{border-bottom:0}
 @media(max-width:720px){.login-grid{grid-template-columns:1fr}.wrap{width:min(640px,calc(100% - 16px));padding-top:12px}.panel{padding:13px;border-radius:13px}.head img{width:50px;height:50px}.head h1{font-size:22px}.admin-account{align-items:flex-start;flex-direction:column}.account-grid,.assign-grid{grid-template-columns:1fr}.actions .btn{flex:1 1 180px}.tablewrap table{min-width:560px}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="topbar"><a class="back-btn" href="index.html">← Game Center</a></div>
+  <div class="topbar"><a class="back-btn" href="index.html">← Beranda</a></div>
   <div class="head">
     <img src="logo-sekolah.png" alt="Logo SMP Negeri 2 Soyo Jaya">
     <h1>Master Guru</h1>
@@ -24,15 +24,6 @@
   </div>
 
   <div id="loginGrid" class="login-grid">
-    <section id="teacherLoginPanel" class="panel login-panel">
-      <div class="brandline"><span class="branddot"></span>LOGIN GURU</div>
-      <div class="note">Pilih nama Guru yang sudah dibuat Admin, lalu masukkan password.</div>
-      <div class="field"><label>Nama Guru</label><select id="teacherLoginSelect"><option value="">Memuat daftar Guru…</option></select></div>
-      <div class="field"><label>Password</label><input id="teacherLoginPassword" type="password" autocomplete="current-password" placeholder="Masukkan password"></div>
-      <div class="actions"><button id="teacherLoginBtn" class="btn primary" style="flex:1">🔐 Masuk sebagai Guru</button></div>
-      <div id="teacherLoginStatus" class="status">Memuat daftar Guru…</div>
-    </section>
-
     <section id="loginPanel" class="panel login-panel login-admin">
       <div class="brandline"><span class="branddot"></span>LOGIN ADMIN</div>
       <div class="note">Masukkan email dan password Admin untuk membuka Master Guru.</div>
@@ -86,13 +77,12 @@
 </div>
 
 <script src="config.js"></script>
-<script src="spenda-db-v34.js"></script>
+<script src="spenda-db.js"></script>
 <script>
 (() => {
   "use strict";
   const $ = id => document.getElementById(id);
   let teachers = [];
-  let teacherLoginList = [];
   let adminAuthenticated = false;
 
   function setStatus(id, message, ok = false) {
@@ -115,26 +105,6 @@
     showLogin();
   }
 
-  async function loadTeacherLoginList(){
-    const sel=$("teacherLoginSelect");
-    sel.disabled=true;
-    sel.innerHTML='<option value="">Memuat daftar Guru…</option>';
-    try{
-      teacherLoginList=await SPENDADB.getTeacherLoginList();
-      sel.innerHTML='<option value="">Pilih Nama Guru</option>';
-      teacherLoginList.forEach(t=>{
-        const o=document.createElement("option");
-        o.value=t.nip; o.textContent=t.full_name;
-        sel.appendChild(o);
-      });
-      sel.disabled=!teacherLoginList.length;
-      setStatus("teacherLoginStatus", teacherLoginList.length?"Pilih Nama Guru lalu masukkan password.":"Belum ada Guru aktif.",!!teacherLoginList.length);
-    }catch(e){
-      sel.innerHTML='<option value="">Daftar Guru tidak tersedia</option>';
-      setStatus("teacherLoginStatus","Gagal memuat daftar Guru: "+e.message);
-    }
-  }
-
   async function loadTeachers(){
     teachers=await SPENDADB.adminListTeachers();
     const lists=[$("accountTeacher"),$("teacherSelect")];
@@ -146,13 +116,10 @@
         sel.appendChild(o);
       });
     });
-    if(teachers.length){
-      const first=teachers.find(t=>t.active!==false);
-      $("accountTeacher").value=String(first.id);
-      $("teacherSelect").value=String(first.id);
-      updateAccountState();
-      await loadAssignments();
-    }
+    $("accountTeacher").value="";
+    $("teacherSelect").value="";
+    updateAccountState();
+    $("assignmentRows").innerHTML='<tr><td colspan="4">Pilih Guru untuk melihat penugasan.</td></tr>';
   }
 
   function selectedTeacher(){
@@ -165,23 +132,6 @@
     state.innerHTML=t.user_id
       ? '<span class="badge ok">✓ Akun sudah diatur</span><span>Masukkan password baru untuk menggantinya.</span>'
       : '<span class="badge wait">Belum ada akun</span><span>Buat password untuk Guru ini.</span>';
-  }
-
-  async function loginTeacher(){
-    const nip=$("teacherLoginSelect").value;
-    const t=teacherLoginList.find(x=>String(x.nip)===String(nip));
-    const password=$("teacherLoginPassword").value;
-    if(!t){setStatus("teacherLoginStatus","Pilih Nama Guru.");return;}
-    if(!password){setStatus("teacherLoginStatus","Password wajib diisi.");return;}
-    $("teacherLoginBtn").disabled=true;
-    setStatus("teacherLoginStatus","Memproses login…");
-    try{
-      await SPENDADB.authSignInByNip(t.nip,password);
-      const r=await SPENDADB.requireTeacherSession();
-      if(r.profile.role!=="teacher"){await SPENDADB.authSignOut();throw new Error("Akun ini bukan akun Guru.");}
-      location.href="bank-soal.html";
-    }catch(e){setStatus("teacherLoginStatus","Login Guru gagal: "+e.message);}
-    finally{$("teacherLoginBtn").disabled=false;}
   }
 
   async function loginAdmin(){
@@ -265,8 +215,6 @@
     catch(e){setStatus("assignStatus","Gagal menghapus penugasan: "+e.message);}
   }
 
-  $("teacherLoginBtn").onclick=loginTeacher;
-  $("teacherLoginPassword").onkeydown=e=>{if(e.key==="Enter")loginTeacher();};
   $("loginBtn").onclick=loginAdmin;
   $("loginPassword").onkeydown=e=>{if(e.key==="Enter")loginAdmin();};
   $("logoutBtn").onclick=async()=>{try{await SPENDADB.authSignOut();}finally{location.reload();}};
@@ -289,7 +237,6 @@
       await SPENDADB.ping();
       setStatus("loginStatus","Supabase aktif. Silakan login Admin.",true);
     }catch(e){setStatus("loginStatus","Supabase belum siap: "+e.message);}
-    await loadTeacherLoginList();
   })();
 })();
 </script>
