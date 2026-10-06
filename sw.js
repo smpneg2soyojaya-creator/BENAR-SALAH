@@ -1,4 +1,4 @@
-const CACHE='spenda-game-center-v34';
+const CACHE='spenda-game-center-v35';
 const ASSETS=[
   './','./index.html','./master-guru.html','./bank-soal.html',
   './benar-salah.html','./spenda-gesture-battle.html','./spenda-family-100.html','./clash-of-champions.html',
