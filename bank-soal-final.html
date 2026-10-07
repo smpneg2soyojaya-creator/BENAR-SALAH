@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="id">
+<head>
+<link rel="icon" href="favicon.ico">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#06111f">
+<title>Database Soal Guru • SPENDA Game Center</title>
+<style>
+:root{--bg:#050b13;--panel:#0d1723;--panel2:#09121d;--line:#293c50;--text:#eef6fb;--muted:#91a5b8;--blue:#2d8cff;--green:#148b4a;--red:#b9344f;--gold:#f4c64d}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% -10%,#10243a 0,transparent 42%),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+body{min-height:100vh}.wrap{width:min(1100px,calc(100% - 24px));margin:auto;padding:70px 0 35px}.home-btn{position:fixed;left:16px;top:16px;z-index:10000;height:38px;padding:0 13px;display:flex;align-items:center;border-radius:20px;background:rgba(7,16,26,.92);border:1px solid #36506a;color:#fff;text-decoration:none;font-weight:900;font-size:11px;box-shadow:0 8px 25px #0005}.head{text-align:center}.head img{width:78px;height:78px;object-fit:contain;border-radius:18px}.head h1{margin:8px 0 3px;font-size:28px}.head small{color:var(--muted);font-size:11px}.panel{background:linear-gradient(165deg,#0d1723,#09111a);border:1px solid var(--line);border-radius:16px;padding:16px;margin-top:12px;box-shadow:0 16px 45px #0004}.login-wrap{width:min(440px,100%);margin:26px auto}.brandline{display:flex;align-items:center;gap:8px;margin-bottom:11px;font-weight:900}.branddot{width:11px;height:11px;border-radius:50%;background:var(--green);box-shadow:0 0 16px #20d46d66}.field{margin:10px 0}.field label{display:block;font-size:11px;color:#a6bacd;margin-bottom:5px}.field input,.field select{width:100%;background:#07101a;border:1px solid #364a5e;color:#fff;border-radius:9px;padding:11px 12px;outline:none}.field input:focus,.field select:focus{border-color:#46a0ff;box-shadow:0 0 0 3px #2d8cff22}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:10px;padding:10px 13px;background:#273847;color:#fff;font-weight:850;font-size:11px;text-decoration:none;cursor:pointer}.btn.primary{background:var(--blue)}.btn.green{background:var(--green)}.btn.red{background:var(--red)}.btn:disabled{opacity:.45;cursor:not-allowed}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.status{font-size:10px;line-height:1.5;color:#a7bbcd;background:#09121c;border:1px solid #26394c;border-radius:9px;padding:10px;margin-top:10px}.status.ok{color:#92f2b7;border-color:#2d7953}.status.err{color:#ff9eae;border-color:#6d3544}.note{font-size:10px;line-height:1.55;color:#9bb0c3;background:#08111b;border:1px solid #26384a;border-radius:9px;padding:10px;margin-top:9px}.account{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px;border-radius:10px;background:#0a1722;border:1px solid #263b50}.account strong{display:block;font-size:12px}.account span{display:block;color:#8399ac;font-size:10px;margin-top:2px}.tablewrap{overflow:auto;border:1px solid #26384a;border-radius:9px;margin-top:8px}table{border-collapse:collapse;width:100%;font-size:9px}th,td{padding:8px;border-bottom:1px solid #253544;text-align:left;white-space:nowrap}th{background:#142231;position:sticky;top:0}.preview{margin-top:8px;font:10px/1.5 ui-monospace,Consolas,monospace;white-space:pre-wrap;background:#07101a;border:1px solid #26384a;padding:9px;border-radius:9px;max-height:300px;overflow:auto}.req{color:#ff8297;font-size:9px;margin-top:3px}.hidden{display:none!important}.login-help{text-align:center;color:#7f95aa;font-size:10px;line-height:1.5;margin-top:12px}
+@media(max-width:850px){.grid{grid-template-columns:1fr 1fr}}@media(max-width:520px){.grid{grid-template-columns:1fr}.head h1{font-size:24px}}
+</style>
+</head>
+<body>
+<a class="home-btn" href="index.html">← Beranda</a>
+<div class="wrap">
+  <div class="head"><img src="logo-sekolah.png" alt="Logo SMP Negeri 2 Soyo Jaya"><h1>Database Soal Guru</h1><small>SPENDA Game Center • Supabase Database Sekolah</small></div>
+
+  <section id="loginPanel" class="panel login-wrap">
+    <div class="brandline"><span class="branddot"></span>LOGIN GURU</div>
+    <div class="note">Pilih Nama Guru dan masukkan password yang dibuat Admin.</div>
+    <div class="field"><label>Nama Guru</label><select id="loginTeacher" autocomplete="username"><option value="">Memuat daftar guru…</option></select></div>
+    <div class="field"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Password"></div>
+    <div class="actions"><button id="loginBtn" class="btn primary" style="flex:1">🔐 Masuk sebagai Guru</button></div>
+    <div id="loginStatus" class="status">Memuat daftar Guru…</div>
+    <div class="login-help">Nama Guru berasal dari data sekolah. Password dibuat oleh Admin.</div>
+  </section>
+
+  <main id="manager" class="hidden">
+    <section class="panel">
+      <div class="account"><div><strong id="teacherName">-</strong></div><button id="logoutBtn" class="btn red">Keluar</button></div>
+    </section>
+
+    <section class="panel">
+      <div class="grid">
+        <div class="field"><label>Game</label><select id="game"><option value="benar-salah">BENAR / SALAH</option><option value="gesture-battle">GESTURE BATTLE EDU</option><option value="family-100">SPENDA FAMILY 100</option><option value="clash-of-champions">CLASH OF CHAMPIONS</option></select></div>
+        <div class="field"><label>Nama Guru</label><input id="teacher" readonly></div>
+        <div class="field"><label>Jenjang <span class="req">*</span></label><select id="level" disabled><option value="">Memuat…</option></select></div>
+        <div class="field"><label>Kelas <span class="req">*</span></label><select id="className" disabled><option value="">Pilih mapel terlebih dahulu</option></select></div>
+        <div class="field"><label>Mapel <span class="req">*</span></label><select id="subject" disabled><option value="">Memuat…</option></select></div>
+        <div class="field"><label>Tingkat Kesulitan</label><select id="difficulty"><option value="Mudah">Mudah</option><option value="Sedang" selected>Sedang</option><option value="Sulit">Sulit</option><option value="Semua">Semua</option></select></div>
+        <div class="field" style="grid-column:span 2"><label>File Word / Excel / CSV / JSON <span class="req">*</span></label><input id="file" type="file" accept=".docx,.xlsx,.xls,.csv,.json"></div>
+      </div>
+      <div class="note"><b>Alur:</b> akun Guru menentukan Nama Guru. Pilih Mapel dan Kelas yang sudah ditugaskan Admin → pilih file soal → Import. Nama Guru tidak dapat diubah dari halaman ini.</div>
+      <div class="actions"><button id="import" class="btn primary">⬆ Import Word / Excel / JSON</button><button id="load" class="btn green">Muat Bank</button><button id="export" class="btn">⬇ Export JSON</button><button id="delete" class="btn red">Hapus Bank</button><a id="adminLink" href="master-guru.html" class="btn hidden">⚙ Master Guru</a><a href="index.html" class="btn">← Beranda</a></div>
+      <div id="status" class="status">Menyiapkan database…</div>
+    </section>
+
+    <section class="panel"><b>Template Soal</b><div class="note">Gunakan template sesuai game. Isi pertanyaan saja; Nama Guru dan metadata bank mengikuti akun serta pilihan pada halaman ini.</div><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:8px"><a class="btn" href="templates/Template_Soal_BENAR_SALAH.docx" download>Word • BENAR/SALAH</a><a class="btn" href="templates/Template_Soal_BENAR_SALAH.xlsx" download>Excel • BENAR/SALAH</a><a class="btn" href="templates/Template_Soal_GESTURE_BATTLE.docx" download>Word • GESTURE</a><a class="btn" href="templates/Template_Soal_GESTURE_BATTLE.xlsx" download>Excel • GESTURE</a><a class="btn" href="templates/Template_Soal_FAMILY_100.docx" download>Word • FAMILY 100</a><a class="btn" href="templates/Template_Soal_FAMILY_100.xlsx" download>Excel • FAMILY 100</a><a class="btn" href="templates/Template_Soal_CLASH_OF_CHAMPIONS.docx" download>Word • CLASH</a><a class="btn" href="templates/Template_Soal_CLASH_OF_CHAMPIONS.xlsx" download>Excel • CLASH</a></div></section>
+
+    <section class="panel"><b>Bank aktif</b><div id="active" class="note">Belum dimuat.</div><div id="preview" class="preview"></div></section>
+    <section class="panel"><b>Bank milik akun ini</b><div class="tablewrap"><table><thead><tr><th>Game</th><th>Guru</th><th>Mapel</th><th>Jenjang</th><th>Kelas</th><th>Kesulitan</th><th>Soal</th></tr></thead><tbody id="rows"></tbody></table></div></section>
+  </main>
+</div>
+<script src="config.js"></script><script src="spenda-db.js"></script><script src="spenda-import-v39.js?v=20261007-1030"></script>
+<script>
+(()=>{
+  const $=id=>document.getElementById(id);
+  const names={"benar-salah":"BENAR / SALAH","gesture-battle":"GESTURE BATTLE EDU","family-100":"SPENDA FAMILY 100","clash-of-champions":"CLASH OF CHAMPIONS"};
+  let profile=null,session=null,assignments=[],loginTeachers=[];
+  const query=new URLSearchParams(location.search);
+  if(query.get("game")&&$("game")?.querySelector(`option[value="${query.get("game")}"]`))$("game").value=query.get("game");
+  function status(msg,ok=false){$("status").textContent=msg;$("status").className='status '+(ok?'ok':'err')}
+  function loginStatus(msg,ok=false){$("loginStatus").textContent=msg;$("loginStatus").className='status '+(ok?'ok':'err')}
+  function meta(){return{game:$('game').value,teacher:profile?.full_name||'',teacher_user_id:'',level:$('level').value,className:$('className').value,subject:$('subject').value,difficulty:$('difficulty').value}}
+  function esc(x){return String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+  function requireFields(){const m=meta();if(!m.teacher||!m.level||!m.className||!m.subject){alert('Pilih Jenjang, Mapel, dan Kelas yang ditugaskan Admin.');return null}return m}
+  function unique(xs){return [...new Set(xs)]}
+  function setOptions(el,items,placeholder){el.innerHTML='';if(placeholder){const o=document.createElement('option');o.value='';o.textContent=placeholder;el.appendChild(o)}items.forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;el.appendChild(o)});el.disabled=!items.length}
+  function populateAssignments(){const levels=unique(assignments.map(a=>a.level));setOptions($("level"),levels,levels.length?'Pilih jenjang':'Tidak ada penugasan');$("subject").innerHTML='<option value="">Pilih jenjang terlebih dahulu</option>';$("subject").disabled=true;$("className").innerHTML='<option value="">Pilih mapel terlebih dahulu</option>';$("className").disabled=true;if(levels.length){$("level").value=levels[0];populateSubjects()}}
+  function populateSubjects(){const lv=$("level").value;const subjects=unique(assignments.filter(a=>a.level===lv).map(a=>a.subject));setOptions($("subject"),subjects,subjects.length?'Pilih mapel':'Tidak ada mapel');$("className").innerHTML='<option value="">Pilih mapel terlebih dahulu</option>';$("className").disabled=true;if(subjects.length){$("subject").value=subjects[0];populateClasses()}}
+  function populateClasses(){const lv=$("level").value,sub=$("subject").value;const classes=unique(assignments.filter(a=>a.level===lv&&a.subject===sub).map(a=>a.class_name));setOptions($("className"),classes,classes.length?'Pilih kelas':'Tidak ada kelas');if(classes.length){$("className").value=classes[0];loadActive()}}
+  async function refreshBanks(){try{const bs=await SPENDADB.listBanks({teacher:profile?.full_name||'',game:$('game').value});$("rows").innerHTML=bs.map(r=>`<tr><td>${names[r.game]||esc(r.game)}</td><td>${esc(r.teacher)}</td><td>${esc(r.subject)}</td><td>${esc(r.level)}</td><td>${esc(r.className)}</td><td>${esc(r.difficulty)}</td><td>${(r.questions||[]).length}</td></tr>`).join('')||'<tr><td colspan="7">Belum ada bank milik akun ini.</td></tr>'}catch(e){status('Gagal membaca bank: '+e.message)}}
+  async function loadActive(){const m=requireFields();if(!m)return;try{const r=await SPENDADB.getBank(m);if(!r){$("active").textContent='Bank aktif belum ada.';$("preview").textContent='';return}$("active").textContent=`${names[r.game]} • ${r.teacher} • ${r.subject} • ${r.level} • ${r.className} • ${r.difficulty} • ${(r.questions||[]).length} soal`;$("preview").textContent=(r.questions||[]).slice(0,50).map((x,i)=>`${i+1}. ${x.statement||x.q||x.pertanyaan||''}${x.answer?' → '+x.answer:''}${x.c?' → '+x.c:''}`).join('\n')}catch(e){status('Gagal memuat bank: '+e.message)}}
+  async function showManager(){try{const result=await SPENDADB.requireTeacherSession();session=result.session;profile=result.profile;$("teacherName").textContent=profile.full_name;$("teacher").value=profile.full_name;if(profile.role==='admin')$("adminLink").classList.remove('hidden');assignments=await SPENDADB.getMyAssignments();$("loginPanel").classList.add('hidden');$("manager").classList.remove('hidden');if(!assignments.length){$("level").innerHTML='<option value="">Belum ada penugasan</option>';$("level").disabled=true;$("subject").innerHTML='<option value="">Belum ada penugasan</option>';$("subject").disabled=true;$("className").innerHTML='<option value="">Belum ada penugasan</option>';$("className").disabled=true;status('Akun aktif, tetapi belum ada Mapel/Kelas yang ditugaskan Admin.',false);return}populateAssignments();status('Login Guru berhasil.',true);await refreshBanks();await loadActive()}catch(e){$("manager").classList.add('hidden');$("loginPanel").classList.remove('hidden');loginStatus(e.message,false)}}
+  async function loadTeacherLoginList(){
+    const sel=$("loginTeacher");
+    sel.disabled=true;
+    sel.innerHTML='<option value="">Memuat daftar Guru…</option>';
+    try{
+      loginTeachers=await SPENDADB.getTeacherLoginList();
+      sel.innerHTML='<option value="">Pilih Nama Guru</option>';
+      loginTeachers.forEach(t=>{
+        const o=document.createElement('option');
+        o.value=t.teacher_id ?? t.id;
+        o.textContent=t.full_name;
+        sel.appendChild(o);
+      });
+      sel.disabled=!loginTeachers.length;
+      if(!loginTeachers.length) loginStatus('Belum ada Guru aktif di teacher_master.');
+      else loginStatus('Pilih Nama Guru lalu masukkan password.',true);
+    }catch(e){
+      sel.innerHTML='<option value="">Gagal memuat daftar Guru</option>';
+      sel.disabled=true;
+      loginStatus('Gagal memuat daftar Guru: '+e.message);
+    }
+  }
+  async function login(){
+    const id=$("loginTeacher").value;
+    const teacher=loginTeachers.find(t=>String(t.teacher_id ?? t.id)===String(id));
+    const pass=$("loginPassword").value;
+    if(!teacher){loginStatus("Silakan pilih Nama Guru.");return}
+    if(!pass){loginStatus("Password wajib diisi.");return}
+    $("loginBtn").disabled=true;loginStatus("Memproses login…");
+    try{
+      const result=await SPENDADB.teacherLogin(Number(id),pass);
+      if(!result?.ok){loginStatus(result?.error||"Nama Guru atau password salah.");return}
+      $("loginPassword").value="";
+      await showManager();
+    }catch(e){loginStatus("Login gagal: "+e.message)}
+    finally{$("loginBtn").disabled=false}
+  }
+  async function logout(){try{await SPENDADB.teacherLogout()}catch(e){}session=null;profile=null;assignments=[];$("manager").classList.add('hidden');$("loginPanel").classList.remove('hidden');loginStatus('Anda sudah keluar dari akun Guru.',true)}
+  $("loginBtn").onclick=login;$("loginPassword").addEventListener('keydown',e=>{if(e.key==='Enter')login()});
+  $("loginTeacher").onchange=()=>{const t=loginTeachers.find(x=>String(x.teacher_id ?? x.id)===String($("loginTeacher").value)); if(t) loginStatus('Silakan masukkan password untuk '+t.full_name+'.',true)};$("logoutBtn").onclick=logout;
+  $("level").onchange=async()=>{populateSubjects();await refreshBanks()};$("subject").onchange=async()=>{populateClasses();await refreshBanks()};$("className").onchange=async()=>{await refreshBanks();await loadActive()};$("game").onchange=async()=>{await refreshBanks();await loadActive()};$("difficulty").onchange=loadActive;
+  $("import").onclick=async()=>{if(!session||!profile){alert('Silakan login sebagai Guru terlebih dahulu.');return}const f=$("file").files[0],m=requireFields();if(!f||!m)return;if(!assignments.some(a=>a.level===m.level&&a.subject===m.subject&&a.class_name===m.className)){alert('Kombinasi Mapel dan Kelas ini belum ditugaskan kepada akun Anda.');return}try{status('Mengimpor dan menyimpan ke Supabase…');const r=await SPENDAIMPORT.importFile(f,m.game,m);status(`Berhasil mengimpor ${r.rows} soal • ${names[m.game]} • ${profile.full_name} • ${m.subject} • ${m.className}.`,true);$("file").value='';await refreshBanks();await loadActive()}catch(e){console.error(e);status('Import gagal: '+e.message);alert('Import gagal: '+e.message)}};
+  $("load").onclick=loadActive;
+  $("delete").onclick=async()=>{const m=requireFields();if(!m)return;if(!confirm(`Hapus bank ${m.game} • ${m.teacher} • ${m.subject} • ${m.className} • ${m.difficulty}?`))return;try{await SPENDADB.remove(m);status('Bank berhasil dihapus.',true);await loadActive();await refreshBanks()}catch(e){status('Gagal menghapus bank: '+e.message);alert(e.message)}};
+  $("export").onclick=async()=>{const m=requireFields();if(!m)return;try{const r=await SPENDADB.getBank(m);if(!r)throw new Error('Bank aktif belum ada.');const blob=new Blob([JSON.stringify(r.questions||[],null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`${m.game}-${m.teacher}-${m.subject}-${m.className}.json`.replace(/[^a-z0-9._-]+/gi,'-');a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}catch(e){alert(e.message)}};
+  (async()=>{if(!SPENDADB.cloudConfigured?.()){loginStatus('Supabase belum dikonfigurasi di config.js.');return}try{await SPENDADB.ping();await loadTeacherLoginList()}catch(e){loginStatus(e.message);return}})();
+})();
+</script>
+</body></html>
