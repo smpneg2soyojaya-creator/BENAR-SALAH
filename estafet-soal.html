@@ -64,6 +64,7 @@ button{cursor:pointer}
   color:#dff7ff;background:rgba(25,207,255,.09);border:1px solid rgba(25,207,255,.22);
   box-shadow:0 0 22px rgba(25,207,255,.08)
 }
+.header-menu{padding:9px 13px;border-radius:999px;color:#fff;text-decoration:none;font-size:11px;font-weight:900;background:linear-gradient(135deg,#1acfff,#4c7cff);box-shadow:0 8px 22px rgba(39,124,255,.22);border:1px solid rgba(255,255,255,.15);transition:.18s}.header-menu:hover{transform:translateY(-2px);box-shadow:0 0 24px rgba(25,207,255,.22)}
 .card{
   background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025)),var(--panel);
   border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
@@ -305,7 +306,7 @@ input:focus,select:focus{border-color:rgba(25,207,255,.72);box-shadow:0 0 0 4px 
 </style>
 </head>
 <body>
-<a class="home-btn" href="./index.html">⌂ Game Center</a>
+<a class="home-btn" href="./index.html?from=estafet&amp;v=20261007">⌂ Game Center</a>
 <div class="wrap">
   <div class="top">
     <div class="brand">
@@ -316,6 +317,7 @@ input:focus,select:focus{border-color:rgba(25,207,255,.72);box-shadow:0 0 0 4px 
       </div>
     </div>
     <div class="badge">🏃 MODE MAIN LANGSUNG DI PID</div>
+    <a class="header-menu" href="./index.html?from=estafet&amp;v=20261007">🏠 Menu Utama</a>
   </div>
 
   <section id="setup" class="setup">
@@ -397,6 +399,7 @@ input:focus,select:focus{border-color:rgba(25,207,255,.72);box-shadow:0 0 0 4px 
       </div>
       <div class="actions" style="margin:0">
         <button class="btn secondary" onclick="backSetup()">← Kembali</button>
+        <a class="btn secondary" style="text-decoration:none" href="./index.html?from=estafet&amp;v=20261007">🏠 Game Center</a>
         <button class="btn primary" onclick="startGame()">🚀 Mulai Estafet</button>
       </div>
     </div>
