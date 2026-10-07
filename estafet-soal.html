@@ -2,733 +2,737 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#09142f">
-<title>SPENDA Game Center - Estafet Soal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07122f">
+<link rel="icon" href="icon-192.png" type="image/png">
+<title>Estafet Soal • SPENDA Game Center</title>
 <style>
-*{box-sizing:border-box}
 :root{
-  --bg:#07122f;
-  --bg2:#101c4a;
-  --panel:rgba(18,32,76,.78);
-  --panel2:rgba(28,48,102,.72);
-  --line:rgba(255,255,255,.14);
-  --text:#f7f9ff;
-  --muted:#aebbd7;
-  --cyan:#19cfff;
-  --blue:#4d7cff;
-  --purple:#9b5cff;
-  --pink:#ff4fb3;
-  --green:#20e38a;
-  --red:#ff526d;
-  --yellow:#ffd449;
-  --orange:#ff9b42;
-  --shadow:0 25px 70px rgba(0,0,0,.38);
-  --radius:24px;
+  --bg:#06102a;--bg2:#111e4a;--panel:rgba(16,29,70,.86);--panel2:rgba(25,42,93,.76);
+  --line:rgba(255,255,255,.13);--text:#f8fbff;--muted:#aab9d6;
+  --cyan:#18d4ff;--blue:#4b7cff;--purple:#9a59ff;--pink:#ff4fae;
+  --green:#20e08a;--red:#ff536c;--yellow:#ffd54d;--orange:#ff9b45;
+  --shadow:0 24px 70px rgba(0,0,0,.40);--radius:22px
 }
-html,body{
-  margin:0;min-height:100%;font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--text);
-  background:
-    radial-gradient(circle at 10% 12%,rgba(25,207,255,.22),transparent 28%),
-    radial-gradient(circle at 88% 8%,rgba(155,92,255,.24),transparent 28%),
-    radial-gradient(circle at 75% 88%,rgba(255,79,179,.13),transparent 24%),
-    linear-gradient(135deg,var(--bg),var(--bg2));
-  overflow-x:hidden;
-}
-body::before,body::after{
-  content:"";position:fixed;border-radius:50%;filter:blur(55px);pointer-events:none;z-index:0;opacity:.5;
-}
-body::before{width:260px;height:260px;left:-100px;bottom:10%;background:rgba(25,207,255,.18);animation:float1 10s ease-in-out infinite}
-body::after{width:300px;height:300px;right:-130px;top:34%;background:rgba(255,79,179,.16);animation:float2 12s ease-in-out infinite}
-@keyframes float1{50%{transform:translate(55px,-35px) scale(1.08)}}
-@keyframes float2{50%{transform:translate(-50px,30px) scale(.92)}}
-button,input,select{font:inherit}
-button{cursor:pointer}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--text);
+background:
+radial-gradient(circle at 12% 0%,rgba(24,212,255,.20),transparent 28%),
+radial-gradient(circle at 88% 5%,rgba(154,89,255,.22),transparent 28%),
+radial-gradient(circle at 72% 92%,rgba(255,79,174,.13),transparent 24%),
+linear-gradient(135deg,var(--bg),var(--bg2));overflow-x:hidden}
+body:before,body:after{content:"";position:fixed;pointer-events:none;border-radius:50%;filter:blur(60px);opacity:.42;z-index:0}
+body:before{width:280px;height:280px;left:-120px;bottom:10%;background:rgba(24,212,255,.16);animation:floatA 11s ease-in-out infinite}
+body:after{width:310px;height:310px;right:-130px;top:32%;background:rgba(255,79,174,.13);animation:floatB 13s ease-in-out infinite}
+@keyframes floatA{50%{transform:translate(55px,-35px) scale(1.08)}}
+@keyframes floatB{50%{transform:translate(-45px,30px) scale(.94)}}
+button,input,select{font:inherit}button{cursor:pointer}
 .hidden{display:none!important}
-.wrap{position:relative;z-index:1;max-width:1440px;margin:0 auto;padding:20px}
-.top{
-  display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:18px
-}
-.brand{display:flex;align-items:center;gap:12px}
-.logo{
-  width:52px;height:52px;border-radius:17px;display:grid;place-items:center;
-  font-weight:950;background:linear-gradient(135deg,var(--cyan),var(--blue),var(--purple));
-  box-shadow:0 0 35px rgba(25,207,255,.28);position:relative;overflow:hidden
-}
-.logo::after{content:"";position:absolute;inset:-50%;background:linear-gradient(120deg,transparent,rgba(255,255,255,.45),transparent);transform:translateX(-70%) rotate(15deg);animation:shine 3.5s infinite}
-@keyframes shine{45%,100%{transform:translateX(75%) rotate(15deg)}}
-.brand h1{font-size:18px;margin:0}
-.brand p{font-size:12px;color:var(--muted);margin:3px 0 0}
-.badge{
-  padding:9px 13px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.6px;
-  color:#dff7ff;background:rgba(25,207,255,.09);border:1px solid rgba(25,207,255,.22);
-  box-shadow:0 0 22px rgba(25,207,255,.08)
-}
-.header-menu{padding:9px 13px;border-radius:999px;color:#fff;text-decoration:none;font-size:11px;font-weight:900;background:linear-gradient(135deg,#1acfff,#4c7cff);box-shadow:0 8px 22px rgba(39,124,255,.22);border:1px solid rgba(255,255,255,.15);transition:.18s}.header-menu:hover{transform:translateY(-2px);box-shadow:0 0 24px rgba(25,207,255,.22)}
-.card{
-  background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025)),var(--panel);
-  border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
-  backdrop-filter:blur(18px)
-}
-.setup{display:grid;grid-template-columns:400px 1fr;gap:18px}
-.panel{padding:23px}
-h2{margin:0 0 8px;font-size:28px}
-h3{margin:0 0 12px;font-size:18px}
-.note{color:var(--muted);font-size:12px;line-height:1.65}
-label{display:block;color:var(--muted);font-size:12px;margin:13px 0 7px}
-input,select{
-  width:100%;padding:12px 13px;border-radius:13px;color:var(--text);background:rgba(4,12,32,.72);
-  border:1px solid var(--line);outline:none
-}
-input:focus,select:focus{border-color:rgba(25,207,255,.72);box-shadow:0 0 0 4px rgba(25,207,255,.10)}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.btn{
-  border:0;border-radius:13px;padding:12px 15px;font-weight:900;color:white;transition:.18s transform,.18s box-shadow,.18s opacity
-}
-.btn:hover{transform:translateY(-2px)}
-.primary{
-  background:linear-gradient(135deg,#1acfff,#4c7cff 55%,#955cff);
-  box-shadow:0 10px 28px rgba(77,124,255,.28)
-}
-.secondary{background:rgba(255,255,255,.06);border:1px solid var(--line)}
-.success{background:linear-gradient(135deg,#12bb6f,#27e394)}
-.danger{background:linear-gradient(135deg,#e83d5d,#9c2b47)}
+a{text-decoration:none;color:inherit}
+.wrap{position:relative;z-index:1;max-width:1440px;margin:auto;padding:18px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:18px}
+.brand{display:flex;align-items:center;gap:11px}
+.school-logo{width:48px;height:48px;border-radius:15px;object-fit:contain;background:#08142e;border:1px solid var(--line);box-shadow:0 12px 30px rgba(0,0,0,.24)}
+.brand h1{font-size:17px;margin:0}.brand p{font-size:11px;color:var(--muted);margin:3px 0 0}
+.top-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.top-btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 13px;border-radius:12px;
+background:rgba(255,255,255,.055);border:1px solid var(--line);color:#edf5ff;font-size:11px;font-weight:900;cursor:pointer}
+.top-btn:hover{border-color:rgba(24,212,255,.45);transform:translateY(-1px)}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.058),rgba(255,255,255,.020)),var(--panel);
+border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);backdrop-filter:blur(16px)}
+.page{max-width:1240px;margin:auto}
+.login-grid{display:grid;grid-template-columns:1fr 420px;gap:18px;align-items:stretch}
+.hero{padding:30px;display:flex;flex-direction:column;justify-content:center;min-height:500px;position:relative;overflow:hidden}
+.hero:after{content:"🏃";position:absolute;right:24px;bottom:12px;font-size:180px;opacity:.05;transform:rotate(-8deg)}
+.kicker{display:inline-flex;width:max-content;padding:8px 12px;border-radius:999px;background:rgba(24,212,255,.08);
+border:1px solid rgba(24,212,255,.22);color:#c9f7ff;font-size:11px;font-weight:900;letter-spacing:1px}
+.hero h2{font-size:clamp(38px,5vw,66px);line-height:1;margin:16px 0 12px;text-shadow:0 0 32px rgba(24,212,255,.18)}
+.hero p{max-width:690px;color:var(--muted);line-height:1.8;font-size:14px;margin:0}
+.feature-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:22px}
+.feature{padding:13px;border:1px solid var(--line);background:rgba(255,255,255,.035);border-radius:15px}
+.feature b{display:block;font-size:13px;margin-bottom:4px}.feature span{font-size:11px;color:var(--muted)}
+.login-card{padding:23px}
+.login-card h3{margin:0 0 7px;font-size:21px}
+label{display:block;color:var(--muted);font-size:12px;margin:14px 0 7px}
+input,select{width:100%;background:rgba(4,11,31,.82);border:1px solid var(--line);border-radius:12px;padding:12px 13px;color:#fff;outline:none}
+input:focus,select:focus{border-color:rgba(24,212,255,.7);box-shadow:0 0 0 4px rgba(24,212,255,.10)}
+.password-wrap{position:relative}.password-wrap input{padding-right:80px}.toggle-pass{position:absolute;right:6px;top:6px;padding:7px 10px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid var(--line);color:#dbe8f8;font-size:10px;font-weight:800}
+.btn{border:0;border-radius:12px;padding:12px 15px;color:#fff;font-weight:900;display:inline-flex;align-items:center;justify-content:center;gap:7px}
+.primary{background:linear-gradient(135deg,#1bd2ff,#4e7cff 55%,#965bff);box-shadow:0 10px 28px rgba(78,124,255,.24)}
+.secondary{background:rgba(255,255,255,.055);border:1px solid var(--line)}.green{background:linear-gradient(135deg,#0ebd70,#29e796)}
+.red{background:linear-gradient(135deg,#ed3f5d,#a12846)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
 .actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:15px}
-.preview{min-height:550px;padding:22px;display:flex;flex-direction:column;justify-content:space-between}
-.preview-screen{
-  min-height:450px;border-radius:24px;padding:28px;position:relative;overflow:hidden;
-  background:
-    radial-gradient(circle at 15% 15%,rgba(25,207,255,.15),transparent 30%),
-    radial-gradient(circle at 90% 0%,rgba(155,92,255,.18),transparent 34%),
-    linear-gradient(145deg,#0b193b,#172759);
-  border:1px solid rgba(255,255,255,.12)
-}
-.preview-screen::before{
-  content:"";position:absolute;inset:0;background:
-    radial-gradient(circle at 20% 80%,rgba(255,79,179,.10),transparent 20%),
-    radial-gradient(circle at 80% 70%,rgba(32,227,138,.08),transparent 22%);
-  animation:pulseBg 5s ease-in-out infinite alternate
-}
-@keyframes pulseBg{to{transform:scale(1.06);opacity:.8}}
-.screen-top{display:flex;justify-content:space-between;align-items:center;gap:10px;position:relative}
-.mini-team{font-weight:950}.mini-timer{padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.08);font-weight:950}
-.mini-q{font-size:36px;line-height:1.25;font-weight:950;margin:32px 0;position:relative}
-.preview-answers{display:grid;grid-template-columns:1fr 1fr;gap:12px;position:relative}
-.option{
-  padding:18px;border-radius:15px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.11);
-  font-weight:850;box-shadow:0 8px 25px rgba(0,0,0,.15)
-}
-.hint{
-  margin-top:18px;padding:14px;border-radius:15px;
-  background:linear-gradient(90deg,rgba(32,227,138,.08),rgba(25,207,255,.06));
-  border:1px solid rgba(32,227,138,.18)
-}
+.status{margin-top:12px;padding:11px 12px;border-radius:12px;background:rgba(255,255,255,.035);border:1px solid var(--line);font-size:11px;line-height:1.55;color:#aabbd1}
+.status.ok{color:#a7ffd1;border-color:rgba(32,224,138,.26);background:rgba(32,224,138,.06)}
+.status.err{color:#ffabb8;border-color:rgba(255,83,108,.26);background:rgba(255,83,108,.055)}
+.status.warn{color:#ffe1a0;border-color:rgba(255,213,77,.22);background:rgba(255,213,77,.045)}
+.note{font-size:11px;line-height:1.6;color:var(--muted)}
+.small{font-size:10px}
+.center{text-align:center}
+.section{padding:22px}
+.section-title{font-size:12px;color:#8ea2bf;text-transform:uppercase;letter-spacing:1.5px;font-weight:900;margin-bottom:13px}
 
-/* Lobby */
-.lobby-head{
-  padding:23px;display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap
-}
-.code-label{text-transform:uppercase;color:var(--muted);font-size:11px;letter-spacing:1.7px}
-.code{font-size:38px;font-weight:1000;letter-spacing:6px;text-shadow:0 0 22px rgba(25,207,255,.35)}
-.game-info{margin-top:2px}
-.team-grid{padding:0 22px 22px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.team{
-  border:1px solid rgba(255,255,255,.11);background:linear-gradient(155deg,rgba(255,255,255,.055),rgba(255,255,255,.018));
-  border-radius:20px;padding:17px;position:relative;overflow:hidden;transition:.22s
-}
-.team:nth-child(1){box-shadow:inset 0 2px 0 rgba(25,207,255,.85)}
-.team:nth-child(2){box-shadow:inset 0 2px 0 rgba(255,79,179,.85)}
-.team:nth-child(3){box-shadow:inset 0 2px 0 rgba(255,212,73,.85)}
-.team:nth-child(4){box-shadow:inset 0 2px 0 rgba(32,227,138,.85)}
-.team:hover{transform:translateY(-3px)}
-.team-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:11px}
-.team-name{font-weight:950}.team-score{color:#9ccfff;font-size:13px;font-weight:850}
-.members{min-height:98px;display:flex;flex-direction:column;gap:7px}
-.member{
-  display:flex;justify-content:space-between;gap:8px;align-items:center;
-  padding:9px 10px;background:rgba(4,12,32,.64);border:1px solid var(--line);border-radius:11px;font-size:13px
-}
-.add{display:flex;gap:7px;margin-top:9px}.add input{padding:10px}.add button{padding:10px 12px;border-radius:10px}
+/* setup */
+.setup-grid{display:grid;grid-template-columns:390px 1fr;gap:18px}
+.control-card{padding:22px}
+.teacher-chip{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 13px;border-radius:14px;background:rgba(24,212,255,.07);border:1px solid rgba(24,212,255,.18)}
+.teacher-chip b{display:block}.teacher-chip span{display:block;font-size:10px;color:var(--muted);margin-top:2px}
+.meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.bank-card{padding:22px;min-height:520px}
+.bank-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.metric{padding:12px 15px;border-radius:14px;background:rgba(255,255,255,.045);border:1px solid var(--line);text-align:center;min-width:130px}
+.metric b{display:block;font-size:26px}.metric span{color:var(--muted);font-size:10px}
+.bank-preview{margin-top:17px;display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.q-preview{padding:15px;border-radius:15px;background:rgba(4,11,31,.62);border:1px solid var(--line)}
+.q-preview .num{font-size:10px;color:#8da2be}.q-preview p{font-size:13px;font-weight:800;line-height:1.45;margin:7px 0 0}
+.empty{min-height:350px;display:grid;place-items:center;text-align:center;border:1px dashed rgba(255,255,255,.15);border-radius:18px;background:rgba(255,255,255,.025)}
+.empty .icon{font-size:50px;margin-bottom:8px}
 
-/* Game */
-.game-grid{display:grid;grid-template-columns:1fr 345px;gap:18px}
-.stage{padding:22px;position:relative;overflow:hidden}
-.stage::after{
-  content:"";position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.03),transparent);
-  transform:translateX(-100%);animation:stageSweep 7s linear infinite
-}
-@keyframes stageSweep{to{transform:translateX(100%)}}
-.side{padding:18px}
-.game-top{
-  display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin-bottom:16px
-}
-.turn{
-  font-size:15px;color:#bfd0e7
-}
-.turn strong{color:#fff;text-shadow:0 0 18px rgba(25,207,255,.22)}
-.timer-wrap{display:flex;align-items:center;gap:10px}
-.timer{
-  width:70px;height:70px;border-radius:50%;display:grid;place-items:center;position:relative;
-  font-weight:1000;background:conic-gradient(var(--cyan) 360deg,#2a385d 0deg);
-  box-shadow:0 0 28px rgba(25,207,255,.16)
-}
-.timer::before{content:"";position:absolute;inset:7px;border-radius:50%;background:#09152f}
-.timer span{position:relative;z-index:2;font-size:19px}
-.question-box{
-  padding:29px;border-radius:24px;position:relative;overflow:hidden;
-  background:
-    radial-gradient(circle at 0% 100%,rgba(255,79,179,.11),transparent 25%),
-    radial-gradient(circle at 100% 0%,rgba(25,207,255,.14),transparent 26%),
-    linear-gradient(145deg,rgba(30,54,120,.68),rgba(20,35,84,.80));
-  border:1px solid rgba(255,255,255,.12);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.08)
-}
-.question-box.new-question{animation:questionIn .5s cubic-bezier(.2,.8,.2,1)}
-@keyframes questionIn{
-  from{opacity:0;transform:translateY(12px) scale(.985)}
-  to{opacity:1;transform:none}
-}
-.meta{display:flex;justify-content:space-between;color:#aebbd7;font-size:12px}
-.question{
-  font-size:34px;line-height:1.28;font-weight:1000;margin:24px 0 25px;
-  text-shadow:0 0 25px rgba(0,0,0,.16)
-}
-.answers{display:grid;grid-template-columns:1fr 1fr;gap:13px}
-.answer{
-  min-height:82px;text-align:left;padding:18px;border-radius:16px;
-  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.11);color:#fff;font-weight:900;
-  position:relative;overflow:hidden;transition:.18s transform,.18s background,.18s border-color,.18s box-shadow
-}
-.answer::after{
-  content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent,rgba(255,255,255,.10),transparent);
-  transform:translateX(-120%);transition:.4s
-}
-.answer:hover:not(:disabled){transform:translateY(-3px) scale(1.01);border-color:rgba(25,207,255,.55);box-shadow:0 12px 28px rgba(0,0,0,.18)}
-.answer:hover:not(:disabled)::after{transform:translateX(120%)}
-.answer:disabled{cursor:default}
-.answer.correct{background:linear-gradient(135deg,rgba(32,227,138,.24),rgba(25,207,255,.11));border-color:rgba(32,227,138,.75);box-shadow:0 0 30px rgba(32,227,138,.16);animation:correctPop .5s ease}
-.answer.wrong{background:linear-gradient(135deg,rgba(255,82,109,.20),rgba(255,155,66,.08));border-color:rgba(255,82,109,.75);animation:wrongShake .45s ease}
-@keyframes correctPop{50%{transform:scale(1.025)}}
-@keyframes wrongShake{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
-.feedback{min-height:32px;margin-top:15px;font-weight:950;font-size:14px}
-.feedback.ok{color:#a7ffd0}.feedback.bad{color:#ffafb9}.feedback.time{color:#ffe18d}
-.feedback.show{animation:feedbackIn .35s ease}
-@keyframes feedbackIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.progressbar{height:8px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;margin-top:8px}
-.progressbar span{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--blue),var(--purple),var(--pink));background-size:300% 100%;animation:grad 4s linear infinite;transition:width .35s}
+/* teams */
+.team-head{padding:22px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.code{font-size:35px;font-weight:1000;letter-spacing:5px;text-shadow:0 0 25px rgba(24,212,255,.25)}
+.team-grid{padding:0 22px 22px;display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
+.team-card{padding:16px;border-radius:18px;background:rgba(255,255,255,.035);border:1px solid var(--line);position:relative;overflow:hidden}
+.team-card:before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--team)}
+.team-card:nth-child(1){--team:#18d4ff}.team-card:nth-child(2){--team:#ff4fae}.team-card:nth-child(3){--team:#ffd54d}.team-card:nth-child(4){--team:#20e08a}.team-card:nth-child(5){--team:#ff8e4d}.team-card:nth-child(6){--team:#a66bff}
+.team-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.team-title b{font-size:15px}.team-title span{font-size:10px;color:var(--muted)}
+.member-list{display:flex;flex-direction:column;gap:7px;min-height:90px}
+.member{display:flex;justify-content:space-between;gap:7px;align-items:center;padding:9px 10px;background:rgba(4,11,31,.65);border:1px solid var(--line);border-radius:10px;font-size:12px}
+.member button{border:0;background:none;color:#ff98a6;padding:2px 5px;font-size:13px}
+.member-add{display:flex;gap:7px;margin-top:9px}.member-add input{padding:10px}.member-add button{padding:10px 12px;border-radius:10px}
+.team-foot{padding:0 22px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+
+/* game */
+.game-wrap{max-width:1440px;margin:auto}
+.game-shell{display:grid;grid-template-columns:1fr 330px;gap:16px}
+.stage{padding:20px;position:relative;overflow:hidden;min-height:calc(100vh - 110px)}
+.stage:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(255,255,255,.035),transparent);transform:translateX(-100%);animation:sweep 8s linear infinite}
+@keyframes sweep{to{transform:translateX(100%)}}
+.stage-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:13px}
+.turn{font-size:16px;color:#c1d0e7}.turn strong{color:#fff}
+.timer-area{display:flex;align-items:center;gap:10px}
+.timer{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;position:relative;background:conic-gradient(var(--cyan) 360deg,#29395f 0deg);box-shadow:0 0 32px rgba(24,212,255,.16)}
+.timer:before{content:"";position:absolute;inset:7px;border-radius:50%;background:#09152f}
+.timer span{position:relative;z-index:2;font-size:19px;font-weight:1000}
+.progress-wrap{min-width:130px}.progress-label{font-size:10px;color:var(--muted);font-weight:800}.progressbar{height:8px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;margin-top:7px}.progressbar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--blue),var(--purple),var(--pink));background-size:300% 100%;animation:grad 4s linear infinite;transition:width .35s}
 @keyframes grad{to{background-position:300% 0}}
-.side-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.live{
-  font-size:10px;font-weight:950;padding:7px 9px;border-radius:999px;color:#cffff0;
-  background:rgba(32,227,138,.09);border:1px solid rgba(32,227,138,.22)
-}
-.live::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:6px;box-shadow:0 0 12px var(--green);animation:blink 1.2s infinite}
+.question-box{padding:28px;border-radius:24px;background:
+radial-gradient(circle at 10% 90%,rgba(255,79,174,.10),transparent 24%),
+radial-gradient(circle at 90% 0%,rgba(24,212,255,.14),transparent 28%),
+linear-gradient(145deg,rgba(26,49,114,.74),rgba(20,35,84,.86));
+border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.07)}
+.question-box.in{animation:qIn .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes qIn{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+.meta-line{display:flex;justify-content:space-between;gap:10px;color:#a9b9d2;font-size:11px}
+.question{font-size:clamp(26px,3.4vw,43px);line-height:1.27;font-weight:1000;margin:24px 0 25px}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.answer{min-height:88px;text-align:left;padding:18px;border-radius:16px;background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.12);color:#fff;font-weight:900;position:relative;overflow:hidden;transition:.18s transform,.18s box-shadow,.18s border-color}
+.answer:hover:not(:disabled){transform:translateY(-3px);border-color:rgba(24,212,255,.62);box-shadow:0 16px 30px rgba(0,0,0,.16)}
+.answer.correct{background:linear-gradient(135deg,rgba(32,224,138,.25),rgba(24,212,255,.09));border-color:rgba(32,224,138,.72);animation:pop .48s ease}
+.answer.wrong{background:linear-gradient(135deg,rgba(255,83,108,.22),rgba(255,155,69,.08));border-color:rgba(255,83,108,.72);animation:shake .43s ease}
+@keyframes pop{50%{transform:scale(1.025)}}@keyframes shake{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+.feedback{min-height:30px;margin-top:15px;font-weight:950;font-size:14px}.feedback.ok{color:#a6ffd0}.feedback.bad{color:#ffabb8}.feedback.time{color:#ffe29b}.feedback.show{animation:feed .35s ease}
+@keyframes feed{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+.side{padding:18px}
+.side-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}.side-title h3{margin:0;font-size:17px}
+.live{font-size:9px;font-weight:950;padding:6px 8px;border-radius:999px;color:#cffff0;background:rgba(32,224,138,.08);border:1px solid rgba(32,224,138,.23)}
+.live:before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);margin-right:5px;box-shadow:0 0 10px var(--green);animation:blink 1.2s infinite}
 @keyframes blink{50%{opacity:.25}}
-.rank-list{display:flex;flex-direction:column;gap:8px}
-.rank{
-  display:grid;grid-template-columns:42px 1fr auto;gap:9px;align-items:center;
-  padding:12px;border-radius:13px;background:rgba(4,12,32,.64);border:1px solid var(--line);
-  transition:.25s
-}
-.rank.rank-up{animation:rankUp .45s ease}
-@keyframes rankUp{50%{transform:scale(1.025);background:rgba(25,207,255,.10)}}
-.rank:nth-child(1){border-color:rgba(255,212,73,.27);box-shadow:inset 3px 0 var(--yellow)}
-.rank:nth-child(2){box-shadow:inset 3px 0 #bfc8d6}
-.rank:nth-child(3){box-shadow:inset 3px 0 #cd7e3e}
-.rank-n{font-weight:1000}.rank-name{font-weight:900;font-size:13px}.rank-score{font-weight:1000;color:#b9dcff;font-size:13px}
-.active{
-  margin-top:13px;padding:14px;border-radius:15px;
-  background:linear-gradient(90deg,rgba(255,212,73,.09),rgba(255,155,66,.05));
-  border:1px solid rgba(255,212,73,.18)
-}
-.active small{color:#dac796}.active b{display:block;margin-top:4px;font-size:14px}
-.rule{
-  margin-top:14px;padding:13px;border-radius:14px;background:rgba(255,255,255,.04);
-  border:1px solid var(--line);font-size:12px;color:#b4c2d8
-}
+.ranking{display:flex;flex-direction:column;gap:8px}
+.rank{display:grid;grid-template-columns:38px 1fr auto;gap:8px;align-items:center;padding:11px;border-radius:12px;background:rgba(4,11,31,.65);border:1px solid var(--line);transition:.2s}
+.rank:nth-child(1){box-shadow:inset 3px 0 var(--yellow)}.rank:nth-child(2){box-shadow:inset 3px 0 #c7d0dd}.rank:nth-child(3){box-shadow:inset 3px 0 #ca7a40}
+.rank.flash{animation:rankFlash .5s ease}@keyframes rankFlash{50%{transform:scale(1.025);background:rgba(24,212,255,.08)}}
+.rank-num{font-weight:1000}.rank-name{font-weight:900;font-size:12px}.rank-score{font-weight:1000;color:#b9dcff;font-size:13px}
+.active-box{margin-top:12px;padding:13px;border-radius:14px;background:linear-gradient(90deg,rgba(255,213,77,.09),rgba(255,155,69,.05));border:1px solid rgba(255,213,77,.18)}
+.active-box small{color:#dcc99d}.active-box b{display:block;margin-top:4px;font-size:14px}
+.rule{margin-top:12px;padding:12px;border-radius:13px;background:rgba(255,255,255,.035);border:1px solid var(--line);color:#acbad0;font-size:11px;line-height:1.6}
+.game-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
 
-/* Result */
-.result{padding:30px;text-align:center;position:relative;overflow:hidden}
-.result::before{
-  content:"";position:absolute;inset:0;background:
-    radial-gradient(circle at 50% 0%,rgba(255,212,73,.15),transparent 28%),
-    radial-gradient(circle at 15% 80%,rgba(25,207,255,.10),transparent 20%),
-    radial-gradient(circle at 85% 75%,rgba(255,79,179,.10),transparent 20%)
-}
-.cup{font-size:65px;position:relative;animation:trophy .9s ease-in-out infinite alternate}
-@keyframes trophy{to{transform:translateY(-7px) rotate(-2deg)}}
-.result h2{font-size:39px;margin:7px 0;position:relative}
-.winner{font-size:20px;font-weight:950;margin-bottom:24px;position:relative}
-.final{max-width:750px;margin:auto;text-align:left;position:relative}
-.final-row{
-  display:grid;grid-template-columns:55px 1fr auto;gap:12px;padding:15px;
-  border-bottom:1px solid var(--line);transition:.18s
-}
-.final-row:hover{background:rgba(255,255,255,.035)}
-.final-place{font-weight:1000}.final-team{font-weight:950}.final-points{font-weight:1000;color:#a8d8ff}
-
-/* modal */
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(10px);display:grid;place-items:center;padding:18px;z-index:30}
-.modal-box{width:min(760px,100%);padding:22px}
-.modal-box textarea{
-  width:100%;min-height:320px;border-radius:14px;background:#07132c;color:#eaf2fc;
-  border:1px solid var(--line);padding:13px;font-family:ui-monospace,Consolas,monospace;font-size:12px
-}
-/* Controls */
-.sound-control{
-  position:fixed;right:18px;bottom:18px;z-index:15;width:48px;height:48px;border-radius:50%;
-  background:rgba(10,23,52,.88);border:1px solid rgba(255,255,255,.14);color:#fff;
-  box-shadow:0 12px 30px rgba(0,0,0,.28)
-}
-.sound-control.on{box-shadow:0 0 25px rgba(25,207,255,.25);border-color:rgba(25,207,255,.35)}
-.confetti{position:fixed;top:-20px;width:9px;height:15px;z-index:40;pointer-events:none;border-radius:2px;animation:confettiFall linear forwards}
-@keyframes confettiFall{to{transform:translate3d(var(--x),110vh,0) rotate(720deg);opacity:.9}}
-.flash{position:fixed;inset:0;background:white;opacity:0;pointer-events:none;z-index:35}
-.flash.go{animation:flash .28s ease}
-@keyframes flash{40%{opacity:.16}}
-.toast{
-  position:fixed;left:50%;bottom:26px;transform:translate(-50%,15px);z-index:45;
-  background:rgba(4,12,32,.95);border:1px solid rgba(255,255,255,.12);padding:11px 14px;border-radius:12px;
-  box-shadow:0 16px 40px rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:.25s
-}
-.toast.show{opacity:1;transform:translate(-50%,0)}
-.home-btn{position:fixed;left:18px;bottom:18px;z-index:15;padding:10px 13px;border-radius:999px;color:#dcecff;text-decoration:none;font-size:11px;font-weight:900;background:rgba(10,23,52,.90);border:1px solid rgba(255,255,255,.14);box-shadow:0 12px 30px rgba(0,0,0,.28);backdrop-filter:blur(10px)}
-.home-btn:hover{transform:translateY(-2px);border-color:rgba(25,207,255,.36);box-shadow:0 0 25px rgba(25,207,255,.18)}
-.footer{text-align:center;color:#7184a4;font-size:11px;padding:16px 0 70px}
-
-@media(max-width:1100px){.setup{grid-template-columns:1fr}.team-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:850px){.game-grid{grid-template-columns:1fr}.preview-answers,.answers{grid-template-columns:1fr}}
-@media(max-width:600px){
-  .wrap{padding:12px}.row{grid-template-columns:1fr}.team-grid{grid-template-columns:1fr}
-  .question{font-size:26px}.mini-q{font-size:27px}.code{font-size:29px}.answers{grid-template-columns:1fr}
-}
+/* result */
+.result{padding:30px;text-align:center;position:relative;overflow:hidden}.result:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(255,213,77,.16),transparent 32%),radial-gradient(circle at 10% 90%,rgba(24,212,255,.09),transparent 20%),radial-gradient(circle at 90% 80%,rgba(255,79,174,.10),transparent 22%)}
+.trophy{font-size:68px;position:relative;animation:trophy .9s ease-in-out infinite alternate}@keyframes trophy{to{transform:translateY(-7px) rotate(-2deg)}}
+.result h2{position:relative;font-size:40px;margin:8px 0}.winner{position:relative;font-size:20px;font-weight:950;margin-bottom:22px}
+.final-table{position:relative;max-width:760px;margin:auto;text-align:left}.final-row{display:grid;grid-template-columns:50px 1fr auto;gap:12px;padding:14px;border-bottom:1px solid var(--line)}.place{font-weight:1000}.team-final{font-weight:950}.points{font-weight:1000;color:#a8d8ff}
+.confetti{position:fixed;top:-20px;width:9px;height:15px;border-radius:2px;z-index:100;pointer-events:none;animation:fall linear forwards}@keyframes fall{to{transform:translate3d(var(--x),110vh,0) rotate(720deg);opacity:.9}}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,15px);opacity:0;pointer-events:none;z-index:110;padding:11px 14px;background:rgba(4,11,31,.97);border:1px solid var(--line);border-radius:12px;box-shadow:0 15px 40px rgba(0,0,0,.35);transition:.2s;font-size:11px}.toast.show{opacity:1;transform:translate(-50%,0)}
+.sound{position:fixed;right:17px;bottom:17px;width:48px;height:48px;border-radius:50%;z-index:20;background:rgba(8,18,45,.9);border:1px solid var(--line);color:#fff;font-size:19px}.sound.on{box-shadow:0 0 25px rgba(24,212,255,.22);border-color:rgba(24,212,255,.35)}
+.flash{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:90}.flash.go{animation:flash .28s ease}@keyframes flash{40%{opacity:.15}}
+@media(max-width:1080px){.login-grid,.setup-grid{grid-template-columns:1fr}.team-grid{grid-template-columns:1fr 1fr}.game-shell{grid-template-columns:1fr}.stage{min-height:auto}}
+@media(max-width:720px){.wrap{padding:12px}.feature-row{grid-template-columns:1fr 1fr}.meta-grid,.answers,.bank-preview{grid-template-columns:1fr}.team-grid{grid-template-columns:1fr}.question{font-size:26px}.top{align-items:flex-start}.top-actions{justify-content:flex-end}}
 </style>
 </head>
 <body>
-<a class="home-btn" href="./index.html?from=estafet&amp;v=20261007">⌂ Game Center</a>
 <div class="wrap">
   <div class="top">
     <div class="brand">
-      <div class="logo">SG</div>
-      <div>
-        <h1>SPENDA Game Center</h1>
-        <p>Estafet Soal • Game Pembelajaran</p>
-      </div>
+      <img class="school-logo" src="logo-sekolah.png" alt="Logo sekolah">
+      <div><h1>SPENDA Game Center</h1><p>ESTAFET SOAL • Permainan pembelajaran berbasis bank soal sekolah</p></div>
     </div>
-    <div class="badge">🏃 MODE MAIN LANGSUNG DI PID</div>
-    <a class="header-menu" href="./index.html?from=estafet&amp;v=20261007">🏠 Menu Utama</a>
+    <div class="top-actions">
+      <a class="top-btn" href="./index.html?menu=estafet">⌂ Game Center</a>
+      <a class="top-btn" href="./bank-soal.html?game=estafet-soal">🗄️ Bank Soal</a>
+    </div>
   </div>
 
-  <section id="setup" class="setup">
-    <div class="card panel">
-      <h2>🏃 Estafet Soal</h2>
-      <div class="note">Siswa maju bergantian dan memilih jawaban langsung pada laptop/layar yang terhubung ke PID. Skor kelompok diperbarui secara otomatis.</div>
-
-      <label>Mata Pelajaran</label>
-      <input id="subject" value="IPA">
-
-      <div class="row">
-        <div>
-          <label>Kelas</label>
-          <input id="className" value="VIII A">
+  <!-- LOGIN -->
+  <main id="loginView" class="page">
+    <section class="login-grid">
+      <div class="card hero">
+        <div class="kicker">🏃 ESTAFET SOAL</div>
+        <h2>Siap? Estafet Dimulai!</h2>
+        <p>
+          Permainan dimainkan langsung pada laptop/layar yang terhubung ke PID.
+          Siswa maju secara bergiliran, menjawab satu soal, memperoleh poin sesuai
+          ketepatan dan kecepatan, lalu giliran berpindah ke kelompok berikutnya.
+        </p>
+        <div class="feature-row">
+          <div class="feature"><b>👥 Tim</b><span>2–6 kelompok</span></div>
+          <div class="feature"><b>⏱️ Timer</b><span>10–30 detik</span></div>
+          <div class="feature"><b>🏆 Skor</b><span>Live per kelompok</span></div>
+          <div class="feature"><b>🔊 Efek</b><span>Animasi & suara</span></div>
         </div>
-        <div>
-          <label>Jumlah Kelompok</label>
-          <select id="teamCount">
-            <option value="2">2</option><option value="3">3</option><option value="4" selected>4</option>
-            <option value="5">5</option><option value="6">6</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="row">
-        <div>
-          <label>Waktu per Soal</label>
-          <select id="timePerQuestion">
-            <option value="10">10 detik</option><option value="15" selected>15 detik</option>
-            <option value="20">20 detik</option><option value="30">30 detik</option>
-          </select>
-        </div>
-        <div>
-          <label>Jumlah Soal</label>
-          <select id="questionCount">
-            <option value="5" selected>5 soal</option><option value="10">10 soal</option>
-          </select>
+        <div class="hint" style="margin-top:22px;padding:14px;border-radius:14px;background:rgba(24,212,255,.06);border:1px solid rgba(24,212,255,.16)">
+          <b>Bank soal terpusat</b><br>
+          Soal tidak ditanam di game. Permainan mengambil bank soal Estafet Soal milik Guru dari Database Sekolah.
         </div>
       </div>
 
-      <div class="actions">
-        <button class="btn primary" onclick="createGame()">🚀 Buat Permainan</button>
-        <button class="btn secondary" onclick="openQuestions()">⚙ Soal Demo</button>
-      </div>
+      <div class="card login-card">
+        <h3>🔐 Login Guru</h3>
+        <div class="note">Pilih Nama Guru dan masukkan password yang tersimpan pada <b>teacher_master</b>.</div>
 
-      <div class="hint">
-        <b>🎯 Aturan prototype:</b> satu siswa aktif pada satu waktu. Setelah menjawab atau waktu habis,
-        giliran berpindah ke kelompok berikutnya. Jawaban benar memberi poin dan combo dapat menghasilkan bonus.
-      </div>
-    </div>
+        <label>Nama Guru</label>
+        <select id="loginTeacher"><option value="">Memuat daftar Guru...</option></select>
 
-    <div class="card preview">
-      <div>
-        <h3>✨ Pratinjau Layar PID</h3>
-        <div class="note">Tampilan utama dibuat besar, kontras, dan cocok diproyeksikan ke layar kelas.</div>
-      </div>
-      <div class="preview-screen">
-        <div class="screen-top">
-          <div class="mini-team">🔥 KELOMPOK A • RINA</div>
-          <div class="mini-timer">⏱ 12</div>
+        <label>Password</label>
+        <div class="password-wrap">
+          <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Masukkan password">
+          <button class="toggle-pass" type="button" onclick="togglePassword()">Lihat</button>
         </div>
-        <div class="note">SOAL 03 / 05</div>
-        <div class="mini-q">Organ utama pada sistem pernapasan manusia adalah ...</div>
-        <div class="preview-answers">
-          <div class="option">🅰️ Jantung</div><div class="option">🅱️ Paru-paru</div>
-          <div class="option">🅲️ Lambung</div><div class="option">🅳️ Ginjal</div>
+
+        <div class="actions">
+          <button id="loginBtn" class="btn primary" style="width:100%">🔓 Masuk ke Estafet</button>
+        </div>
+        <div id="loginStatus" class="status">Memuat daftar Guru...</div>
+
+        <div class="actions">
+          <a class="btn secondary" style="width:100%" href="./index.html">← Kembali ke Game Center</a>
         </div>
       </div>
-      <div class="note">🔊 Prototype sudah dilengkapi efek suara menggunakan Web Audio API. Tidak membutuhkan file audio eksternal.</div>
-    </div>
-  </section>
+    </section>
+  </main>
 
-  <section id="lobby" class="card hidden">
-    <div class="lobby-head">
-      <div>
-        <div class="code-label">Kode permainan</div>
-        <div id="gameCode" class="code">SPN000</div>
-        <div id="gameInfo" class="note game-info"></div>
-      </div>
-      <div class="actions" style="margin:0">
-        <button class="btn secondary" onclick="backSetup()">← Kembali</button>
-        <a class="btn secondary" style="text-decoration:none" href="./index.html?from=estafet&amp;v=20261007">🏠 Game Center</a>
-        <button class="btn primary" onclick="startGame()">🚀 Mulai Estafet</button>
-      </div>
-    </div>
-    <div id="teamGrid" class="team-grid"></div>
-  </section>
-
-  <section id="game" class="game-grid hidden">
-    <div class="card stage">
-      <div class="game-top">
-        <div class="turn">🏃 Giliran:
-          <strong id="activeTeam">Kelompok A</strong> •
-          <strong id="activePlayer">-</strong>
+  <!-- SETUP -->
+  <main id="setupView" class="page hidden">
+    <section class="setup-grid">
+      <div class="card control-card">
+        <div class="section-title">Pengaturan permainan</div>
+        <div class="teacher-chip">
+          <div><b id="teacherName">-</b><span>Guru yang sedang login</span></div>
+          <button class="top-btn" onclick="logout()">Keluar</button>
         </div>
-        <div class="timer-wrap">
-          <div id="timer" class="timer"><span id="timerText">15</span></div>
+
+        <label>Jenjang</label>
+        <select id="level"></select>
+
+        <label>Mata Pelajaran</label>
+        <select id="subject"></select>
+
+        <label>Kelas</label>
+        <select id="className"></select>
+
+        <label>Tingkat Kesulitan</label>
+        <select id="difficulty">
+          <option value="Semua">Semua</option>
+          <option value="Mudah">Mudah</option>
+          <option value="Sedang">Sedang</option>
+          <option value="Sulit">Sulit</option>
+        </select>
+
+        <div class="meta-grid">
           <div>
-            <div class="code-label">PROGRES</div>
-            <div id="progress">1 / 5</div>
-            <div class="progressbar"><span id="progressFill"></span></div>
+            <label>Jumlah Kelompok</label>
+            <select id="teamCount">
+              <option value="2">2 kelompok</option>
+              <option value="3">3 kelompok</option>
+              <option value="4" selected>4 kelompok</option>
+              <option value="5">5 kelompok</option>
+              <option value="6">6 kelompok</option>
+            </select>
+          </div>
+          <div>
+            <label>Waktu / Soal</label>
+            <select id="timePerQuestion"><option value="10">10 detik</option><option value="15" selected>15 detik</option><option value="20">20 detik</option><option value="30">30 detik</option></select>
+          </div>
+          <div>
+            <label>Jumlah Soal</label>
+            <select id="questionCount">
+              <option value="5">5 soal</option><option value="10">10 soal</option><option value="20" selected>20 soal</option><option value="30">30 soal</option><option value="9999">Semua yang tersedia</option>
+            </select>
           </div>
         </div>
-      </div>
 
-      <div id="questionBox" class="question-box">
-        <div class="meta">
-          <span id="questionNumber">SOAL 01</span>
-          <span id="combo">COMBO 0</span>
+        <div id="setupStatus" class="status">Memuat penugasan Guru...</div>
+        <div class="actions">
+          <button id="refreshBankBtn" class="btn secondary" style="flex:1">↻ Muat Bank Soal</button>
+          <a class="btn secondary" style="flex:1" href="./bank-soal.html?game=estafet-soal">🗄️ Kelola Bank Soal</a>
         </div>
-        <div id="question" class="question"></div>
-        <div id="answers" class="answers"></div>
-        <div id="feedback" class="feedback"></div>
+        <div class="actions"><button id="goTeamsBtn" class="btn primary" style="width:100%" disabled>➡️ Lanjut ke Pembagian Tim</button></div>
       </div>
 
-      <div class="actions">
-        <button class="btn danger" onclick="endGame()">⏹ Akhiri Game</button>
+      <div class="card bank-card">
+        <div class="bank-head">
+          <div>
+            <div class="section-title" style="margin-bottom:6px">Bank soal aktif</div>
+            <h2 id="bankTitle" style="margin:0;font-size:24px">Belum dimuat</h2>
+            <div id="bankMeta" class="note" style="margin-top:4px">Pilih penugasan Guru.</div>
+          </div>
+          <div class="metric"><b id="bankCount">0</b><span>Soal tersedia</span></div>
+        </div>
+        <div id="bankPreview" class="bank-preview"></div>
       </div>
-    </div>
+    </section>
+  </main>
 
-    <aside class="card side">
-      <div class="side-title">
-        <h3>🏆 Skor Kelompok</h3>
-        <span class="live">LIVE</span>
+  <!-- TEAMS -->
+  <main id="teamsView" class="page hidden">
+    <section class="card">
+      <div class="team-head">
+        <div>
+          <div class="section-title" style="margin-bottom:6px">Pembagian Tim</div>
+          <div class="code-label">Kode sesi</div>
+          <div id="gameCode" class="code">SPN000</div>
+          <div id="sessionInfo" class="note"></div>
+        </div>
+        <div class="actions" style="margin:0">
+          <button class="btn secondary" onclick="backSetup()">← Kembali</button>
+          <button id="startBtn" class="btn primary" disabled>🚀 Mulai Estafet</button>
+        </div>
       </div>
-      <div id="ranking" class="rank-list"></div>
+      <div id="teamGrid" class="team-grid"></div>
+      <div class="team-foot">
+        <div id="teamStatus" class="status warn" style="margin:0">Setiap kelompok harus memiliki minimal 1 siswa.</div>
+        <button class="btn secondary" onclick="autoBalance()">⚖️ Bagi 4 Tim Otomatis</button>
+      </div>
+    </section>
+  </main>
 
-      <div class="active">
-        <small>🎯 Pemain yang sedang aktif</small>
-        <b id="sideActive">-</b>
+  <!-- GAME -->
+  <main id="gameView" class="game-wrap hidden">
+    <section class="game-shell">
+      <div class="card stage">
+        <div class="stage-top">
+          <div class="turn">🏃 Giliran: <strong id="activeTeam">-</strong> • <strong id="activePlayer">-</strong></div>
+          <div class="timer-area">
+            <div id="timer" class="timer"><span id="timerText">15</span></div>
+            <div class="progress-wrap">
+              <div class="progress-label" id="progressLabel">SOAL 1 / 20</div>
+              <div class="progressbar"><span id="progressFill"></span></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="questionBox" class="question-box">
+          <div class="meta-line"><span id="qNumber">SOAL 01</span><span id="comboText">COMBO 0</span></div>
+          <div id="question" class="question">Memuat soal...</div>
+          <div id="answers" class="answers"></div>
+          <div id="feedback" class="feedback"></div>
+        </div>
+
+        <div class="game-actions">
+          <button class="btn secondary" onclick="backToTeams()">← Tim</button>
+          <button class="btn red" onclick="confirmEndGame()">⏹ Akhiri Game</button>
+        </div>
       </div>
 
-      <div class="rule">
-        <b>⚡ Cara main</b><br>
-        Pemain aktif menjawab di layar. Setelah jawaban terkirim, sistem otomatis berpindah ke kelompok berikutnya.
+      <aside class="card side">
+        <div class="side-title"><h3>🏆 Skor Kelompok</h3><span class="live">LIVE</span></div>
+        <div id="ranking" class="ranking"></div>
+        <div class="active-box"><small>🎯 Pemain aktif</small><b id="sideActive">-</b></div>
+        <div class="rule">
+          <b>Aturan Estafet</b><br>
+          Satu siswa aktif pada satu waktu. Setelah menjawab atau waktu habis,
+          giliran berpindah ke kelompok berikutnya. Pemain dalam satu kelompok
+          bergiliran otomatis.
+        </div>
+        <div class="game-actions">
+          <a class="top-btn" href="./index.html?menu=estafet" style="width:100%">⌂ Game Center</a>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <!-- RESULT -->
+  <main id="resultView" class="page hidden">
+    <section class="card result">
+      <div class="trophy">🏆</div>
+      <h2>Estafet Selesai!</h2>
+      <div id="winnerText" class="winner"></div>
+      <div id="finalTable" class="final-table"></div>
+      <div class="actions" style="justify-content:center">
+        <button class="btn primary" onclick="downloadResult()">⬇️ Download Rekap</button>
+        <button class="btn secondary" onclick="printResult()">🖨️ Cetak Hasil</button>
+        <button class="btn secondary" onclick="newGame()">🔄 Permainan Baru</button>
+        <a class="btn secondary" href="./index.html?menu=estafet">⌂ Game Center</a>
       </div>
-    </aside>
-  </section>
-
-  <section id="result" class="card result hidden">
-    <div class="cup">🏆</div>
-    <h2>Estafet Selesai!</h2>
-    <div id="winner" class="winner"></div>
-    <div id="final" class="final"></div>
-    <div class="actions" style="justify-content:center">
-      <button class="btn primary" onclick="newGame()">🔄 Permainan Baru</button>
-    </div>
-  </section>
-
-  <div class="footer">SPENDA Game Center • Estafet Soal • Mode PID • Animasi + Suara</div>
+    </section>
+  </main>
 </div>
 
-<button id="soundBtn" class="sound-control on" title="Suara ON/OFF" onclick="toggleSound()">🔊</button>
-<div id="flash" class="flash"></div>
-<div id="toast" class="toast"></div>
+<button id="soundBtn" class="sound on" onclick="toggleSound()" title="Suara ON/OFF">🔊</button>
+<div id="flash" class="flash"></div><div id="toast" class="toast"></div>
 
-<div id="modal" class="modal hidden">
-  <div class="card modal-box">
-    <h3>🧩 Data Soal Demo</h3>
-    <div class="note" style="margin-bottom:10px">Format JSON ini hanya untuk menguji prototype. Versi final akan mengambil soal dari Supabase.</div>
-    <textarea id="json"></textarea>
-    <div class="actions">
-      <button class="btn primary" onclick="saveQuestions()">💾 Gunakan Soal</button>
-      <button class="btn secondary" onclick="closeQuestions()">Tutup</button>
-    </div>
-  </div>
-</div>
-
+<script src="config.js"></script>
+<script src="spenda-db.js"></script>
 <script>
-const defaultQuestions=[
-  {q:"Organ utama pada sistem pernapasan manusia adalah ...",a:["Jantung","Paru-paru","Lambung","Ginjal"],c:1},
-  {q:"Planet yang dikenal sebagai Planet Merah adalah ...",a:["Venus","Mars","Jupiter","Saturnus"],c:1},
-  {q:"Perubahan wujud dari cair menjadi gas disebut ...",a:["Membeku","Mengembun","Menguap","Menyublim"],c:2},
-  {q:"Sumber energi utama bagi kehidupan di Bumi adalah ...",a:["Bulan","Matahari","Angin","Air"],c:1},
-  {q:"Bagian tumbuhan yang berfungsi utama menyerap air dan mineral adalah ...",a:["Daun","Batang","Bunga","Akar"],c:3},
-  {q:"Hewan yang mengalami metamorfosis sempurna adalah ...",a:["Kucing","Ayam","Kupu-kupu","Cicak"],c:2},
-  {q:"Alat untuk mengukur suhu disebut ...",a:["Barometer","Termometer","Higrometer","Anemometer"],c:1},
-  {q:"Gaya yang menyebabkan benda jatuh ke bawah adalah gaya ...",a:["Gesek","Magnet","Gravitasi","Pegas"],c:2},
-  {q:"Air mendidih pada tekanan normal pada suhu ...",a:["50°C","75°C","100°C","150°C"],c:2},
-  {q:"Zat yang memiliki bentuk dan volume tetap adalah ...",a:["Gas","Cair","Padat","Uap"],c:2}
-];
+"use strict";
 
-let questions=[...defaultQuestions], state=null, timerId=null, locked=false, combo=0;
-let soundEnabled=true, audioCtx=null;
+let loginTeachers=[], assignments=[], profile=null, activeQuestions=[], selectedBank=[];
+let gameState=null, timerId=null, locked=false, combo=0, soundEnabled=true, audioCtx=null;
 
-const teamNames=["Kelompok A","Kelompok B","Kelompok C","Kelompok D","Kelompok E","Kelompok F"];
-
-function show(id){
-  ["setup","lobby","game","result"].forEach(x=>document.getElementById(x).classList.add("hidden"));
-  document.getElementById(id).classList.remove("hidden");
+function $(id){return document.getElementById(id)}
+function show(view){
+  ["loginView","setupView","teamsView","gameView","resultView"].forEach(id=>$(id).classList.add("hidden"));
+  $(view).classList.remove("hidden");
   window.scrollTo({top:0,behavior:"smooth"});
 }
-function code(){
-  const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  let x="SPN"; for(let i=0;i<3;i++)x+=chars[Math.floor(Math.random()*chars.length)]; return x;
+function setStatus(id,msg,type=""){
+  const el=$(id); if(!el)return;
+  el.textContent=msg; el.className="status"+(type?" "+type:"");
 }
+function clean(x){return window.SPENDADB?.clean?SPENDADB.clean(x):String(x??"").replace(/\s+/g," ").trim()}
+function unique(arr){return [...new Set(arr.map(clean).filter(Boolean))]}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function normalizeLevel(x){
+  const s=clean(x).toUpperCase();
+  if(/^SMP/.test(s))return "SMP"; if(/^SD/.test(s))return "SD"; if(/^SMA/.test(s))return "SMA"; return clean(x);
+}
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}
+  return a;
+}
+function code(){
+  const c="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";let s="SPN";
+  for(let i=0;i<3;i++)s+=c[Math.floor(Math.random()*c.length)];
+  return s;
+}
+
+/* Audio */
 function ensureAudio(){
   if(!soundEnabled)return;
-  try{
-    if(!audioCtx)audioCtx=new (window.AudioContext||window.webkitAudioContext)();
-    if(audioCtx.state==="suspended")audioCtx.resume();
-  }catch(e){}
+  try{if(!audioCtx)audioCtx=new (window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==="suspended")audioCtx.resume()}catch(e){}
 }
-function tone(freq,duration,type="sine",gain=.045,delay=0){
-  if(!soundEnabled)return;
-  ensureAudio(); if(!audioCtx)return;
-  const t=audioCtx.currentTime+delay;
-  const osc=audioCtx.createOscillator(), g=audioCtx.createGain();
+function tone(freq,dur,type="sine",gain=.05,delay=0){
+  if(!soundEnabled)return;ensureAudio();if(!audioCtx)return;
+  const t=audioCtx.currentTime+delay,osc=audioCtx.createOscillator(),g=audioCtx.createGain();
   osc.type=type;osc.frequency.setValueAtTime(freq,t);
-  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(gain,t+.015);
-  g.gain.exponentialRampToValueAtTime(.0001,t+duration);
-  osc.connect(g).connect(audioCtx.destination);osc.start(t);osc.stop(t+duration+.02);
+  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(gain,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  osc.connect(g).connect(audioCtx.destination);osc.start(t);osc.stop(t+dur+.02);
 }
-function soundStart(){
-  tone(523,.12,"sine",.055);tone(659,.12,"sine",.05,.09);tone(784,.18,"sine",.055,.18);
-}
-function soundTick(){
-  tone(720,.045,"square",.018);
-}
-function soundCorrect(){
-  tone(523,.10,"sine",.05);tone(659,.10,"sine",.05,.08);tone(784,.18,"sine",.06,.16);
-}
-function soundWrong(){
-  tone(220,.12,"sawtooth",.035);tone(165,.20,"sawtooth",.03,.10);
-}
-function soundTime(){
-  tone(180,.16,"square",.028);tone(140,.20,"square",.024,.14);
-}
-function soundWinner(){
-  [523,659,784,1047].forEach((f,i)=>tone(f,.18,"sine",.055,i*.12));
-}
+function sndStart(){[523,659,784].forEach((f,i)=>tone(f,.13,"sine",.055,i*.09))}
+function sndCorrect(){tone(523,.11,"sine",.055);tone(659,.11,"sine",.05,.08);tone(784,.17,"sine",.06,.16)}
+function sndWrong(){tone(220,.13,"sawtooth",.035);tone(165,.2,"sawtooth",.03,.12)}
+function sndTick(){tone(720,.045,"square",.018)}
+function sndTime(){tone(180,.16,"square",.03);tone(140,.20,"square",.025,.14)}
+function sndWinner(){[523,659,784,1047].forEach((f,i)=>tone(f,.18,"sine",.055,i*.12))}
 function toggleSound(){
-  soundEnabled=!soundEnabled;
-  const b=document.getElementById("soundBtn");
-  b.textContent=soundEnabled?"🔊":"🔇";
-  b.classList.toggle("on",soundEnabled);
-  if(soundEnabled){ensureAudio();soundStart();showToast("Suara diaktifkan");}
-  else showToast("Suara dimatikan");
+  soundEnabled=!soundEnabled;$("soundBtn").textContent=soundEnabled?"🔊":"🔇";$("soundBtn").classList.toggle("on",soundEnabled);
+  if(soundEnabled){ensureAudio();sndStart();showToast("Suara diaktifkan")}else showToast("Suara dimatikan")
+}
+function togglePassword(){
+  const el=$("loginPassword"),b=document.querySelector(".toggle-pass");
+  el.type=el.type==="password"?"text":"password";b.textContent=el.type==="password"?"Lihat":"Sembunyikan"
+}
+function flash(){const f=$("flash");f.classList.remove("go");void f.offsetWidth;f.classList.add("go")}
+function confetti(n=90){
+  const colors=["#18d4ff","#4b7cff","#9a59ff","#ff4fae","#20e08a","#ffd54d","#ff9b45"];
+  for(let i=0;i<n;i++){
+    const d=document.createElement("div");d.className="confetti";d.style.left=Math.random()*100+"vw";d.style.setProperty("--x",(Math.random()*220-110)+"px");
+    d.style.background=colors[Math.floor(Math.random()*colors.length)];d.style.animationDuration=(2.2+Math.random()*2)+"s";d.style.animationDelay=(Math.random()*.35)+"s";
+    document.body.appendChild(d);setTimeout(()=>d.remove(),4800)
+  }
 }
 function showToast(msg){
-  const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");
-  setTimeout(()=>t.classList.remove("show"),1400);
+  const t=$("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1500)
 }
-function flash(){
-  const f=document.getElementById("flash");f.classList.remove("go");void f.offsetWidth;f.classList.add("go");
+
+/* Login */
+async function loadTeacherList(){
+  const sel=$("loginTeacher");sel.disabled=true;sel.innerHTML="<option value=''>Memuat daftar Guru...</option>";
+  try{
+    loginTeachers=await SPENDADB.getTeacherLoginList();
+    sel.innerHTML="<option value=''>Pilih Nama Guru</option>";
+    loginTeachers.forEach(t=>{
+      const o=document.createElement("option");o.value=t.teacher_id??t.id;o.textContent=t.full_name;sel.appendChild(o)
+    });
+    sel.disabled=!loginTeachers.length;
+    setStatus("loginStatus",loginTeachers.length?"Pilih Nama Guru lalu masukkan password.":"Belum ada Guru aktif di teacher_master.",loginTeachers.length?"ok":"warn")
+  }catch(e){setStatus("loginStatus","Gagal memuat daftar Guru: "+(e.message||e),"err")}
 }
-function createConfetti(count=85){
-  const frag=document.createDocumentFragment();
-  for(let i=0;i<count;i++){
-    const d=document.createElement("div");d.className="confetti";
-    d.style.left=Math.random()*100+"vw";
-    d.style.setProperty("--x",(Math.random()*220-110)+"px");
-    d.style.animationDuration=(2.2+Math.random()*2.2)+"s";
-    d.style.animationDelay=(Math.random()*.5)+"s";
-    d.style.background=["#19cfff","#4d7cff","#9b5cff","#ff4fb3","#20e38a","#ffd449","#ff9b42"][Math.floor(Math.random()*7)];
-    frag.appendChild(d);
-    setTimeout(()=>d.remove(),5000);
+async function login(){
+  ensureAudio();
+  const id=$("loginTeacher").value,pass=$("loginPassword").value;
+  if(!id){setStatus("loginStatus","Silakan pilih Nama Guru.","warn");return}
+  if(!pass){setStatus("loginStatus","Password wajib diisi.","warn");return}
+  $("loginBtn").disabled=true;setStatus("loginStatus","Memverifikasi login...");
+  try{
+    const result=await SPENDADB.teacherLogin(Number(id),pass);
+    if(!result?.ok){setStatus("loginStatus",result?.error||"Nama Guru atau password salah.","err");return}
+    profile=result.profile;$("teacherName").textContent=profile.full_name;
+    assignments=await SPENDADB.getMyAssignments();
+    if(!assignments.length){
+      setStatus("loginStatus","Login berhasil, tetapi akun ini belum memiliki penugasan Mapel/Kelas dari Admin.","warn");return
+    }
+    $("loginPassword").value="";setupAssignments();show("setupView");await refreshBank();
+    sndStart();
+  }catch(e){setStatus("loginStatus","Login gagal: "+(e.message||e),"err")}
+  finally{$("loginBtn").disabled=false}
+}
+function setupAssignments(){
+  const levels=unique(assignments.map(a=>normalizeLevel(a.level)));
+  fill($("level"),levels,"Pilih Jenjang");populateSubjects();populateClasses();
+}
+function fill(sel,items,placeholder){
+  const old=sel.value;sel.innerHTML=`<option value="">${placeholder}</option>`;
+  unique(items).forEach(x=>{const o=document.createElement("option");o.value=x;o.textContent=x;sel.appendChild(o)});
+  if(items.includes(old))sel.value=old;else if(sel.options.length>1)sel.selectedIndex=1;
+}
+function populateSubjects(){
+  const lv=$("level").value;
+  const list=assignments.filter(a=>normalizeLevel(a.level)===lv).map(a=>a.subject);
+  fill($("subject"),list,"Pilih Mata Pelajaran");populateClasses()
+}
+function populateClasses(){
+  const lv=$("level").value,sub=$("subject").value;
+  const list=assignments.filter(a=>normalizeLevel(a.level)===lv&&clean(a.subject)===clean(sub)).map(a=>a.class_name);
+  fill($("className"),list,"Pilih Kelas")
+}
+async function logout(){
+  try{await SPENDADB.teacherLogout()}catch(e){}
+  profile=null;assignments=[];activeQuestions=[];gameState=null;clearInterval(timerId);show("loginView");loadTeacherList();showToast("Anda sudah keluar dari akun Guru")
+}
+
+/* Bank */
+function currentMeta(){
+  return {
+    game:"estafet-soal",
+    teacher:profile?.full_name||"",
+    level:$("level").value,
+    className:$("className").value,
+    subject:$("subject").value,
+    difficulty:$("difficulty").value
   }
-  document.body.appendChild(frag);
 }
-function createGame(){
-  ensureAudio();
-  const count=+document.getElementById("teamCount").value;
-  state={
-    code:code(),
-    subject:document.getElementById("subject").value.trim()||"Umum",
-    className:document.getElementById("className").value.trim()||"Semua",
-    time:+document.getElementById("timePerQuestion").value,
-    total:Math.min(+document.getElementById("questionCount").value,questions.length),
-    teams:Array.from({length:count},(_,i)=>({name:teamNames[i],score:0,players:[],turn:0,combo:0}))
-  };
-  renderLobby();show("lobby");soundStart();showToast("Permainan siap!");
+async function refreshBank(){
+  if(!profile)return;
+  const m=currentMeta();
+  if(!m.level||!m.subject||!m.className){activeQuestions=[];renderBank();return}
+  setStatus("setupStatus","Memuat bank soal dari Database Sekolah...");
+  $("goTeamsBtn").disabled=true;
+  try{
+    const qs=await SPENDADB.getQuestionsStrict(m);
+    activeQuestions=shuffle((qs||[]).filter(normalizeQuestion));
+    renderBank();
+    if(activeQuestions.length){
+      setStatus("setupStatus",`✅ ${activeQuestions.length} soal tersedia untuk ${m.subject} • ${m.className}.`,"ok");
+      $("goTeamsBtn").disabled=false
+    }else setStatus("setupStatus",`Belum ada bank soal Estafet Soal untuk ${m.subject} • ${m.className} • ${m.difficulty}. Import template Estafet terlebih dahulu.`,"warn");
+  }catch(e){
+    activeQuestions=[];renderBank();setStatus("setupStatus","Gagal memuat bank soal: "+(e.message||e),"err")
+  }
 }
-function renderLobby(){
-  document.getElementById("gameCode").textContent=state.code;
-  document.getElementById("gameInfo").textContent=`${state.subject} • ${state.className} • ${state.total} soal • ${state.time} detik/soal`;
-  document.getElementById("teamGrid").innerHTML=state.teams.map((t,i)=>`
-    <div class="team">
-      <div class="team-top"><div class="team-name">${t.name}</div><div class="team-score">0 poin</div></div>
-      <div class="members" id="members-${i}"><div class="note">Belum ada anggota.</div></div>
-      <div class="add"><input id="input-${i}" placeholder="Nama siswa"><button class="btn primary" onclick="addPlayer(${i})">Tambah</button></div>
-    </div>`).join("");
+function normalizeQuestion(q){
+  if(!q||typeof q!=="object")return null;
+  const text=clean(q.q??q.pertanyaan??q.question);
+  const opts=Array.isArray(q.a)?q.a.map(clean):[q.A,q.B,q.C,q.D].map(clean);
+  let c=q.c??q.kunci??q.answer??q.correct;
+  if(typeof c==="string"){
+    const up=clean(c).toUpperCase(),m=up.match(/^[A-D]/);
+    if(m)c="ABCD".indexOf(m[0]);
+    else{
+      const idx=opts.findIndex(x=>x&&x.toLowerCase()===up.toLowerCase());c=idx;
+    }
+  }
+  c=Number(c);
+  if(!text||opts.length!==4||opts.some(x=>!x)||!Number.isInteger(c)||c<0||c>3)return null;
+  return {q:text,a:opts,c}
 }
-function addPlayer(i){
-  ensureAudio();
-  const input=document.getElementById(`input-${i}`),name=input.value.trim();if(!name)return;
-  state.teams[i].players.push(name);input.value="";renderMembers(i);tone(660,.08,"sine",.035);showToast(`${name} ditambahkan`);
-}
-function renderMembers(i){
-  const t=state.teams[i];
-  document.getElementById(`members-${i}`).innerHTML=t.players.map((p,j)=>`
-    <div class="member"><span>${j+1}. ${escapeHtml(p)}</span><span class="note">Peserta</span></div>`).join("");
-}
-function ensurePlayers(){
-  state.teams.forEach((t,i)=>{
-    if(!t.players.length)t.players=[
-      `Siswa ${String.fromCharCode(65+i)}1`,
-      `Siswa ${String.fromCharCode(65+i)}2`,
-      `Siswa ${String.fromCharCode(65+i)}3`
-    ];
+function renderBank(){
+  $("bankCount").textContent=activeQuestions.length;
+  const m=currentMeta();$("bankTitle").textContent=m.subject&&m.className?`${m.subject} • ${m.className}`:"Belum dimuat";
+  $("bankMeta").textContent=m.level&&m.teacher?`${m.teacher} • ${m.level} • Kesulitan: ${m.difficulty}`:"Pilih penugasan Guru.";
+  const wrap=$("bankPreview");wrap.innerHTML="";
+  if(!activeQuestions.length){
+    wrap.innerHTML='<div class="empty" style="grid-column:1/-1"><div><div class="icon">🗄️</div><b>Belum ada bank soal aktif</b><div class="note" style="margin-top:6px">Import template Estafet Soal melalui halaman Database & Bank Soal Guru.</div></div></div>';return
+  }
+  activeQuestions.slice(0,6).forEach((q,i)=>{
+    const d=document.createElement("div");d.className="q-preview";d.innerHTML=`<div class="num">SOAL ${String(i+1).padStart(2,"0")}</div><p>${escapeHtml(q.q)}</p>`;wrap.appendChild(d)
   });
+  if(activeQuestions.length>6){
+    const more=document.createElement("div");more.className="note";more.style.gridColumn="1/-1";more.textContent=`+ ${activeQuestions.length-6} soal lainnya tersedia.`;wrap.appendChild(more)
+  }
 }
+
+/* Teams */
+function createTeams(){
+  const count=Number($("teamCount")?.value||4); // fallback, not used by UI; retained for compatibility
+}
+function openTeams(){
+  if(!activeQuestions.length){setStatus("setupStatus","Belum ada soal yang dapat dimainkan.","warn");return}
+  gameState={
+    code:code(),
+    subject:$("subject").value,className:$("className").value,level:$("level").value,difficulty:$("difficulty").value,
+    time:Number($("timePerQuestion").value),
+    total:Math.min(Number($("questionCount").value),activeQuestions.length),
+    questions:shuffle(activeQuestions).slice(0,Math.min(Number($("questionCount").value),activeQuestions.length)),
+    teams:Array.from({length:Number($("teamCount").value||4)},(_,i)=>({name:`Kelompok ${String.fromCharCode(65+i)}`,score:0,players:[],turn:0,combo:0}))
+  };
+  $("gameCode").textContent=gameState.code;
+  $("sessionInfo").textContent=`${gameState.subject} • ${gameState.className} • ${gameState.total} soal • ${gameState.time} detik/soal`;
+  renderTeams();show("teamsView");
+}
+function renderTeams(){
+  $("teamGrid").innerHTML=gameState.teams.map((t,i)=>`
+    <div class="team-card">
+      <div class="team-title"><b>${t.name}</b><span id="teamCountLabel-${i}">0 anggota</span></div>
+      <div class="member-list" id="memberList-${i}">${t.players.length?t.players.map((p,j)=>memberHtml(i,p,j)).join(""):'<div class="note">Belum ada anggota.</div>'}</div>
+      <div class="member-add"><input id="memberInput-${i}" placeholder="Nama siswa"><button class="btn primary" onclick="addMember(${i})">Tambah</button></div>
+    </div>`).join("");
+  gameState.teams.forEach(updateTeamCount);updateTeamReady()
+}
+function memberHtml(teamIndex,name,index){
+  return `<div class="member"><span>${index+1}. ${escapeHtml(name)}</span><button title="Hapus" onclick="removeMember(${teamIndex},${index})">✕</button></div>`
+}
+function addMember(i){
+  const input=$(`memberInput-${i}`),name=clean(input.value);if(!name)return;
+  if(gameState.teams.some(t=>t.players.some(p=>p.toLowerCase()===name.toLowerCase()))){showToast("Nama siswa sudah ada di tim.");return}
+  gameState.teams[i].players.push(name);input.value="";renderTeamMembers(i);updateTeamCount(i);updateTeamReady();tone(660,.08,"sine",.035);showToast(`${name} masuk ${gameState.teams[i].name}`)
+}
+function removeMember(i,j){gameState.teams[i].players.splice(j,1);renderTeamMembers(i);updateTeamCount(i);updateTeamReady()}
+function renderTeamMembers(i){
+  const t=gameState.teams[i];$(`memberList-${i}`).innerHTML=t.players.length?t.players.map((p,j)=>memberHtml(i,p,j)).join(""):'<div class="note">Belum ada anggota.</div>'
+}
+function updateTeamCount(i){$(`teamCountLabel-${i}`).textContent=`${gameState.teams[i].players.length} anggota`}
+function updateTeamReady(){
+  const ok=gameState.teams.every(t=>t.players.length>0);
+  $("startBtn").disabled=!ok;
+  setStatus("teamStatus",ok?"✅ Semua kelompok siap. Permainan dapat dimulai.":"Setiap kelompok harus memiliki minimal 1 siswa.",ok?"ok":"warn")
+}
+function autoBalance(){
+  const roster=[];
+  gameState.teams.forEach(t=>t.players.forEach(p=>roster.push(p)));
+  if(!roster.length){showToast("Tambahkan nama siswa dahulu.");return}
+  gameState.teams.forEach(t=>t.players=[]);
+  roster.forEach((p,i)=>gameState.teams[i%gameState.teams.length].players.push(p));
+  renderTeams();showToast(`Siswa dibagi otomatis ke ${gameState.teams.length} kelompok.`)
+}
+function backSetup(){clearInterval(timerId);show("setupView")}
+function backToTeams(){
+  if(gameState?.started){if(!confirm("Kembali ke pengaturan tim akan menghentikan permainan yang sedang berlangsung. Lanjutkan?"))return}
+  clearInterval(timerId);renderTeams();show("teamsView")
+}
+
+/* Game */
 function startGame(){
-  ensurePlayers();ensureAudio();
-  state.questions=questions.slice(0,state.total);state.questionIndex=0;state.teamIndex=0;
-  state.teams.forEach(t=>{t.score=0;t.turn=0;t.combo=0});combo=0;
-  show("game");drawQuestion();soundStart();flash();
+  if(!gameState||!gameState.teams.every(t=>t.players.length)){showToast("Lengkapi semua kelompok.");return}
+  ensureAudio();gameState.started=true;gameState.qIndex=0;gameState.teamIndex=0;
+  gameState.teams.forEach(t=>{t.score=0;t.turn=0;t.combo=0});combo=0;
+  show("gameView");drawQuestion();sndStart();flash()
 }
-function currentTeam(){return state.teams[state.teamIndex]}
+function currentTeam(){return gameState.teams[gameState.teamIndex]}
 function currentPlayer(){const t=currentTeam();return t.players[t.turn%t.players.length]}
 function drawQuestion(){
   clearInterval(timerId);locked=false;
-  const t=currentTeam(),p=currentPlayer(),q=state.questions[state.questionIndex];
-  document.getElementById("activeTeam").textContent=t.name;
-  document.getElementById("activePlayer").textContent=p;
-  document.getElementById("sideActive").textContent=`${t.name} • ${p}`;
-  document.getElementById("questionNumber").textContent=`SOAL ${String(state.questionIndex+1).padStart(2,"0")}`;
-  document.getElementById("progress").textContent=`${state.questionIndex+1} / ${state.total}`;
-  document.getElementById("progressFill").style.width=`${((state.questionIndex+1)/state.total)*100}%`;
-  document.getElementById("combo").textContent=`COMBO ${combo}`;
-  document.getElementById("question").textContent=q.q;
-  const fb=document.getElementById("feedback");fb.textContent="";fb.className="feedback";
-  const box=document.getElementById("questionBox");box.classList.remove("new-question");void box.offsetWidth;box.classList.add("new-question");
-  document.getElementById("answers").innerHTML=q.a.map((a,i)=>`
-    <button class="answer" onclick="answer(${i})">${["🅰️","🅱️","🅲️","🅳️"][i]} ${escapeHtml(a)}</button>`).join("");
-  updateRanking();startTimer();
+  const t=currentTeam(),p=currentPlayer(),q=gameState.questions[gameState.qIndex];
+  $("activeTeam").textContent=t.name;$("activePlayer").textContent=p;$("sideActive").textContent=`${t.name} • ${p}`;
+  $("qNumber").textContent=`SOAL ${String(gameState.qIndex+1).padStart(2,"0")}`;
+  $("progressLabel").textContent=`SOAL ${gameState.qIndex+1} / ${gameState.total}`;
+  $("progressFill").style.width=`${((gameState.qIndex+1)/gameState.total)*100}%`;
+  $("comboText").textContent=`COMBO ${combo}`;$("question").textContent=q.q;
+  const box=$("questionBox");box.classList.remove("in");void box.offsetWidth;box.classList.add("in");
+  const fb=$("feedback");fb.textContent="";fb.className="feedback";
+  $("answers").innerHTML=q.a.map((a,i)=>`<button class="answer" onclick="answer(${i})">${["🅰️","🅱️","🅲️","🅳️"][i]} ${escapeHtml(a)}</button>`).join("");
+  updateRanking();startTimer()
 }
 function startTimer(){
-  let left=state.time;paintTimer(left);
+  let left=gameState.time;paintTimer(left);
   timerId=setInterval(()=>{
-    left--;paintTimer(left);
-    if(left<=3&&left>0)soundTick();
-    if(left<=0){clearInterval(timerId);if(!locked)timeout();}
-  },1000);
+    left--;paintTimer(left);if(left<=3&&left>0)sndTick();
+    if(left<=0){clearInterval(timerId);if(!locked)timeout()}
+  },1000)
 }
 function paintTimer(left){
-  const ratio=Math.max(0,left/state.time),deg=ratio*360;
-  const el=document.getElementById("timer");
-  el.style.background=`conic-gradient(${left<=3?"var(--red)":"var(--cyan)"} ${deg}deg,#2a385d ${deg}deg)`;
-  el.style.boxShadow=left<=3?"0 0 34px rgba(255,82,109,.28)":"0 0 28px rgba(25,207,255,.16)";
-  document.getElementById("timerText").textContent=left;
+  const deg=Math.max(0,left/gameState.time)*360;
+  $("timer").style.background=`conic-gradient(${left<=3?"var(--red)":"var(--cyan)"} ${deg}deg,#29395f ${deg}deg)`;
+  $("timerText").textContent=left
 }
-function showFeedback(text,cls){
-  const fb=document.getElementById("feedback");
-  fb.textContent=text;fb.className=`feedback ${cls}`;void fb.offsetWidth;fb.classList.add("show");
+function feedback(text,cls){
+  const f=$("feedback");f.textContent=text;f.className=`feedback ${cls}`;void f.offsetWidth;f.classList.add("show")
 }
-function answer(index){
+function answer(i){
   if(locked)return;locked=true;clearInterval(timerId);
-  const q=state.questions[state.questionIndex],t=currentTeam();
-  const buttons=[...document.querySelectorAll(".answer")];
+  const q=gameState.questions[gameState.qIndex],t=currentTeam(),buttons=[...document.querySelectorAll(".answer")];
   buttons.forEach(b=>b.disabled=true);buttons[q.c].classList.add("correct");
-  const left=+document.getElementById("timerText").textContent;
-  if(index===q.c){
-    combo++;t.combo++;
-    let points=100+Math.round((left/state.time)*50);
-    let message=`✅ BENAR! +${points} poin`;
-    if(t.combo>=4){points+=200;message+=` • 🔥 COMBO 4! BONUS +200`;}
-    t.score+=points;showFeedback(message,"ok");soundCorrect();flash();
-    createConfetti(24);
+  const left=Number($("timerText").textContent);
+  if(i===q.c){
+    combo++;t.combo++;let pts=100+Math.round((left/gameState.time)*50),msg=`✅ BENAR! +${pts} poin`;
+    if(t.combo>=4){pts+=200;msg+=` • 🔥 COMBO 4! BONUS +200`};t.score+=pts;feedback(msg,"ok");sndCorrect();flash();confetti(22)
   }else{
-    combo=0;t.combo=0;buttons[index].classList.add("wrong");
-    showFeedback(`❌ SALAH • Jawaban benar: ${String.fromCharCode(65+q.c)}. ${q.a[q.c]}`,"bad");soundWrong();
+    combo=0;t.combo=0;buttons[i].classList.add("wrong");feedback(`❌ SALAH • Jawaban benar: ${String.fromCharCode(65+q.c)}. ${q.a[q.c]}`,"bad");sndWrong()
   }
-  updateRanking();setTimeout(nextTurn,1400);
+  updateRanking();setTimeout(nextTurn,1400)
 }
 function timeout(){
   locked=true;combo=0;currentTeam().combo=0;
-  const q=state.questions[state.questionIndex],buttons=[...document.querySelectorAll(".answer")];
+  const q=gameState.questions[gameState.qIndex],buttons=[...document.querySelectorAll(".answer")];
   buttons.forEach(b=>b.disabled=true);buttons[q.c].classList.add("correct");
-  showFeedback(`⏰ WAKTU HABIS • Jawaban benar: ${String.fromCharCode(65+q.c)}. ${q.a[q.c]}`,"time");
-  soundTime();updateRanking();setTimeout(nextTurn,1400);
+  feedback(`⏰ WAKTU HABIS • Jawaban benar: ${String.fromCharCode(65+q.c)}. ${q.a[q.c]}`,"time");sndTime();updateRanking();setTimeout(nextTurn,1400)
 }
 function nextTurn(){
-  if(state.questionIndex>=state.total-1){endGame();return}
-  state.questionIndex++;state.teamIndex=(state.teamIndex+1)%state.teams.length;
-  const t=currentTeam();t.turn=(t.turn+1)%t.players.length;
-  drawQuestion();tone(440,.05,"sine",.018);
+  if(gameState.qIndex>=gameState.total-1){finishGame();return}
+  gameState.qIndex++;gameState.teamIndex=(gameState.teamIndex+1)%gameState.teams.length;
+  const t=currentTeam();t.turn=(t.turn+1)%t.players.length;drawQuestion()
 }
 function updateRanking(){
-  const before=[...state.teams].map(t=>`${t.name}:${t.score}`).join("|");
-  const arr=[...state.teams].sort((a,b)=>b.score-a.score);
-  document.getElementById("ranking").innerHTML=arr.map((t,i)=>`
-    <div class="rank"><div class="rank-n">${i===0?"🥇":i===1?"🥈":i===2?"🥉":i+1}</div>
-      <div class="rank-name">${t.name}</div><div class="rank-score">${t.score}</div></div>`).join("");
-  const after=arr.map(t=>`${t.name}:${t.score}`).join("|");
-  if(before!==after)document.querySelectorAll(".rank").forEach((el,i)=>{el.classList.add("rank-up");setTimeout(()=>el.classList.remove("rank-up"),500)});
+  const arr=[...gameState.teams].sort((a,b)=>b.score-a.score);
+  $("ranking").innerHTML=arr.map((t,i)=>`<div class="rank"><div class="rank-num">${i===0?"🥇":i===1?"🥈":i===2?"🥉":i+1}</div><div class="rank-name">${escapeHtml(t.name)}</div><div class="rank-score">${t.score}</div></div>`).join("");
+  document.querySelectorAll(".rank").forEach(el=>{el.classList.add("flash");setTimeout(()=>el.classList.remove("flash"),500)})
 }
-function endGame(){
-  clearInterval(timerId);if(!state)return;
-  const arr=[...state.teams].sort((a,b)=>b.score-a.score);
-  document.getElementById("winner").textContent=`🥇 ${arr[0].name} menjadi juara dengan ${arr[0].score} poin`;
-  document.getElementById("final").innerHTML=arr.map((t,i)=>`
-    <div class="final-row"><div class="final-place">${i+1}</div>
-      <div><div class="final-team">${["🏆","🥈","🥉"][i]||"⭐"} ${t.name}</div><div class="note">${t.players.length} peserta</div></div>
-      <div class="final-points">${t.score}</div>
-    </div>`).join("");
-  show("result");soundWinner();setTimeout(()=>createConfetti(130),120);flash();
+function confirmEndGame(){
+  if(confirm("Akhiri permainan sekarang? Hasil akan dihitung berdasarkan skor saat ini."))finishGame()
 }
-function backSetup(){clearInterval(timerId);state=null;show("setup")}
-function newGame(){state=null;clearInterval(timerId);show("setup")}
-function openQuestions(){document.getElementById("json").value=JSON.stringify(questions,null,2);document.getElementById("modal").classList.remove("hidden")}
-function closeQuestions(){document.getElementById("modal").classList.add("hidden")}
-function saveQuestions(){
-  try{
-    const data=JSON.parse(document.getElementById("json").value);
-    if(!Array.isArray(data)||!data.length)throw new Error("Data soal kosong.");
-    for(const q of data)if(!q.q||!Array.isArray(q.a)||q.a.length!==4||typeof q.c!=="number"||q.c<0||q.c>3)throw new Error("Format soal tidak sesuai.");
-    questions=data;closeQuestions();showToast(`✅ ${questions.length} soal siap digunakan`);tone(784,.12,"sine",.045);
-  }catch(e){alert("Data belum dapat digunakan: "+e.message)}
+function finishGame(){
+  clearInterval(timerId);if(!gameState)return;
+  gameState.ended=true;
+  const arr=[...gameState.teams].sort((a,b)=>b.score-a.score),w=arr[0];
+  $("winnerText").textContent=`🥇 ${w.name} menjadi juara dengan ${w.score} poin`;
+  $("finalTable").innerHTML=arr.map((t,i)=>`<div class="final-row"><div class="place">${i+1}</div><div><div class="team-final">${["🏆","🥈","🥉"][i]||"⭐"} ${escapeHtml(t.name)}</div><div class="note">${t.players.length} peserta</div></div><div class="points">${t.score}</div></div>`).join("");
+  show("resultView");sndWinner();flash();setTimeout(()=>confetti(120),120)
 }
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function newGame(){clearInterval(timerId);gameState=null;show("setupView");refreshBank()}
+function downloadResult(){
+  if(!gameState)return;
+  const standings=[...gameState.teams].sort((a,b)=>b.score-a.score);
+  const payload={game:"ESTAFET SOAL",tanggal:new Date().toISOString(),guru:profile?.full_name||"",mapel:gameState.subject,kelas:gameState.className,jenjang:gameState.level,difficulty:gameState.difficulty,jumlah_soal:gameState.total,teams:standings.map((t,i)=>({peringkat:i+1,kelompok:t.name,skor:t.score,anggota:t.players}))};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=url;a.download=`rekap-estafet-soal-${String(gameState.className).replace(/\\W+/g,"-")}.json`;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url)
+}
+function printResult(){
+  if(!gameState)return;const w=window.open("","_blank","width=900,height=700");if(!w){alert("Popup diblokir browser.");return}
+  const standings=[...gameState.teams].sort((a,b)=>b.score-a.score);
+  w.document.write(`<html><head><title>Rekap Estafet Soal</title><style>body{font-family:Arial;padding:30px;color:#111}h1{text-align:center}table{width:100%;border-collapse:collapse;margin-top:20px}th,td{padding:10px;border:1px solid #ccc;text-align:left}th{background:#eee}</style></head><body><h1>REKAP ESTAFET SOAL</h1><p><b>Guru:</b> ${escapeHtml(profile?.full_name||"")}<br><b>Mapel:</b> ${escapeHtml(gameState.subject)}<br><b>Kelas:</b> ${escapeHtml(gameState.className)}<br><b>Jenjang:</b> ${escapeHtml(gameState.level)}</p><table><tr><th>Peringkat</th><th>Kelompok</th><th>Anggota</th><th>Skor</th></tr>${standings.map((t,i)=>`<tr><td>${i+1}</td><td>${escapeHtml(t.name)}</td><td>${escapeHtml(t.players.join(", "))}</td><td><b>${t.score}</b></td></tr>`).join("")}</table><script>window.print();<\/script></body></html>`);w.document.close()
+}
+$("loginBtn").onclick=login;$("loginPassword").addEventListener("keydown",e=>{if(e.key==="Enter")login()});
+$("level").onchange=async()=>{populateSubjects();await refreshBank()};$("subject").onchange=async()=>{populateClasses();await refreshBank()};$("className").onchange=refreshBank;$("difficulty").onchange=refreshBank;$("refreshBankBtn").onclick=refreshBank;
+$("goTeamsBtn").onclick=openTeams;$("startBtn").onclick=startGame;
+$("loginTeacher").onchange=()=>{const t=loginTeachers.find(x=>String(x.teacher_id??x.id)===String($("loginTeacher").value));if(t)setStatus("loginStatus","Silakan masukkan password untuk "+t.full_name+".","ok")};
+
+(async()=>{
+  if(!window.SPENDADB?.cloudConfigured?.()){setStatus("loginStatus","Supabase belum dikonfigurasi pada config.js.","err");return}
+  try{await SPENDADB.ping();await loadTeacherList()}catch(e){setStatus("loginStatus","Database tidak dapat dihubungi: "+(e.message||e),"err")}
+})();
 </script>
 </body>
 </html>

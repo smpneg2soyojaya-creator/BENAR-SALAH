@@ -26,7 +26,8 @@ const LABEL = {
   "benar-salah": "BENAR / SALAH",
   "gesture-battle": "GESTURE BATTLE EDU",
   "family-100": "SPENDA FAMILY 100",
-  "clash-of-champions": "CLASH OF CHAMPIONS"
+  "clash-of-champions": "CLASH OF CHAMPIONS",
+  "estafet-soal": "ESTAFET SOAL"
 };
 
 /* ---------- util ---------- */
@@ -65,6 +66,8 @@ function detectFromHeaders(headers) {
   const hasQ = has(...Q_NAMES);
   if (has("jawaban1", "answer1", "opsi1")) return hasQ || has("kategori", "category") ? "family-100" : null;
   const abcd = ["a", "b", "c", "d"].every(l => set.has(l) || set.has("opsi" + l) || set.has("jawaban" + l) || set.has("answer" + l));
+  // Template Estafet memakai kolom identitas Game agar tidak tertukar dengan Gesture.
+  if (hasQ && abcd && has("game", "jenis game", "kode game")) return "estafet-soal";
   if (hasQ && abcd) return "gesture-battle";
   if (has("pernyataan", "statement") || (hasQ && has("kunci", "kuncijawaban"))) return "benar-salah";
   if (hasQ && has("jawaban", "answer")) return "clash-of-champions";
@@ -196,6 +199,17 @@ function convert(row, game, d) {
     const lvl = normDifficulty(val(row, ["tingkat kesulitan", "kesulitan", "difficulty", "level soal", "level"]), normDifficulty(m.difficulty, "Sedang"));
     return { meta: { ...m, difficulty: lvl }, ok: !!(q && a), question: { level: lvl, q, a } };
   }
+  if (game === "estafet-soal") {
+    const q = clean(val(row, Q_NAMES));
+    const a = ["A", "B", "C", "D"].map(x => clean(val(row, [x, "opsi " + x, "jawaban " + x, "answer " + x])));
+    let c = clean(val(row, ["kunci", "kunci jawaban", "jawaban benar", "correct", "answer"])).toUpperCase();
+    let letter = (c.match(/^([A-D])(?:[\s.\):]|$)/) || [])[1];
+    if (!letter) {
+      const i = a.findIndex(x => x && x.toUpperCase() === c);
+      if (i >= 0) letter = "ABCD"[i];
+    }
+    return { meta: m, ok: !!(q && a.every(Boolean) && letter), question: { q, a, c: letter || "A" } };
+  }
   return { meta: m, ok: true, question: row };
 }
 
@@ -243,7 +257,7 @@ async function importFile(file, game, d = {}) {
     }
     throw new Error(
       `Header kolom tidak dikenali untuk ${LABEL[game]}. Sheet/tabel yang diperiksa: ${r.sheetsSeen.join(", ") || "-"}. ` +
-      `Jangan ubah nama kolom pada template (contoh Benar/Salah: No | Pernyataan | Kunci).`);
+      `Jangan ubah nama kolom pada template. Contoh Estafet: No | Pertanyaan | A | B | C | D | Kunci | Kesulitan | Game.`);
   }
 
   const conv = pick.rows.map(row => convert(row, game, base));

@@ -35,7 +35,7 @@ body{min-height:100vh}.wrap{width:min(1100px,calc(100% - 24px));margin:auto;padd
 
     <section class="panel">
       <div class="grid">
-        <div class="field"><label>Game</label><select id="game"><option value="benar-salah">BENAR / SALAH</option><option value="gesture-battle">GESTURE BATTLE EDU</option><option value="family-100">SPENDA FAMILY 100</option><option value="clash-of-champions">CLASH OF CHAMPIONS</option></select></div>
+        <div class="field"><label>Game</label><select id="game"><option value="benar-salah">BENAR / SALAH</option><option value="gesture-battle">GESTURE BATTLE EDU</option><option value="family-100">SPENDA FAMILY 100</option><option value="clash-of-champions">CLASH OF CHAMPIONS</option><option value="estafet-soal">ESTAFET SOAL</option></select></div>
         <div class="field"><label>Nama Guru</label><input id="teacher" readonly></div>
         <div class="field"><label>Jenjang <span class="req">*</span></label><select id="level" disabled><option value="">Memuat…</option></select></div>
         <div class="field"><label>Kelas <span class="req">*</span></label><select id="className" disabled><option value="">Pilih mapel terlebih dahulu</option></select></div>
@@ -48,17 +48,17 @@ body{min-height:100vh}.wrap{width:min(1100px,calc(100% - 24px));margin:auto;padd
       <div id="status" class="status">Menyiapkan database…</div>
     </section>
 
-    <section class="panel"><b>Template Soal</b><div class="note">Gunakan template sesuai game. Isi pertanyaan saja; Nama Guru dan metadata bank mengikuti akun serta pilihan pada halaman ini.</div><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:8px"><a class="btn" href="templates/Template_Soal_BENAR_SALAH.docx" download>Word • BENAR/SALAH</a><a class="btn" href="templates/Template_Soal_BENAR_SALAH.xlsx" download>Excel • BENAR/SALAH</a><a class="btn" href="templates/Template_Soal_GESTURE_BATTLE.docx" download>Word • GESTURE</a><a class="btn" href="templates/Template_Soal_GESTURE_BATTLE.xlsx" download>Excel • GESTURE</a><a class="btn" href="templates/Template_Soal_FAMILY_100.docx" download>Word • FAMILY 100</a><a class="btn" href="templates/Template_Soal_FAMILY_100.xlsx" download>Excel • FAMILY 100</a><a class="btn" href="templates/Template_Soal_CLASH_OF_CHAMPIONS.docx" download>Word • CLASH</a><a class="btn" href="templates/Template_Soal_CLASH_OF_CHAMPIONS.xlsx" download>Excel • CLASH</a></div></section>
+    <section class="panel"><b>Template Soal</b><div class="note">Gunakan template sesuai game. Isi pertanyaan saja; Nama Guru dan metadata bank mengikuti akun serta pilihan pada halaman ini.</div><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:8px"><a class="btn" href="templates/Template_Soal_BENAR_SALAH.docx" download>Word • BENAR/SALAH</a><a class="btn" href="templates/Template_Soal_BENAR_SALAH.xlsx" download>Excel • BENAR/SALAH</a><a class="btn" href="templates/Template_Soal_GESTURE_BATTLE.docx" download>Word • GESTURE</a><a class="btn" href="templates/Template_Soal_GESTURE_BATTLE.xlsx" download>Excel • GESTURE</a><a class="btn" href="templates/Template_Soal_FAMILY_100.docx" download>Word • FAMILY 100</a><a class="btn" href="templates/Template_Soal_FAMILY_100.xlsx" download>Excel • FAMILY 100</a><a class="btn" href="templates/Template_Soal_CLASH_OF_CHAMPIONS.docx" download>Word • CLASH</a><a class="btn" href="templates/Template_Soal_CLASH_OF_CHAMPIONS.xlsx" download>Excel • CLASH</a><a class="btn" href="templates/Template_Soal_ESTAFET_SOAL.docx" download>Word • ESTAFET</a><a class="btn" href="templates/Template_Soal_ESTAFET_SOAL.xlsx" download>Excel • ESTAFET</a></div></section>
 
     <section class="panel"><b>Bank aktif</b><div id="active" class="note">Belum dimuat.</div><div id="preview" class="preview"></div></section>
     <section class="panel"><b>Bank milik akun ini</b><div class="tablewrap"><table><thead><tr><th>Game</th><th>Guru</th><th>Mapel</th><th>Jenjang</th><th>Kelas</th><th>Kesulitan</th><th>Soal</th></tr></thead><tbody id="rows"></tbody></table></div></section>
   </main>
 </div>
-<script src="config.js"></script><script src="spenda-db.js"></script><script src="spenda-import-final.js?v=20261007-fix2"></script>
+<script src="config.js"></script><script src="spenda-db.js"></script><script src="spenda-import-final.js?v=20261007-estafet-final"></script>
 <script>
 (()=>{
   const $=id=>document.getElementById(id);
-  const names={"benar-salah":"BENAR / SALAH","gesture-battle":"GESTURE BATTLE EDU","family-100":"SPENDA FAMILY 100","clash-of-champions":"CLASH OF CHAMPIONS"};
+  const names={"benar-salah":"BENAR / SALAH","gesture-battle":"GESTURE BATTLE EDU","family-100":"SPENDA FAMILY 100","clash-of-champions":"CLASH OF CHAMPIONS","estafet-soal":"ESTAFET SOAL"};
   let profile=null,session=null,assignments=[],loginTeachers=[];
   const query=new URLSearchParams(location.search);
   if(query.get("game")&&$("game")?.querySelector(`option[value="${query.get("game")}"]`))$("game").value=query.get("game");
