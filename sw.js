@@ -1,8 +1,8 @@
-const CACHE='spenda-game-center-final-import-fix-20261007';
+const CACHE='spenda-game-center-import-ready-20261007';
 const ASSETS=[
   './','./index.html','./master-guru.html','./bank-soal.html',
   './benar-salah.html','./spenda-gesture-battle.html','./spenda-family-100.html','./clash-of-champions.html',
-  './config.js','./spenda-db.js','./spenda-import-final.js',
+  './config.js','./spenda-db.js','./spenda-import-final-fix.js',
   './manifest.webmanifest','./icon-192.png','./icon-512.png','./logo-sekolah.png','./favicon.ico'
 ];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())));
