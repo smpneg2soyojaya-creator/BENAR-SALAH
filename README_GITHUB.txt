@@ -20,3 +20,9 @@ PERBAIKAN IMPORT (fix2)
 - Library Excel/Word punya CDN cadangan; CSV (koma/titik-koma) dibaca sebagai UTF-8.
 - Pesan error kini menyebut sheet dan kolom yang terbaca.
 - Setelah upload ke GitHub, buka aplikasi lalu refresh keras (Ctrl+F5) / hapus cache PWA satu kali.
+
+
+GAME TAMBAHAN
+- ESTAFET SOAL: estafet-soal.html
+- Mode utama prototype: siswa bergantian menjawab langsung di layar/PID.
+- Dilengkapi timer, skor kelompok, combo, animasi, confetti, dan suara browser.

@@ -1,7 +1,7 @@
-const CACHE='spenda-game-center-final-20261007-fix2';
+const CACHE='spenda-game-center-final-20261007-estafet';
 const ASSETS=[
   './','./index.html','./master-guru.html','./bank-soal.html',
-  './benar-salah.html','./spenda-gesture-battle.html','./spenda-family-100.html','./clash-of-champions.html',
+  './benar-salah.html','./spenda-gesture-battle.html','./spenda-family-100.html','./clash-of-champions.html','./estafet-soal.html',
   './config.js','./spenda-db.js','./spenda-import-final.js',
   './manifest.webmanifest','./icon-192.png','./icon-512.png','./logo-sekolah.png','./favicon.ico'
 ];

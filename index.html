@@ -34,7 +34,7 @@ h1{margin:0;font-size:clamp(30px,5vw,50px);font-weight:950;letter-spacing:.2px}
 .subtitle{max-width:780px;margin:9px auto 0;color:var(--muted);font-size:14px;line-height:1.6}
 .school{display:inline-flex;margin-top:11px;padding:7px 12px;border-radius:999px;background:#091727;border:1px solid #2c4056;color:#bfd3e6;font-size:11px;font-weight:850}
 .section-title{text-align:center;margin:28px 0 14px;font-size:12px;color:#8095aa;letter-spacing:1.5px;text-transform:uppercase;font-weight:900}
-.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
 .card{
  position:relative;overflow:hidden;padding:21px;border-radius:22px;
  background:linear-gradient(165deg,#0c1826,#09111b 75%);
@@ -62,7 +62,7 @@ h1{margin:0;font-size:clamp(30px,5vw,50px);font-weight:950;letter-spacing:.2px}
  margin:16px auto 0;max-width:720px;padding:11px 13px;border-radius:12px;
  background:rgba(9,19,30,.68);border:1px solid #233448;color:#8ea0b2;font-size:10px;line-height:1.6;text-align:center
 }
-@media(max-width:1100px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:650px){.cards{grid-template-columns:1fr}.card{min-height:260px}}
+@media(max-width:1250px){.cards{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:850px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){.cards{grid-template-columns:1fr}.card{min-height:260px}}
 </style>
 </head>
 <body>
@@ -71,7 +71,7 @@ h1{margin:0;font-size:clamp(30px,5vw,50px);font-weight:950;letter-spacing:.2px}
   <header class="header">
    <img class="logo" src="logo-sekolah.png" alt="Logo SMP Negeri 2 Soyo Jaya">
    <h1>SPENDA Game Center</h1>
-   <div class="subtitle">Pusat permainan interaktif SMP Negeri 2 Soyo Jaya. Empat game berada dalam satu paket aplikasi dan satu alamat GitHub Pages.</div>
+   <div class="subtitle">Pusat permainan interaktif SMP Negeri 2 Soyo Jaya. Lima game berada dalam satu paket aplikasi dan satu alamat GitHub Pages.</div>
    <div class="school">Berilmu • Berkarakter • Berprestasi</div><div style="margin-top:10px"><a class="launch" href="./bank-soal.html" style="display:inline-flex;width:auto;padding:0 16px;text-decoration:none">🗄️ Database &amp; Bank Soal Guru</a></div><div style="margin-top:7px"><a class="launch" href="./master-guru.html?v=37" style="display:inline-flex;width:auto;padding:0 16px;text-decoration:none">⚙️ Master Guru &amp; Penugasan</a></div>
   </header>
 
@@ -102,6 +102,15 @@ h1{margin:0;font-size:clamp(30px,5vw,50px);font-weight:950;letter-spacing:.2px}
     <a class="launch" href="./spenda-gesture-battle.html">Mulai Game</a>
    </article>
 
+
+   <article class="card estafet">
+    <div class="icon" style="background:rgba(155,92,255,.10);border-color:rgba(155,92,255,.40);color:#c8adff">🏃</div>
+    <h2>ESTAFET SOAL</h2>
+    <p>Game kerja sama tim. Siswa maju bergantian dan menjawab langsung di layar/PID dengan timer, combo, animasi, suara, dan papan skor kelompok.</p>
+    <div class="tags"><span class="tag">Tim</span><span class="tag">PID</span><span class="tag">Timer</span><span class="tag">Skor Live</span></div>
+    <a class="launch" style="background:linear-gradient(135deg,#8f52ff,#5c3bc4)" href="./estafet-soal.html">Mulai Game</a>
+   </article>
+
    <article class="card clash">
     <div class="icon" style="background:rgba(0,242,254,.10);border-color:rgba(0,242,254,.38);color:#74e7ff">🚩</div>
     <h2>CLASH OF CHAMPIONS</h2>
@@ -112,7 +121,7 @@ h1{margin:0;font-size:clamp(30px,5vw,50px);font-weight:950;letter-spacing:.2px}
   </main>
 
   <div class="about">Setiap permainan dibuka sebagai halaman tersendiri di root GitHub Pages; tidak menggunakan iframe.</div>
-  <div class="footer">SPENDA Game Center • 4 Game • SMP Negeri 2 Soyo Jaya</div>
+  <div class="footer">SPENDA Game Center • 5 Game • SMP Negeri 2 Soyo Jaya</div>
  </div>
 </section>
 
