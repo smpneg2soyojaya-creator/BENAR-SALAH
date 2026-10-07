@@ -36,10 +36,22 @@ function headerScore(headers,game){
   }[game]||[];
   return wanted.reduce((n,w)=>n+(hs.includes(hn(w))?1:0),0);
 }
+function detectGameFromMatrix(matrix){
+  const rows=Array.isArray(matrix)?matrix:[];
+  const games=["benar-salah","gesture-battle","family-100","clash-of-champions"];
+  let bestGame="",bestScore=0;
+  for(const g of games){
+    let score=0;
+    for(const r of rows.slice(0,40)) score=Math.max(score,headerScore((r||[]).map(x=>String(x??"")),g));
+    if(score>bestScore){bestScore=score;bestGame=g;}
+  }
+  return bestGame||null;
+}
 function rowsFromSheetArray(matrix,game){
   const rows=Array.isArray(matrix)?matrix:[];
+  const effectiveGame=game||detectGameFromMatrix(rows);
   let bestIndex=-1,bestScore=0;
-  rows.slice(0,40).forEach((r,i)=>{const s=headerScore((r||[]).map(x=>String(x??"")),game);if(s>bestScore){bestScore=s;bestIndex=i;}});
+  rows.slice(0,40).forEach((r,i)=>{const s=headerScore((r||[]).map(x=>String(x??"")),effectiveGame);if(s>bestScore){bestScore=s;bestIndex=i;}});
   if(bestIndex<0 || bestScore<1) return [];
   const headers=(rows[bestIndex]||[]).map((h,i)=>String(h??"").trim()||("Kolom "+(i+1)));
   return rows.slice(bestIndex+1).map(r=>{const o={};headers.forEach((h,i)=>o[h]=String((r||[])[i]??"").trim());return o}).filter(o=>Object.values(o).some(Boolean));
@@ -80,7 +92,7 @@ async function parseWord(file,game){
 async function parseJSON(file){const o=JSON.parse((await file.text()).replace(/^\uFEFF/,""));return Array.isArray(o)?o:(o.questions||o.data||o.soal||o.items||[])}
 async function parse(file,game){const n=file.name.toLowerCase();if(n.endsWith(".docx"))return parseWord(file,game);if(n.endsWith(".xlsx")||n.endsWith(".xls"))return parseExcel(file,game);if(n.endsWith(".csv"))return parseExcel(file,game);if(n.endsWith(".json"))return parseJSON(file);throw new Error("Gunakan .docx, .xlsx/.xls, atau .json")}
 async function importFile(file,game,d={}){
-  const rows=await parse(file);
+  const rows=await parse(file,game);
   const base={game,teacher:String(d.teacher||"").trim(),level:String(d.level||"").trim(),className:String(d.className||"").trim(),subject:String(d.subject||"").trim(),difficulty:String(d.difficulty||"Semua").trim()||"Semua"};
   if(!base.teacher||!base.level||!base.className||!base.subject) throw new Error("Nama Guru, Jenjang, Kelas, dan Mapel wajib diisi.");
   const cv=rows.map(r=>convert(r,game,base)).filter(x=>{const q=x.question;if(game==="benar-salah")return q.statement;if(game==="gesture-battle")return q.q&&q.a.every(Boolean);if(game==="family-100")return q.pertanyaan&&q.jawaban.length;if(game==="clash-of-champions")return q.q&&q.a;return true});
